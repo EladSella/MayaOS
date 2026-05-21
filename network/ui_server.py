@@ -60,6 +60,8 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({"status": "error", "message": str(e)}).encode('utf-8'))
             return
+        if self.path == '/':
+            self.path = '/maya.html'
 
         return super().do_GET()
 
