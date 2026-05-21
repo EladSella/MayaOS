@@ -1285,8 +1285,35 @@
      5. WORKOUT TRACKER
   ============================================================ */
   let workouts = lsGet('leo_workouts', []);
-  let selectedWType = null;
+  // Form state
+  const form = {
+    type: null,
+    duration: null,
+    intensity: null,
+    symptomOn: false,
+    bodyPart: null,
+    sensType: null,
+    severity: 5,
+    note: ''
+  };
 
+  /* ---------- Helpers ---------- */
+  const NEURO_SENS = ['נימול', 'חולשה'];
+  function symptomClass(sym) {
+    if (!sym) return '';
+    if (NEURO_SENS.includes(sym.sensType)) return 'neuro';
+    if ((sym.severity || 0) >= 7) return 'high';
+    return '';
+  }
+  function severityEmoji(v) {
+    if (v <= 2) return '🙂';
+    if (v <= 4) return '😐';
+    if (v <= 6) return '😣';
+    if (v <= 8) return '😖';
+    return '😫';
+  }
+
+  /* ---------- Week dots ---------- */
   function renderWeekDots() {
     const wrap = document.getElementById('week-dots');
     wrap.innerHTML = '';
@@ -1301,6 +1328,8 @@
       wrap.appendChild(el);
     }
   }
+
+  /* ---------- Stats ---------- */
   function renderWorkoutStats() {
     const weekKeys = new Set();
     for (let i = 0; i < 7; i++) weekKeys.add(dateKey(daysAgo(i)));
@@ -1332,6 +1361,8 @@
       document.getElementById('m-workout-status').textContent = 'לא נרשם';
     }
   }
+
+  /* ---------- Workout history (with symptom badges) ---------- */
   function renderWorkoutHistory() {
     const ul = document.getElementById('workout-history');
     ul.innerHTML = '';
@@ -1340,54 +1371,294 @@
       ul.innerHTML = '<li style="color:var(--text-dim); justify-content:center; font-style:italic;">עוד אין אימונים. בחר סוג ולחץ תיעוד ↑</li>';
       return;
     }
-    sorted.forEach((w, idx) => {
+    sorted.forEach(w => {
       const li = document.createElement('li');
+      if (w.symptom) li.classList.add('has-symptom');
       const d = new Date(w.ts);
       const dateLbl = d.getDate() + '/' + (d.getMonth() + 1) + ' · ' + DOW_HE[d.getDay()];
-      li.innerHTML = '<span class="log-type">' + w.type + '</span>' +
-                     '<span class="log-date">' + dateLbl + '</span>' +
-                     '<span class="log-del" data-idx="' + idx + '">✕</span>';
+      let extra = '';
+      if (w.duration) extra += ' · ' + w.duration + "'";
+      if (w.intensity) extra += ' · ' + w.intensity;
+      let badge = '';
+      if (w.symptom) {
+        const cls = symptomClass(w.symptom);
+        badge = '<span class="sym-badge ' + cls + '" title="' + (w.symptom.note || '') + '">' +
+                w.symptom.bodyPart + ' ' + w.symptom.severity + '/10</span>';
+      }
+      li.innerHTML =
+        '<div class="log-main">' +
+          '<span class="log-type">' + w.type + '</span>' +
+          (extra ? '<span style="color:var(--text-dim); font-size:10px;">' + extra + '</span>' : '') +
+          badge +
+        '</div>' +
+        '<span class="log-date">' + dateLbl + '</span>' +
+        '<span class="log-del" data-ts="' + w.ts + '">✕</span>';
       ul.appendChild(li);
     });
     ul.querySelectorAll('.log-del').forEach(btn => {
       btn.addEventListener('click', (e) => {
-        const i = +e.target.dataset.idx;
-        const target = [...workouts].sort((a,b) => b.ts - a.ts).slice(0,8)[i];
-        workouts = workouts.filter(w => w.ts !== target.ts);
+        const ts = +e.target.dataset.ts;
+        workouts = workouts.filter(w => w.ts !== ts);
         lsSet('leo_workouts', workouts);
         renderAllWorkouts();
         updateScore();
       });
     });
   }
+
+  /* ---------- Recent symptoms (14 days) ---------- */
+  function recentSymptoms(days) {
+    const cutoff = Date.now() - days * 24 * 60 * 60 * 1000;
+    return workouts
+      .filter(w => w.symptom && w.ts >= cutoff)
+      .sort((a,b) => b.ts - a.ts);
+  }
+  function renderRecentSyms() {
+    const list = document.getElementById('rs-list');
+    const recent = recentSymptoms(14);
+    document.getElementById('rs-count').textContent = recent.length;
+    if (!recent.length) {
+      list.innerHTML = '<li class="rs-empty">אין סימפטומים ב-14 הימים האחרונים 👌</li>';
+      return;
+    }
+    list.innerHTML = '';
+    recent.slice(0, 6).forEach(w => {
+      const s = w.symptom;
+      const cls = symptomClass(s);
+      const d = new Date(w.ts);
+      const dateLbl = d.getDate() + '/' + (d.getMonth() + 1);
+      const li = document.createElement('li');
+      li.className = 'rs-item ' + cls;
+      li.innerHTML =
+        '<span class="rs-body">' + s.bodyPart + '</span>' +
+        '<span class="rs-sens">' + (s.sensType || '—') + (s.note ? ' · ' + s.note : '') + '</span>' +
+        '<span class="rs-sev">' + s.severity + '/10</span>' +
+        '<span class="rs-date">' + dateLbl + '</span>';
+      list.appendChild(li);
+    });
+  }
+
+  /* ---------- Pattern detection ---------- */
+  function detectPattern(latestSym) {
+    if (!latestSym) {
+      document.getElementById('pattern-warn').classList.remove('show');
+      return;
+    }
+    const recent = recentSymptoms(14)
+      .filter(w => w.symptom.bodyPart === latestSym.bodyPart);
+    const warnEl = document.getElementById('pattern-warn');
+    const txtEl = document.getElementById('pattern-warn-text');
+    if (recent.length >= 3) {
+      warnEl.classList.add('show');
+      txtEl.innerHTML = 'זהו האירוע ה-<b>' + recent.length + '</b> ב-<b>' + latestSym.bodyPart +
+        '</b> ב-14 הימים האחרונים. שווה להעלות את זה בתור הקרוב לראומטולוג (26/5). ' +
+        'אני שומר את זה בלוח הבריאות של ד"ר ליאם.';
+      // Cross-agent flag
+      const flags = lsGet('maya_health_flags', []);
+      flags.push({
+        source: 'leo',
+        type: 'pattern',
+        bodyPart: latestSym.bodyPart,
+        count: recent.length,
+        windowDays: 14,
+        ts: Date.now()
+      });
+      lsSet('maya_health_flags', flags.slice(-50));
+    } else {
+      warnEl.classList.remove('show');
+    }
+  }
+
+  /* ---------- Leo's smart response ---------- */
+  function leoRespondToSymptom(sym, type) {
+    const resp = document.getElementById('leo-response');
+    const txt = document.getElementById('leo-response-text');
+    const flag = document.getElementById('leo-response-flag');
+    resp.classList.remove('escalate');
+    if (!sym) {
+      // Positive feedback
+      resp.classList.add('show');
+      const positives = [
+        'אימון נשמר. תזכור — מנוחה היא חלק מהאימון.',
+        'יפה. גוף שזז = גוף שמתחזק. נתראה מחר.',
+        'נרשם. אם הגיע גם פרק זמן ועצימות — הסטטיסטיקה שלך יותר חכמה.'
+      ];
+      txt.textContent = positives[Math.floor(Math.random() * positives.length)];
+      flag.textContent = '';
+      setTimeout(() => resp.classList.remove('show'), 6000);
+      return;
+    }
+
+    const isNeuro = NEURO_SENS.includes(sym.sensType);
+    const sev = sym.severity || 0;
+    let msg = '';
+    let escalate = false;
+    let flagMsg = '';
+
+    if (isNeuro) {
+      escalate = true;
+      msg = 'סימפטום נוירולוגי (' + sym.sensType + ' ב' + sym.bodyPart + ') במהלך ' + type +
+        '. זה לא משהו להמשיך לדחות — מומלץ ליידע את ד"ר ליאם ולציין בתור הקרוב לראומטולוג (26/5). ' +
+        'מומלץ להפסיק את האימון הנוכחי ולשים לב אם הסימפטום חוזר במנוחה.';
+      flagMsg = '🚩 דווח אוטומטית לדשבורד של ד"ר ליאם';
+    } else if (sev >= 8) {
+      escalate = true;
+      msg = 'כאב חזק (' + sev + '/10) ב' + sym.bodyPart + '. ' +
+        'הפסק אימונים שמערבים את האזור הזה ל-48-72 שעות. אם הכאב נמשך מעל 24 שעות במנוחה או מחמיר — דבר עם רופא.';
+      flagMsg = '🚩 דווח אוטומטית לדשבורד של ד"ר ליאם';
+    } else if (sev >= 5) {
+      msg = 'כאב בינוני (' + sev + '/10) ב' + sym.bodyPart + '. ' +
+        'הורד עוצמה ב-48 שעות הקרובות. תרגילים שמערבים את ה' + sym.bodyPart + ' — דלג. אני יזכיר לך לפני האימון הבא.';
+    } else if (sev >= 3) {
+      msg = 'כאב קל (' + sev + '/10) ב' + sym.bodyPart + '. ' +
+        'אפשר להמשיך בזהירות. הוסף חימום ארוך יותר ומתיחות לאזור. שווה לעקוב.';
+    } else {
+      msg = 'אי-נוחות קלה ב' + sym.bodyPart + '. נשמר במעקב — אם חוזר נראה דפוס.';
+    }
+
+    if (escalate) resp.classList.add('escalate');
+    resp.classList.add('show');
+    txt.textContent = msg;
+    flag.textContent = flagMsg;
+
+    if (escalate) {
+      const flags = lsGet('maya_health_flags', []);
+      flags.push({
+        source: 'leo',
+        type: 'severe_symptom',
+        bodyPart: sym.bodyPart,
+        sensType: sym.sensType,
+        severity: sev,
+        workoutType: type,
+        note: sym.note || '',
+        ts: Date.now()
+      });
+      lsSet('maya_health_flags', flags.slice(-50));
+    }
+  }
+
   function renderAllWorkouts() {
     renderWeekDots();
     renderWorkoutStats();
     renderWorkoutHistory();
+    renderRecentSyms();
   }
-  document.querySelectorAll('#workout-types .wtype-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('#workout-types .wtype-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedWType = btn.dataset.type;
-      const logBtn = document.getElementById('log-workout-btn');
-      logBtn.disabled = false;
-      logBtn.textContent = 'תיעוד · ' + selectedWType;
+
+  /* ---------- Form interactions ---------- */
+  // Generic single-select chip group → updates form key
+  function bindChipGroup(containerId, formKey, opts={}) {
+    const isToggle = !!opts.toggle; // re-clicking clears
+    document.querySelectorAll('#' + containerId + ' .form-chip, #' + containerId + ' .wtype-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dataAttr = opts.attr || ('data-' + formKey).toLowerCase();
+        const val = btn.getAttribute(dataAttr);
+        const wasActive = btn.classList.contains('active');
+        document.querySelectorAll('#' + containerId + ' .form-chip, #' + containerId + ' .wtype-btn').forEach(b => b.classList.remove('active'));
+        if (isToggle && wasActive) {
+          form[formKey] = null;
+        } else {
+          btn.classList.add('active');
+          form[formKey] = opts.cast ? opts.cast(val) : val;
+        }
+        if (formKey === 'type') updateLogBtn();
+      });
     });
+  }
+  bindChipGroup('workout-types', 'type', { attr: 'data-type' });
+  bindChipGroup('duration-chips', 'duration', { attr: 'data-dur', toggle: true, cast: (v) => parseInt(v, 10) });
+  bindChipGroup('intensity-chips', 'intensity', { attr: 'data-int', toggle: true });
+  bindChipGroup('bodypart-chips', 'bodyPart', { attr: 'data-bp', toggle: true });
+  bindChipGroup('sens-chips', 'sensType', { attr: 'data-sens', toggle: true });
+
+  // Severity slider
+  const sevSlider = document.getElementById('sev-slider');
+  const sevNum = document.getElementById('sev-num');
+  const sevEmoji = document.getElementById('sev-emoji');
+  sevSlider.addEventListener('input', () => {
+    form.severity = parseInt(sevSlider.value, 10);
+    sevNum.textContent = form.severity;
+    sevEmoji.textContent = severityEmoji(form.severity);
   });
+
+  // Symptom note
+  document.getElementById('sym-note').addEventListener('input', (e) => {
+    form.note = e.target.value.trim();
+  });
+
+  // Symptom toggle
+  document.getElementById('sym-toggle').addEventListener('click', () => {
+    form.symptomOn = !form.symptomOn;
+    document.getElementById('sym-toggle').classList.toggle('active', form.symptomOn);
+    document.getElementById('sym-section').classList.toggle('active', form.symptomOn);
+  });
+
+  function updateLogBtn() {
+    const btn = document.getElementById('log-workout-btn');
+    if (form.type) {
+      btn.disabled = false;
+      btn.textContent = 'תיעוד · ' + form.type;
+    } else {
+      btn.disabled = true;
+      btn.textContent = 'בחר סוג אימון';
+    }
+  }
+
+  function resetForm() {
+    form.type = null;
+    form.duration = null;
+    form.intensity = null;
+    form.symptomOn = false;
+    form.bodyPart = null;
+    form.sensType = null;
+    form.severity = 5;
+    form.note = '';
+    document.querySelectorAll('.form-chip.active, .wtype-btn.active').forEach(b => b.classList.remove('active'));
+    document.getElementById('sym-toggle').classList.remove('active');
+    document.getElementById('sym-section').classList.remove('active');
+    document.getElementById('sym-note').value = '';
+    sevSlider.value = 5; sevNum.textContent = '5'; sevEmoji.textContent = '😐';
+    updateLogBtn();
+  }
+
   document.getElementById('log-workout-btn').addEventListener('click', () => {
-    if (!selectedWType) return;
-    workouts.push({ date: todayStr, type: selectedWType, ts: Date.now() });
+    if (!form.type) return;
+
+    // Build symptom only if user opened that section AND chose at least body part
+    let symptom = null;
+    if (form.symptomOn && form.bodyPart) {
+      symptom = {
+        bodyPart: form.bodyPart,
+        sensType: form.sensType || 'כאב עמום',
+        severity: form.severity,
+        note: form.note || ''
+      };
+    }
+    const entry = {
+      date: todayStr,
+      type: form.type,
+      duration: form.duration || null,
+      intensity: form.intensity || null,
+      symptom: symptom,
+      ts: Date.now()
+    };
+    workouts.push(entry);
     lsSet('leo_workouts', workouts);
     renderAllWorkouts();
     updateScore();
-    document.querySelectorAll('#workout-types .wtype-btn').forEach(b => b.classList.remove('active'));
-    selectedWType = null;
-    const logBtn = document.getElementById('log-workout-btn');
-    logBtn.disabled = true;
-    logBtn.textContent = 'נשמר ✓';
-    setTimeout(() => { logBtn.textContent = 'בחר סוג אימון'; }, 1500);
+
+    // Leo response + pattern detection
+    leoRespondToSymptom(symptom, entry.type);
+    detectPattern(symptom);
+
+    // Reset form (keep response visible)
+    const savedType = form.type;
+    resetForm();
+    const btn = document.getElementById('log-workout-btn');
+    btn.disabled = true;
+    btn.textContent = '✓ ' + savedType + ' נשמר';
+    setTimeout(() => { if (btn.textContent.startsWith('✓')) btn.textContent = 'בחר סוג אימון'; }, 2000);
   });
+
   renderAllWorkouts();
 
   /* ============================================================
