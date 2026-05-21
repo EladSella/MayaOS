@@ -642,6 +642,271 @@
     .nweek-bar.today .nweek-label { color: var(--lime); }
     .nweek-bar.today .nweek-track { box-shadow: 0 0 0 1px var(--lime) inset; }
 
+    /* ─── FUEL MACRO CARD (prominent at top) ─── */
+    .fuel-card {
+      padding: 14px;
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+    .fuel-card::before {
+      content: ''; position: absolute; top: -40%; left: -10%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(251, 146, 60, 0.16), transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+    .fuel-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px; position: relative; z-index: 1;
+    }
+    .fuel-title {
+      font-size: 10px; color: var(--orange);
+      font-weight: 800; text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .fuel-title svg { width: 12px; height: 12px; }
+    .fuel-day { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); }
+    .fuel-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; position: relative; z-index: 1;
+    }
+    .fuel-cell {
+      padding: 10px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .fuel-cell-top {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .fuel-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 26px; font-weight: 800; line-height: 1;
+      background: var(--grad-leo);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .fuel-cell.cal .fuel-val {
+      background: linear-gradient(135deg, #fb923c 0%, #f87171 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .fuel-unit { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+    .fuel-cell-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .fuel-lbl {
+      font-size: 9.5px; color: var(--text-muted); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .fuel-target { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--text-dim); }
+    .fuel-bar {
+      height: 4px; margin-top: 6px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 999px; overflow: hidden;
+    }
+    .fuel-bar-fill {
+      height: 100%; border-radius: 999px;
+      background: var(--grad-leo);
+      transition: width 0.6s cubic-bezier(.4,1.4,.6,1);
+    }
+    .fuel-cell.cal .fuel-bar-fill { background: linear-gradient(90deg, #fb923c, #f87171); }
+
+    /* ─── FOOD LOG (in nutri panel) ─── */
+    .food-section { margin-bottom: 12px; }
+    .food-drop {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; padding: 16px 12px;
+      border: 2px dashed rgba(251, 146, 60, 0.3);
+      border-radius: 12px;
+      background: rgba(251, 146, 60, 0.04);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .food-drop:hover { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.5); }
+    .food-drop.dragover { background: rgba(251, 146, 60, 0.14); border-color: var(--orange); transform: scale(1.01); }
+    .food-drop svg { width: 28px; height: 28px; color: var(--orange); opacity: 0.8; }
+    .food-drop-title { font-size: 13px; font-weight: 700; color: var(--text); }
+    .food-drop-sub { font-size: 11px; color: var(--text-muted); text-align: center; }
+    .food-drop-actions { display: flex; gap: 6px; margin-top: 4px; }
+    .food-drop-btn {
+      padding: 5px 12px;
+      background: var(--orange-soft);
+      color: var(--orange); font-weight: 700;
+      border: 1px solid rgba(251,146,60,0.35);
+      border-radius: 999px; font-size: 11px;
+      font-family: 'Outfit', sans-serif; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 5px;
+      transition: all 0.15s ease;
+    }
+    .food-drop-btn:hover { background: rgba(251,146,60,0.25); }
+    .food-drop-btn svg { width: 12px; height: 12px; }
+
+    .food-form {
+      display: none;
+      margin-top: 10px; padding: 12px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+    .food-form.active { display: block; }
+    .food-form-row {
+      display: flex; gap: 10px; margin-bottom: 10px;
+    }
+    .food-preview {
+      width: 76px; height: 76px; flex-shrink: 0;
+      border-radius: 10px; overflow: hidden;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .food-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .food-preview .ph {
+      color: var(--text-dim); font-size: 10px; padding: 6px; text-align: center;
+    }
+    .food-fields { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .food-input {
+      width: 100%;
+      padding: 7px 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px;
+    }
+    .food-input:focus { outline: none; border-color: var(--orange); }
+    .food-input::placeholder { color: var(--text-dim); }
+    .food-mini-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+    .food-numeric {
+      position: relative;
+    }
+    .food-numeric input {
+      width: 100%; padding: 7px 28px 7px 10px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 700;
+      text-align: left;
+    }
+    .food-numeric input:focus { outline: none; border-color: var(--orange); }
+    .food-numeric .suffix {
+      position: absolute; left: 9px; top: 50%;
+      transform: translateY(-50%);
+      font-size: 9.5px; color: var(--text-dim);
+      pointer-events: none; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .food-preset-row { margin-bottom: 8px; }
+    .food-preset-label {
+      font-size: 9px; color: var(--text-dim); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px;
+    }
+    .food-presets { display: flex; flex-wrap: wrap; gap: 4px; }
+    .food-preset {
+      padding: 3px 9px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 10.5px; color: var(--text); font-weight: 500;
+      cursor: pointer; transition: all 0.15s ease;
+      font-family: 'Outfit', sans-serif;
+    }
+    .food-preset:hover { border-color: var(--orange); color: var(--orange); }
+    .food-form-actions { display: flex; gap: 6px; }
+    .food-save {
+      flex: 1;
+      padding: 9px;
+      background: var(--grad-leo);
+      border: 0; border-radius: 10px;
+      color: #0f172a; font-weight: 800; font-size: 12.5px;
+      cursor: pointer; font-family: 'Outfit', sans-serif;
+      box-shadow: 0 6px 16px -5px rgba(251, 146, 60, 0.4);
+    }
+    .food-save:hover { transform: translateY(-1px); }
+    .food-cancel {
+      padding: 9px 14px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-muted); font-weight: 600; font-size: 12.5px;
+      cursor: pointer; font-family: 'Outfit', sans-serif;
+    }
+
+    .food-log-list {
+      list-style: none; display: flex; flex-direction: column; gap: 6px;
+      max-height: 280px; overflow-y: auto;
+      margin-top: 4px;
+    }
+    .food-item {
+      display: flex; gap: 9px; align-items: center;
+      padding: 7px 9px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: border-color 0.15s ease;
+    }
+    .food-item:hover { border-color: var(--border-strong); }
+    .food-thumb {
+      width: 42px; height: 42px; flex-shrink: 0;
+      border-radius: 8px; overflow: hidden;
+      background: rgba(251, 146, 60, 0.1);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .food-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .food-thumb .no-img { font-size: 16px; opacity: 0.5; }
+    .food-meta { flex: 1; min-width: 0; }
+    .food-name { font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .food-meta-sub {
+      display: flex; gap: 8px; align-items: center;
+      margin-top: 2px;
+    }
+    .food-time {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px; color: var(--text-dim);
+    }
+    .food-macros {
+      display: flex; gap: 5px; flex-shrink: 0; align-items: center;
+    }
+    .food-macro {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 700;
+      padding: 2px 6px; border-radius: 6px;
+    }
+    .food-macro.prot { background: rgba(163, 230, 53, 0.15); color: var(--lime); }
+    .food-macro.cal { background: rgba(251, 146, 60, 0.15); color: var(--orange); }
+    .food-del {
+      color: var(--text-dim); cursor: pointer;
+      font-size: 12px; padding: 0 5px;
+      flex-shrink: 0;
+    }
+    .food-del:hover { color: #ef4444; }
+    .food-empty {
+      text-align: center; font-style: italic;
+      color: var(--text-dim); font-size: 11px;
+      padding: 12px 0;
+    }
+    .food-section-divider {
+      margin: 14px 0 8px;
+      display: flex; align-items: center; gap: 8px;
+      font-size: 10px; color: var(--text-muted);
+      font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .food-section-divider::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(to left, var(--border), transparent);
+    }
+
     /* ─── WATER PANEL ─── */
     .water-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-bottom: 10px; }
     .glass {
@@ -853,6 +1118,44 @@
       </div>
     </div>
 
+    <!-- ─── FUEL MACRO CARD (prominent) ─── -->
+    <div class="fuel-card">
+      <div class="fuel-head">
+        <div class="fuel-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v6M12 22V12M4 8l8 4 8-4"/>
+            <path d="M4 8v8l8 4 8-4V8"/>
+          </svg>
+          Fuel · היום
+        </div>
+        <div class="fuel-day" id="fuel-day">—</div>
+      </div>
+      <div class="fuel-grid">
+        <div class="fuel-cell prot">
+          <div class="fuel-cell-top">
+            <div class="fuel-val"><span id="fuel-prot">0</span></div>
+            <div class="fuel-unit">g</div>
+          </div>
+          <div class="fuel-cell-bottom">
+            <div class="fuel-lbl">חלבון</div>
+            <div class="fuel-target">/ <span id="fuel-prot-target">100</span>g</div>
+          </div>
+          <div class="fuel-bar"><div class="fuel-bar-fill" id="fuel-prot-bar" style="width:0%"></div></div>
+        </div>
+        <div class="fuel-cell cal">
+          <div class="fuel-cell-top">
+            <div class="fuel-val"><span id="fuel-cal">0</span></div>
+            <div class="fuel-unit">kcal</div>
+          </div>
+          <div class="fuel-cell-bottom">
+            <div class="fuel-lbl">קלוריות</div>
+            <div class="fuel-target">/ <span id="fuel-cal-target">2000</span></div>
+          </div>
+          <div class="fuel-bar"><div class="fuel-bar-fill" id="fuel-cal-bar" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ─── TABS ─── -->
     <div class="tabs" role="tablist">
       <button class="tab t-zen active" data-tab="zen" role="tab">
@@ -1045,9 +1348,61 @@
     <!-- NUTRITION -->
     <div class="panel" id="panel-nutri" role="tabpanel">
       <div class="panel-head">
-        <div class="panel-title">3 ארוחות היום</div>
+        <div class="panel-title">תזונה · יומן ארוחות</div>
         <span class="panel-tag tag-orange" id="nutri-tag">0 / 3</span>
       </div>
+
+      <!-- ─── FOOD LOG SECTION ─── -->
+      <div class="food-section">
+        <div class="food-drop" id="food-drop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+          <div class="food-drop-title">צלם או גרור את הארוחה שלך</div>
+          <div class="food-drop-sub">Leo ירשום את החלבון והקלוריות, ואת השעה אוטומטית</div>
+          <div class="food-drop-actions">
+            <label class="food-drop-btn" for="food-camera">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              צלם
+            </label>
+            <label class="food-drop-btn" for="food-file">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              בחר תמונה
+            </label>
+            <button class="food-drop-btn" id="food-no-img" type="button" style="background:transparent; border-color:var(--border); color:var(--text-muted);">בלי תמונה</button>
+          </div>
+          <input type="file" id="food-camera" accept="image/*" capture="environment" style="display:none" />
+          <input type="file" id="food-file" accept="image/*" style="display:none" />
+        </div>
+
+        <div class="food-form" id="food-form">
+          <div class="food-form-row">
+            <div class="food-preview" id="food-preview"><div class="ph">אין תמונה</div></div>
+            <div class="food-fields">
+              <input type="text" class="food-input" id="food-name" placeholder="שם הארוחה (למשל: סלט עוף)" />
+              <div class="food-mini-row">
+                <div class="food-numeric"><input type="number" id="food-prot" min="0" step="1" placeholder="0" /><span class="suffix">חלבון g</span></div>
+                <div class="food-numeric"><input type="number" id="food-cal" min="0" step="10" placeholder="0" /><span class="suffix">קלוריות</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="food-preset-row">
+            <div class="food-preset-label">מילוי מהיר</div>
+            <div class="food-presets" id="food-presets"></div>
+          </div>
+          <div class="food-form-actions">
+            <button class="food-save" id="food-save">✓ שמור ארוחה</button>
+            <button class="food-cancel" id="food-cancel" type="button">ביטול</button>
+          </div>
+        </div>
+
+        <div class="food-section-divider">היום · <span id="food-count">0</span> ארוחות</div>
+        <ul class="food-log-list" id="food-log-list"></ul>
+      </div>
+
+      <!-- existing 3-meal checklist (kept) -->
+      <div class="food-section-divider" style="margin-top:18px;">סימון מהיר · ארוחות עיקריות</div>
       <div class="meals-list">
         <div class="meal-row" data-meal="breakfast">
           <div class="meal-check"></div>
@@ -1738,6 +2093,278 @@
     });
   });
   renderNutrition();
+
+  /* ============================================================
+     6b. FOOD LOG (image + protein + calories)
+  ============================================================ */
+  // Daily targets — tweak if user requests.
+  const FUEL_TARGETS = lsGet('leo_fuel_targets', { protein: 100, calories: 2000 });
+
+  // Foods: array of { ts, name, protein, calories, imageData (data: URL, optional), dayKey }
+  let foods = lsGet('leo_foods', []);
+
+  // Quick-fill presets — Hebrew names + reasonable macros.
+  const FOOD_PRESETS = [
+    { name: 'סלט עוף', prot: 35, cal: 420 },
+    { name: 'אומלט 3 ביצים', prot: 21, cal: 270 },
+    { name: 'יוגורט יווני', prot: 18, cal: 130 },
+    { name: 'כריך טונה', prot: 25, cal: 380 },
+    { name: 'אורז + עוף', prot: 38, cal: 520 },
+    { name: 'שייק חלבון', prot: 30, cal: 200 },
+    { name: 'פיצה (פרוסה)', prot: 12, cal: 285 },
+    { name: 'גרנולה + חלב', prot: 10, cal: 320 },
+    { name: 'פירות', prot: 1, cal: 90 },
+    { name: 'אגוזים (חופן)', prot: 6, cal: 180 },
+    { name: 'בורקס', prot: 8, cal: 350 },
+    { name: 'קוטג\' + לחם', prot: 16, cal: 250 }
+  ];
+
+  // ---------- Image compression ----------
+  function compressImage(file, maxDim = 600, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+      if (!file) return resolve(null);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let { width, height } = img;
+          if (width > height && width > maxDim) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+          else if (height > maxDim) { width = Math.round(width * (maxDim / height)); height = maxDim; }
+          const c = document.createElement('canvas');
+          c.width = width; c.height = height;
+          c.getContext('2d').drawImage(img, 0, 0, width, height);
+          resolve(c.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = reject;
+        img.src = e.target.result;
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // ---------- Form state ----------
+  const foodForm = {
+    open: false,
+    imageData: null,
+    name: '',
+    protein: 0,
+    calories: 0
+  };
+
+  const elDrop = document.getElementById('food-drop');
+  const elForm = document.getElementById('food-form');
+  const elPreview = document.getElementById('food-preview');
+  const elName = document.getElementById('food-name');
+  const elProt = document.getElementById('food-prot');
+  const elCal = document.getElementById('food-cal');
+  const elFile = document.getElementById('food-file');
+  const elCam = document.getElementById('food-camera');
+  const elNoImg = document.getElementById('food-no-img');
+  const elSave = document.getElementById('food-save');
+  const elCancel = document.getElementById('food-cancel');
+  const elPresetsWrap = document.getElementById('food-presets');
+
+  function renderPresets() {
+    elPresetsWrap.innerHTML = '';
+    FOOD_PRESETS.forEach(p => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'food-preset';
+      btn.textContent = p.name + ' · ' + p.prot + 'g · ' + p.cal;
+      btn.addEventListener('click', () => {
+        elName.value = p.name; foodForm.name = p.name;
+        elProt.value = p.prot; foodForm.protein = p.prot;
+        elCal.value = p.cal; foodForm.calories = p.cal;
+      });
+      elPresetsWrap.appendChild(btn);
+    });
+  }
+  renderPresets();
+
+  function openForm(imageData) {
+    foodForm.open = true;
+    foodForm.imageData = imageData || null;
+    foodForm.name = ''; foodForm.protein = 0; foodForm.calories = 0;
+    elName.value = ''; elProt.value = ''; elCal.value = '';
+    if (imageData) {
+      elPreview.innerHTML = '<img src="' + imageData + '" alt="meal" />';
+    } else {
+      elPreview.innerHTML = '<div class="ph">בלי תמונה</div>';
+    }
+    elForm.classList.add('active');
+    setTimeout(() => elName.focus(), 50);
+  }
+  function closeForm() {
+    foodForm.open = false;
+    foodForm.imageData = null;
+    elForm.classList.remove('active');
+  }
+
+  async function handleFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    try {
+      const compressed = await compressImage(file, 500, 0.7);
+      openForm(compressed);
+      
+      const originalPlaceholder = elName.placeholder;
+      elName.value = '';
+      elName.placeholder = 'מנתח תמונה... 🤖';
+      elProt.value = '';
+      elCal.value = '';
+      
+      try {
+        const res = await fetch('http://localhost:8000/api/analyze_food', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ image: compressed })
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            elName.value = data.name || '';
+            foodForm.name = data.name || '';
+            elProt.value = data.protein || 0;
+            foodForm.protein = data.protein || 0;
+            elCal.value = data.calories || 0;
+            foodForm.calories = data.calories || 0;
+        }
+      } catch(err) {
+        console.error('AI Analysis failed', err);
+      }
+      
+      elName.placeholder = originalPlaceholder;
+    } catch (e) {
+      console.error('Image processing failed', e);
+      openForm(null);
+    }
+  }
+
+  // Click drop → choose file (fallback when label isn't reachable)
+  elDrop.addEventListener('click', (e) => {
+    if (e.target.closest('.food-drop-btn') || e.target.tagName === 'INPUT') return;
+    elFile.click();
+  });
+  elFile.addEventListener('change', (e) => { handleFile(e.target.files[0]); e.target.value = ''; });
+  elCam.addEventListener('change', (e) => { handleFile(e.target.files[0]); e.target.value = ''; });
+  elNoImg.addEventListener('click', (e) => { e.stopPropagation(); openForm(null); });
+
+  // Drag & drop
+  ['dragenter', 'dragover'].forEach(ev =>
+    elDrop.addEventListener(ev, (e) => { e.preventDefault(); elDrop.classList.add('dragover'); })
+  );
+  ['dragleave', 'drop'].forEach(ev =>
+    elDrop.addEventListener(ev, (e) => { e.preventDefault(); elDrop.classList.remove('dragover'); })
+  );
+  elDrop.addEventListener('drop', (e) => {
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (f) handleFile(f);
+  });
+
+  // Field bindings
+  elName.addEventListener('input', () => { foodForm.name = elName.value.trim(); });
+  elProt.addEventListener('input', () => { foodForm.protein = Math.max(0, parseInt(elProt.value, 10) || 0); });
+  elCal.addEventListener('input', () => { foodForm.calories = Math.max(0, parseInt(elCal.value, 10) || 0); });
+
+  // Save
+  elSave.addEventListener('click', () => {
+    if (!foodForm.name && !foodForm.protein && !foodForm.calories) {
+      elName.focus();
+      return;
+    }
+    const entry = {
+      ts: Date.now(),
+      dayKey: todayStr,
+      name: foodForm.name || 'ארוחה',
+      protein: foodForm.protein || 0,
+      calories: foodForm.calories || 0,
+      imageData: foodForm.imageData || null
+    };
+    foods.push(entry);
+    lsSet('leo_foods', foods);
+    closeForm();
+    renderFoodLog();
+    renderFuel();
+    updateScore();
+  });
+  elCancel.addEventListener('click', closeForm);
+
+  // Delete (delegated)
+  function deleteFood(ts) {
+    foods = foods.filter(f => f.ts !== ts);
+    lsSet('leo_foods', foods);
+    renderFoodLog();
+    renderFuel();
+    updateScore();
+  }
+
+  // ---------- Rendering ----------
+  function todaysFoods() {
+    return foods.filter(f => f.dayKey === todayStr).sort((a, b) => a.ts - b.ts);
+  }
+
+  function fmtTime(ts) {
+    const d = new Date(ts);
+    return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+  }
+
+  function renderFoodLog() {
+    const list = document.getElementById('food-log-list');
+    const today = todaysFoods();
+    document.getElementById('food-count').textContent = today.length;
+    list.innerHTML = '';
+    if (!today.length) {
+      list.innerHTML = '<li class="food-empty">עוד לא תיעדת ארוחות היום. צלם או גרור תמונה ↑</li>';
+      return;
+    }
+    today.slice().reverse().forEach(f => {
+      const li = document.createElement('li');
+      li.className = 'food-item';
+      const thumb = f.imageData
+        ? '<div class="food-thumb"><img src="' + f.imageData + '" alt="" /></div>'
+        : '<div class="food-thumb"><span class="no-img">🍽️</span></div>';
+      li.innerHTML =
+        thumb +
+        '<div class="food-meta">' +
+          '<div class="food-name">' + escapeHtml(f.name) + '</div>' +
+          '<div class="food-meta-sub"><span class="food-time">⏱ ' + fmtTime(f.ts) + '</span></div>' +
+        '</div>' +
+        '<div class="food-macros">' +
+          '<span class="food-macro prot">' + (f.protein || 0) + 'g</span>' +
+          '<span class="food-macro cal">' + (f.calories || 0) + '</span>' +
+        '</div>' +
+        '<span class="food-del" data-ts="' + f.ts + '" title="מחק">✕</span>';
+      list.appendChild(li);
+    });
+    list.querySelectorAll('.food-del').forEach(btn => {
+      btn.addEventListener('click', (e) => deleteFood(+e.target.dataset.ts));
+    });
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function renderFuel() {
+    const today = todaysFoods();
+    const prot = today.reduce((a, f) => a + (f.protein || 0), 0);
+    const cal = today.reduce((a, f) => a + (f.calories || 0), 0);
+    document.getElementById('fuel-prot').textContent = prot;
+    document.getElementById('fuel-cal').textContent = cal.toLocaleString();
+    document.getElementById('fuel-prot-target').textContent = FUEL_TARGETS.protein;
+    document.getElementById('fuel-cal-target').textContent = FUEL_TARGETS.calories.toLocaleString();
+    const protPct = Math.min(100, Math.round((prot / FUEL_TARGETS.protein) * 100));
+    const calPct = Math.min(100, Math.round((cal / FUEL_TARGETS.calories) * 100));
+    document.getElementById('fuel-prot-bar').style.width = protPct + '%';
+    document.getElementById('fuel-cal-bar').style.width = calPct + '%';
+
+    const d = new Date();
+    document.getElementById('fuel-day').textContent =
+      String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') +
+      ' · ' + DOW_HE[d.getDay()];
+  }
+
+  renderFoodLog();
+  renderFuel();
 
   /* ============================================================
      7. STREAK + SCORE

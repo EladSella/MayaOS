@@ -1,0 +1,2 @@
+# MayaOS relies entirely on Python standard libraries
+# No external dependencies are required.

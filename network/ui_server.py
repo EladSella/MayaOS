@@ -65,9 +65,72 @@ class DashboardHandler(http.server.SimpleHTTPRequestHandler):
 
     def end_headers(self):
         self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-type, X-File-Name')
         super().end_headers()
 
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.end_headers()
+
     def do_POST(self):
+        if self.path == '/api/analyze_food':
+            import json, urllib.request, os
+            
+            env_path = BASE_DIR / ".env"
+            api_key = None
+            if env_path.exists():
+                with open(env_path, 'r') as f:
+                    for line in f:
+                        if line.startswith("GEMINI_API_KEY="):
+                            api_key = line.strip().split("=", 1)[1]
+            
+            if not api_key:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(b'{"error": "API Key missing"}')
+                return
+
+            content_length = int(self.headers.get('Content-Length', 0))
+            if content_length > 0:
+                body = self.rfile.read(content_length).decode('utf-8')
+                data = json.loads(body)
+                image_data = data.get("image")
+                
+                if image_data and "," in image_data:
+                    mime_type, b64_data = image_data.split(",", 1)
+                    mime_type = mime_type.split(":")[1].split(";")[0]
+                    
+                    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={api_key}"
+                    payload = {
+                        "contents": [{
+                            "parts": [
+                                {"text": "You are a professional nutritionist. Analyze this food image. Return a JSON object with 'name' (string, Hebrew name of the dish), 'calories' (integer), and 'protein' (integer in grams). Be as accurate as possible. Return ONLY the JSON object without markdown formatting."},
+                                {"inlineData": {"mimeType": mime_type, "data": b64_data}}
+                            ]
+                        }]
+                    }
+                    
+                    req = urllib.request.Request(url, data=json.dumps(payload).encode('utf-8'), headers={'Content-Type': 'application/json'})
+                    try:
+                        with urllib.request.urlopen(req) as response:
+                            gemini_resp = json.loads(response.read().decode('utf-8'))
+                            text = gemini_resp['candidates'][0]['content']['parts'][0]['text']
+                            text = text.replace('```json', '').replace('```', '').strip()
+                            
+                            self.send_response(200)
+                            self.send_header('Content-type', 'application/json')
+                            self.end_headers()
+                            self.wfile.write(text.encode('utf-8'))
+                    except Exception as e:
+                        self.send_response(500)
+                        self.end_headers()
+                        self.wfile.write(json.dumps({"error": str(e)}).encode('utf-8'))
+            else:
+                self.send_response(400)
+                self.end_headers()
+            return
+
         if self.path == '/upload':
             raw_file_name = self.headers.get('X-File-Name', 'uploaded_file.bin')
             file_name = urllib.parse.unquote(raw_file_name)
