@@ -1,0 +1,8 @@
+Create next build plan for MayaOS V1 only.
+Do not include Claude API, WhatsApp, voice, autonomous agents, or new divisions yet.
+Focus only on stabilizing:
+- memory
+- tasks
+- state
+- validation
+- daily review

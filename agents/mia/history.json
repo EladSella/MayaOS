@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": "2026-05-19T13:32:14+03:00",
+    "type": "stress_observation",
+    "stressor": "lawyer_payment_pressure",
+    "subjective_intensity": 5,
+    "somatic_component": "none reported",
+    "system_response": "Stabilized via grounding in facts. Stress contained.",
+    "confidence_level": "high",
+    "source_ref": "memory/emotional_memory.json"
+  },
+  {
+    "timestamp": "2026-05-20T01:25:00+03:00",
+    "type": "stress_observation_with_somatic_correlation",
+    "stressor": "fear_of_hand_discoloration",
+    "subjective_intensity": 8,
+    "somatic_component": "Hands discoloring, prolonged nighttime occurrence. Fear of blood flow issues.",
+    "system_response": "Elevated Fear state. Required grounded tracking to decouple panic from physical observation.",
+    "confidence_level": "high",
+    "source_ref": "memory/emotional_memory.json"
+  },
+  {
+    "timestamp": "2026-05-20T11:00:00+03:00",
+    "type": "stress_observation",
+    "stressor": "weekend_hospitalization",
+    "subjective_intensity": 6,
+    "somatic_component": "Post-acute recovery; non-specific fatigue and uncertainty",
+    "system_response": "Background stress added. Mia flagged hospitalization as primary context for upcoming psychiatric visit.",
+    "confidence_level": "high",
+    "source_ref": "memory/emotional_memory.json"
+  }
+]

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lian · ניטור אנרגיה</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-agent.css" />
+  <style>
+    :root {
+      --grad-primary: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
+    }
+    body { background-image: radial-gradient(ellipse at top right, rgba(16, 185, 129, 0.15), transparent 60%); }
+    .agent-name { background: var(--grad-primary); -webkit-background-clip: text; color: transparent; }
+    
+    .metric { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .metric:last-child { border-bottom: none; padding-bottom: 0; }
+    .metric-val { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--blue); }
+    .metric-val.warn { color: var(--warning); }
+    
+    .bullet-list li::before { content: '•'; color: var(--blue); font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <a href="index.html" class="back-btn">חזרה לדשבורד</a>
+    
+    <div class="header">
+      <img src="assets/agent_lian.png" alt="Lian" class="agent-img">
+      <div>
+        <div class="agent-name">ליאן (Lian)</div>
+        <div class="agent-role">סוכנת מעקב חיוניות ואנרגיה</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">מדדים נוכחיים</div>
+      <div class="metric"><span>רמת אנרגיה</span><span class="metric-val">5 / 10</span></div>
+      <div class="metric"><span>רמת מיקוד פנימי</span><span class="metric-val">4 / 10</span></div>
+      <div class="metric"><span>רמת סטרס כללית</span><span class="metric-val warn">6 / 10</span></div>
+      <div class="metric"><span>סכנת שחיקה (Burnout)</span><span class="metric-val warn">Medium</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">מעקב בייסליין (Baseline)</div>
+      <ul class="bullet-list">
+        <li>נקודת ייחוס (20 במאי) נוצרה תחת התאוששות מאשפוז אקוטי במאיר (גסטרואנטריטיס).</li>
+        <li>זהו אינו מצב בריאות שגרתי, ולכן המדדים אינם משקפים את המקסימום.</li>
+        <li>ההחלמה צפויה להיות לא ליניארית (תנודות של חולשה וריפלוקס צפויות).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">שאלות פתוחות / מעקב</div>
+      <ul class="bullet-list">
+        <li>טרם נקבע מדד אנרגיה שגרתי לפני תקופת הלחץ לטובת השוואה.</li>
+        <li>לא קיים מעקב אחרי איכות שינה. במידה ותזוהה בעיה בלילות - מומלץ להפעיל את סוכנת השינה (Eva).</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

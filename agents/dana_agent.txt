@@ -1,0 +1,14 @@
+DEPRECATED - This single-file persona has been superseded.
+
+The canonical location for Dana is now the folder: agents/dana/
+
+See:
+- agents/dana/persona.md
+- agents/dana/state.json
+- agents/dana/history.json
+- agents/dana/protocol.md
+- agents/dana/inbox.json
+- agents/dana/outbox.json
+- network/invoke_dana.py  (standalone runner)
+
+This file is retained only as a pointer. Do not edit it. Do not load it as the persona.

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Gabriel · מיון רפואי</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-agent.css" />
+  <style>
+    :root {
+      --grad-primary: linear-gradient(135deg, #ef4444 0%, #3b82f6 100%);
+    }
+    body { background-image: radial-gradient(ellipse at top right, rgba(239, 68, 68, 0.15), transparent 60%); }
+    .agent-name { background: var(--grad-primary); -webkit-background-clip: text; color: transparent; }
+    
+    .tag-container { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { font-size: 12px; padding: 6px 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 999px; }
+    .tag.red { border-color: var(--danger); background: rgba(239, 68, 68, 0.1); color: #fca5a5; }
+    
+    .bullet-list li::before { content: '•'; color: var(--danger); font-weight: bold; }
+
+    /* Emergency Button */
+    .emergency-btn {
+      display: flex; justify-content: center; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+      color: white; text-decoration: none;
+      padding: 18px; border-radius: var(--radius);
+      font-size: 22px; font-weight: 800; letter-spacing: 1px;
+      margin-bottom: 20px; box-shadow: 0 8px 25px rgba(239, 68, 68, 0.5);
+      transition: all 0.2s ease;
+      animation: pulse-red 2s infinite;
+    }
+    .emergency-btn:hover { transform: scale(1.02); box-shadow: 0 10px 30px rgba(239, 68, 68, 0.7); }
+    @keyframes pulse-red {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <a href="index.html" class="back-btn">חזרה לדשבורד</a>
+    
+    <div class="header">
+      <img src="assets/agent_gabriel.png" alt="Gabriel" class="agent-img">
+      <div>
+        <div class="agent-name">גבריאל (Gabriel)</div>
+        <div class="agent-role">סוכן טריאז' מיון וחירום</div>
+      </div>
+    </div>
+
+    <!-- MADA Button -->
+    <a href="tel:101" class="emergency-btn">
+      🚨 חייג עכשיו למד"א (101) 🚨
+    </a>
+
+    <div class="card">
+      <div class="card-title">סטטוס קליני פעיל</div>
+      <ul class="bullet-list">
+        <li>מצב אירוע אקוטי: <span style="color:#10b981">שלילי (רגיעה)</span></li>
+        <li>אשפוז אחרון: 15-16 במאי, גסטרואנטריטיס (הקאות, חולשה). קבלת תרופות: פרמין 10 מ"ג. אירוע לבבי נשלל.</li>
+        <li>סימפטום תחת מעקב: "הכחלת ידיים" (תועד לאחרונה: 20.5 10:01).</li>
+      </ul>
+    </div>
+
+    <div class="card" style="border-color: rgba(16, 185, 129, 0.4); background: rgba(16, 185, 129, 0.05);">
+      <div class="card-title" style="color: var(--success);">נשלל משמעותית ע"י בדיקות הדם</div>
+      <div class="tag-container">
+        <span class="tag" style="border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; text-decoration: line-through;">מחלות רקמת חיבור (ANA שלילי)</span>
+        <span class="tag" style="border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; text-decoration: line-through;">דלקת מפרקים שגרונית</span>
+        <span class="tag" style="border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; text-decoration: line-through;">דלקת מערכתית פעילה</span>
+        <span class="tag" style="border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; text-decoration: line-through;">אנמיה / חוסר B12</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">השערות במעקב (לראומטולוג)</div>
+      <div class="tag-container">
+        <span class="tag">תופעת Raynaud's (כנראה ראשונית, לא אוטואימונית)</span>
+        <span class="tag">תגובת כלי דם לסטרס / קור</span>
+        <span class="tag">כיווץ שרירי צוואר מקרין</span>
+        <span class="tag">תגובה אוטונומית של פוסט-טראומה פיזית</span>
+        <span class="tag">השפעות מערכת העיכול (IBS) על העצב התועה (Vagus)</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">דגלים אדומים לסריקה מיידית</div>
+      <div class="tag-container">
+        <span class="tag red">כאב חזה</span>
+        <span class="tag red">קוצר נשימה</span>
+        <span class="tag red">אובדן תחושה ביד</span>
+        <span class="tag red">צבע כחול לא יורד אחרי שעתיים</span>
+        <span class="tag red">חולשה משמעותית / חוסר יכולת לעמוד</span>
+        <span class="tag red">פצעים פתוחים או הופעת נמק</span>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

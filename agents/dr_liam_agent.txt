@@ -1,0 +1,14 @@
+DEPRECATED - This single-file persona has been superseded.
+
+The canonical location for Dr. Liam is now the folder: agents/dr_liam/
+
+See:
+- agents/dr_liam/persona.md
+- agents/dr_liam/state.json
+- agents/dr_liam/history.json
+- agents/dr_liam/protocol.md
+- agents/dr_liam/inbox.json
+- agents/dr_liam/outbox.json
+- network/invoke_dr_liam.py  (standalone runner with --synthesize)
+
+This file is retained only as a pointer. Do not edit it. Do not load it as the persona.

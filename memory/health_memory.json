@@ -1,0 +1,124 @@
+[
+  {
+    "timestamp": "2026-05-20T01:25:00+03:00",
+    "topic": "Acute Physical Event & Hand Discoloration",
+    "summary": "User experienced severe physical symptoms (vomiting ~10 times, tremors, sweating, shortness of breath, severe nausea, weakness) on Thursday. Cardiac event ruled out. Ongoing symptom: hands/fingers turning blue, sometimes lasting overnight. Accompanied by fear and visible veins.",
+    "hypotheses_monitored": [
+      "Raynaud's phenomenon",
+      "Vascular response to stress/cold/posture",
+      "Muscular/nerve tension from neck",
+      "Post-acute stress response",
+      "Dehydration/electrolyte imbalance"
+    ],
+    "medical_appointments": "Rheumatologist (upcoming Tuesday)",
+    "red_flags_to_watch": "Severe pain, hand not returning to normal color, significant weakness, loss of sensation, chest pain, shortness of breath, black fingers/sores.",
+    "confidence_level": "high"
+  },
+  {
+    "timestamp": "2026-05-20T10:01:00+03:00",
+    "topic": "Hand Discoloration Photo Documentation",
+    "summary": "Visual evidence captured: medial/ulnar side of right hand shows greenish-blue discoloration with prominent vein visibility. Photo timestamped 10:01. Logged by Gabriel (Emergency Health Agent) for inclusion in pre-appointment file.",
+    "evidence_type": "photograph",
+    "logged_by": "Gabriel",
+    "confidence_level": "high"
+  },
+  {
+    "timestamp": "2026-05-20T11:00:00+03:00",
+    "topic": "Weekend Hospitalization Recorded",
+    "summary": "User reports hospitalization over the previous weekend (approx. 2026-05-16 / 2026-05-17). Discharge documentation not yet present in MayaOS. Hospitalization is baseline context for both upcoming specialist visits. Recovery curve is currently active and non-linear.",
+    "open_items": [
+      "Obtain and store discharge summary",
+      "Document reason for admission",
+      "Document medications prescribed at discharge",
+      "Document follow-up instructions given at discharge"
+    ],
+    "logged_by": "Dr. Liam",
+    "confidence_level": "medium",
+    "notes": "Confidence medium because no documentation file has been received yet. Will move to high once discharge papers are logged."
+  },
+  {
+    "timestamp": "2026-05-20T11:05:00+03:00",
+    "topic": "Specialist Appointments Scheduled — 2026-05-26",
+    "summary": "Two specialist appointments scheduled for Tuesday 2026-05-26: Rheumatologist 18:30, Psychiatrist 20:00. Document checklist initiated by Dana.",
+    "documents_to_bring": [
+      "Recent blood test results",
+      "Referrals (הפניות) for each specialist",
+      "Photo log of hand discoloration episodes",
+      "Hospital discharge summary (when available)",
+      "Written timeline: Thursday acute event → weekend hospitalization → current symptoms",
+      "List of current medications and supplements"
+    ],
+    "insurance_check_owner": "Chen",
+  },
+  {
+    "timestamp": "2026-05-20T16:50:00+03:00",
+    "topic": "Gravity Medical Master Brief - Integration",
+    "summary": "Master Brief imported. Demographic context: Male, born 1977. Chronic stress load, divorce/custody, high workload. New symptom tracking added: Left arm tingling/electrical sensations, blue markings on abdomen, and GI episode triggered by wine. Triggers to monitor: water exposure, fatigue, alcohol, cold.",
+    "new_symptoms_logged": [
+      "Tingling/electrical sensations (left hand/arm, mostly morning/stress)",
+      "Blue markings/discoloration on abdomen",
+      "Gastrointestinal acute episode linked to wine (dizziness, nausea, vomiting)"
+    ],
+    "psychosocial_context": "Divorce, custody stressors, financial stress.",
+    "confidence_level": "high",
+  },
+  {
+    "timestamp": "2026-05-20T22:26:00+03:00",
+    "topic": "Chronic and Past Medical History Update",
+    "summary": "User disclosed history of Helicobacter pylori infection and active/ongoing Irritable Bowel Syndrome (IBS). This is highly relevant context for the recent acute gastroenteritis episode and the ongoing stress/vascular symptoms.",
+    "chronic_conditions": [
+      "Irritable Bowel Syndrome (IBS) - Active"
+    ],
+    "past_conditions": [
+      "Helicobacter Pylori - Past"
+    ],
+    "confidence_level": "high",
+  },
+  {
+    "timestamp": "2026-05-20T22:50:00+03:00",
+    "topic": "Post-Hospitalization Symptom Check",
+    "summary": "User reported general weakness, headache, and mild reflux. Triage indicates likely dehydration / post-acute gastroenteritis recovery complicated by IBS history. No acute cardiovascular red flags reported.",
+    "symptoms": [
+      "Weakness",
+      "Headache",
+      "Mild Reflux"
+    ],
+    "action_taken": "Advised rest and hydration. Logged for Gabriel's tracking.",
+    "confidence_level": "high",
+    "logged_by": "Gravity"
+  },
+  {
+    "timestamp": "2026-05-21T00:31:00+03:00",
+    "topic": "Comprehensive Blood Panel Results",
+    "summary": "User uploaded 10 PDF files containing comprehensive blood test results from late April 2026. The results are exceptionally clean and normal across all major domains, which is highly significant for ruling out systemic, autoimmune, or inflammatory causes for the ongoing symptoms.",
+    "tests": [
+      {
+        "test_name": "Rheumatology/Autoimmune Markers",
+        "result": "ALL NEGATIVE/NORMAL",
+        "notes": "ANA Titer: Negative, ANA Pattern: Negative. Rheumatoid Factor: < 15.0. This rules out Lupus (SLE), Rheumatoid Arthritis, Sjogren's, and most mixed connective tissue diseases."
+      },
+      {
+        "test_name": "Inflammation Markers",
+        "result": "NORMAL",
+        "notes": "CRP: 0.34 mg/dL. ESR: 5 mm/h. No active systemic inflammation."
+      },
+      {
+        "test_name": "Complete Blood Count (CBC)",
+        "result": "NORMAL",
+        "notes": "WBC 8.3, RBC 5.34, HB 15.7, Platelets 304. No anemia, no infection."
+      },
+      {
+        "test_name": "Chemistry & Endocrine",
+        "result": "NORMAL",
+        "notes": "Glucose, Renal function (Urea/Creatinine), Liver function (AST/ALT), Electrolytes (Calcium, Phosphorus) all within normal limits. TSH 4.450 (Normal). Vit B12 297 (Normal)."
+      },
+      {
+        "test_name": "Infectious Serology",
+        "result": "NEGATIVE",
+        "notes": "HIV, Syphilis, Hep C, Hep Bs Ag are all negative. Hep Bs Ab is positive (>1000) indicating immunity/past vaccination."
+      }
+    ],
+    "confidence_level": "high",
+    "logged_by": "Gravity"
+  }
+]

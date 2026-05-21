@@ -1,0 +1,59 @@
+[
+  {
+    "event_id": "evt_2026_05_thursday_acute",
+    "timestamp": "2026-05-14T00:00:00+03:00",
+    "event_type": "acute_episode",
+    "symptom_summary": "Vomiting ~10 times, tremors, sweating, shortness of breath, severe nausea, weakness.",
+    "duration": "Multiple hours (exact unknown — pre-tracking)",
+    "side": "n/a (systemic)",
+    "red_flags_present_at_time": [
+      "shortness of breath",
+      "severe weakness"
+    ],
+    "outcome": "Cardiac event ruled out by hospital workup.",
+    "documentation_source": "User report. Logged retroactively in health_memory.json on 2026-05-20.",
+    "confidence_level": "medium",
+    "notes": "Pre-Gabriel-activation event. Logged for historical context. Date approximate."
+  },
+  {
+    "event_id": "evt_2026_05_weekend_hospitalization",
+    "timestamp": "2026-05-16T00:00:00+03:00",
+    "event_type": "hospitalization",
+    "symptom_summary": "Admitted over weekend. Reason for admission and full workup pending discharge documentation.",
+    "duration": "Estimated 1-2 nights",
+    "side": "n/a",
+    "red_flags_present_at_time": [
+      "unknown — pending discharge summary"
+    ],
+    "outcome": "Discharged. Discharge summary not yet uploaded to system.",
+    "documentation_source": "User self-report 2026-05-20.",
+    "confidence_level": "medium",
+    "notes": "HIGH PRIORITY: obtain discharge summary. Multiple downstream tasks depend on it."
+  },
+  {
+    "event_id": "evt_2026_05_20_hand_photo",
+    "timestamp": "2026-05-20T10:01:00+03:00",
+    "event_type": "symptom_episode",
+    "symptom_summary": "Hand discoloration documented in photograph. Medial/ulnar side of right hand shows greenish-blue tint with prominent vein visibility.",
+    "duration": "Captured at single timestamp — duration of episode unknown from this evidence alone",
+    "side": "right",
+    "red_flags_present_at_time": [],
+    "outcome": "Photographed and logged. No escalation triggered.",
+    "documentation_source": "Photo provided by user, logged in health_memory.json.",
+    "confidence_level": "high",
+    "notes": "Add duration tracking to future photo events."
+  },
+  {
+    "event_id": "evt_2026_05_20_hand discoloration",
+    "timestamp": "2026-05-20T07:33:30.156511+00:00",
+    "event_type": "symptom_episode",
+    "symptom_summary": "hand discoloration",
+    "duration": "20min",
+    "side": "right",
+    "red_flags_present_at_time": [],
+    "outcome": "resolved after warming",
+    "documentation_source": "invoke_gabriel.py --log",
+    "confidence_level": "high",
+    "notes": ""
+  }
+]

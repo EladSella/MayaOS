@@ -1,0 +1,26 @@
+[
+  {
+    "timestamp": "2026-05-19T13:32:14+03:00",
+    "trigger": "Repeated request from lawyer",
+    "state": "Monitoring (Stabilized)",
+    "stress_level_delta": "0",
+    "notes": "System intercepted potential emotional escalation by grounding the user in objective facts and multiple hypotheses. Stress remained contained.",
+    "confidence_level": "high"
+  },
+  {
+    "timestamp": "2026-05-20T01:25:00+03:00",
+    "trigger": "Physical symptoms: hands turning blue after acute physical event",
+    "state": "Elevated Fear",
+    "stress_level_delta": "+3",
+    "notes": "User reported significant fear regarding blood flow and blue hands, especially after a prolonged nighttime occurrence. The medical situation creates acute anxiety, requiring grounded tracking and logical symptom monitoring to decouple panic from physical observation.",
+    "confidence_level": "high"
+  },
+  {
+    "timestamp": "2026-05-20T11:00:00+03:00",
+    "trigger": "Weekend hospitalization (newly disclosed to system)",
+    "state": "Post-acute Recovery + Background Stress",
+    "stress_level_delta": "+1",
+    "notes": "Hospitalization adds significant psychological load beyond the symptom itself: loss of routine, exposure to medical environment, uncertainty about cause. Mia (Stress Regulation) flagged this as primary context for the psychiatric appointment on 2026-05-26. Recovery curve expected to be non-linear; energy dips are normal and should not trigger crisis-mode escalation unless red flags appear.",
+    "confidence_level": "high"
+  }
+]

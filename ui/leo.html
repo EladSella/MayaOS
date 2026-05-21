@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>Leo · אורח חיים בריא</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-0: #0f172a;
+      --panel: rgba(255, 255, 255, 0.045);
+      --panel-strong: rgba(255, 255, 255, 0.08);
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --lime: #a3e635;
+      --lime-soft: rgba(163, 230, 53, 0.14);
+      --orange: #fb923c;
+      --orange-soft: rgba(251, 146, 60, 0.14);
+      --cyan: #22d3ee;
+      --cyan-soft: rgba(34, 211, 238, 0.14);
+
+      --grad-leo: linear-gradient(135deg, #a3e635 0%, #fb923c 100%);
+      --grad-zen: linear-gradient(135deg, #22d3ee 0%, #818cf8 100%);
+
+      --shadow-card: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text); background: var(--bg-0);
+      -webkit-font-smoothing: antialiased;
+      letter-spacing: -0.005em;
+    }
+    body {
+      background:
+        radial-gradient(ellipse 60% 50% at 80% -10%, rgba(163, 230, 53, 0.18), transparent 70%),
+        radial-gradient(ellipse 50% 40% at 10% 25%, rgba(251, 146, 60, 0.12), transparent 70%),
+        radial-gradient(ellipse 60% 50% at 50% 100%, rgba(34, 211, 238, 0.08), transparent 70%),
+        var(--bg-0);
+      min-height: 100vh;
+      padding: 14px 12px 22px;
+    }
+
+    .app {
+      max-width: 440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    /* ─── BACK ─── */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-muted); text-decoration: none;
+      font-size: 12px; font-weight: 500;
+      transition: color 0.2s ease, transform 0.2s ease;
+      width: fit-content;
+    }
+    .back-btn:hover { color: var(--lime); transform: translateX(2px); }
+    .back-btn::before { content: '→'; }
+
+    /* ─── HERO (COMPACT) ─── */
+    .hero {
+      position: relative;
+      padding: 14px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; top: -50%; right: -10%;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(163, 230, 53, 0.25), transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+    .hero-top { display: flex; gap: 12px; align-items: center; position: relative; z-index: 1; }
+    .avatar-frame {
+      position: relative; width: 56px; height: 56px; flex-shrink: 0;
+      border-radius: 50%; padding: 2px;
+      background: var(--grad-leo);
+      box-shadow: 0 6px 18px -4px rgba(163, 230, 53, 0.45);
+    }
+    .avatar-frame img {
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--bg-0); display: block;
+    }
+    .avatar-status {
+      position: absolute; bottom: 1px; left: 1px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--lime); border: 2px solid var(--bg-0);
+      box-shadow: 0 0 6px rgba(163, 230, 53, 0.8);
+    }
+    .hero-meta { flex: 1; min-width: 0; }
+    .hero-name {
+      font-size: 18px; font-weight: 800; letter-spacing: -0.015em;
+      background: var(--grad-leo);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1.1;
+    }
+    .hero-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--lime); letter-spacing: 0.04em;
+      margin-top: 3px;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .hero-role::before {
+      content: ''; width: 4px; height: 4px;
+      background: var(--lime); border-radius: 50%;
+    }
+    .hero-stats {
+      display: flex; gap: 8px; flex-shrink: 0;
+    }
+    .hero-stat {
+      text-align: center; padding: 4px 8px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      min-width: 42px;
+    }
+    .hero-stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 700;
+      background: var(--grad-leo);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1;
+    }
+    .hero-stat-lbl {
+      font-size: 8px; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      font-weight: 600; margin-top: 2px;
+    }
+
+    /* ─── SCORE + MISSIONS in one card ─── */
+    .top-card {
+      padding: 14px; background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+    }
+    .score-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+    .score-ring { position: relative; width: 78px; height: 78px; flex-shrink: 0; }
+    .score-ring svg { transform: rotate(-90deg); }
+    .score-ring .track { stroke: rgba(255, 255, 255, 0.08); }
+    .score-ring .progress {
+      stroke: url(#leoGrad); stroke-linecap: round;
+      filter: drop-shadow(0 0 4px rgba(163, 230, 53, 0.5));
+      transition: stroke-dashoffset 1s ease;
+    }
+    .score-center {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .score-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px; font-weight: 700;
+      background: var(--grad-leo);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1;
+    }
+    .score-suffix { font-size: 8px; color: var(--text-dim); letter-spacing: 0.06em; margin-top: 1px; font-weight: 600; }
+    .score-info { flex: 1; min-width: 0; }
+    .score-title {
+      font-size: 10px; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      font-weight: 600; margin-bottom: 3px;
+    }
+    .score-headline { font-size: 15px; font-weight: 700; line-height: 1.2; margin-bottom: 3px; }
+    .score-sub { font-size: 11px; color: var(--text-muted); line-height: 1.35; }
+
+    .mission-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
+      padding-top: 12px; border-top: 1px solid var(--border);
+    }
+    .mission {
+      padding: 8px 6px; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); border-radius: 8px;
+      text-align: center; cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .mission:hover { transform: translateY(-1px); border-color: var(--border-strong); }
+    .mission-icon {
+      width: 24px; height: 24px; margin: 0 auto 4px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--lime-soft); color: var(--lime);
+    }
+    .mission.m-nutrition .mission-icon { background: var(--orange-soft); color: var(--orange); }
+    .mission.m-zen .mission-icon { background: var(--cyan-soft); color: var(--cyan); }
+    .mission-val { font-size: 11px; font-weight: 700; }
+    .mission-status {
+      margin-top: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5px; color: var(--text-muted);
+    }
+    .mission.done .mission-status { color: var(--lime); }
+    .mission.m-nutrition.done .mission-status { color: var(--orange); }
+    .mission.m-zen.done .mission-status { color: var(--cyan); }
+
+    /* ─── TABS NAV ─── */
+    .tabs {
+      display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 6px;
+      padding: 5px; background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: 12px;
+      box-shadow: var(--shadow-card);
+    }
+    .tab {
+      padding: 8px 4px;
+      background: transparent; border: 0; border-radius: 8px;
+      color: var(--text-muted); cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-size: 11px; font-weight: 700;
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .tab svg { width: 16px; height: 16px; }
+    .tab.active {
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+    }
+    .tab.active.t-zen { color: var(--cyan); }
+    .tab.active.t-workout { color: var(--lime); }
+    .tab.active.t-nutri { color: var(--orange); }
+    .tab.active.t-water { color: var(--cyan); }
+
+    /* ─── PANEL (TAB CONTENT) ─── */
+    .panel {
+      padding: 14px; background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      display: none;
+      animation: fadeIn 0.25s ease;
+    }
+    .panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .panel-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .panel-title { font-size: 13px; font-weight: 700; letter-spacing: -0.005em; }
+    .panel-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; padding: 2px 7px; border-radius: 5px;
+      letter-spacing: 0.04em; font-weight: 700;
+    }
+    .panel-tag.tag-lime { background: var(--lime-soft); color: var(--lime); border: 1px solid rgba(163,230,53,0.3); }
+    .panel-tag.tag-orange { background: var(--orange-soft); color: var(--orange); border: 1px solid rgba(251,146,60,0.3); }
+    .panel-tag.tag-cyan { background: var(--cyan-soft); color: var(--cyan); border: 1px solid rgba(34,211,238,0.3); }
+
+    /* ─── MEDITATION PANEL ─── */
+    .med-row {
+      display: flex; gap: 10px; align-items: center; margin-bottom: 10px;
+    }
+    .med-icon-box {
+      width: 36px; height: 36px; flex-shrink: 0;
+      border-radius: 10px;
+      background: var(--grad-zen);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px -3px rgba(34, 211, 238, 0.5);
+    }
+    .med-meta { flex: 1; min-width: 0; }
+    .med-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px; color: var(--cyan);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      font-weight: 600; margin-bottom: 1px;
+    }
+    .med-title {
+      font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.25;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .med-refresh {
+      width: 32px; height: 32px; flex-shrink: 0;
+      border-radius: 8px;
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34, 211, 238, 0.25);
+      color: var(--cyan); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.3s ease, background 0.2s ease;
+    }
+    .med-refresh:hover { background: rgba(34, 211, 238, 0.2); transform: rotate(180deg); }
+    .med-frame-wrap {
+      border-radius: 10px; overflow: hidden;
+      border: 1px solid rgba(34, 211, 238, 0.2);
+      aspect-ratio: 16/9; background: #000;
+    }
+    .med-frame-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+    .med-foot {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 10px;
+    }
+    .med-complete-btn {
+      padding: 7px 12px; background: var(--grad-zen);
+      color: #0f172a; font-weight: 700;
+      border: 0; border-radius: 999px; cursor: pointer;
+      font-size: 11px; font-family: 'Outfit', sans-serif;
+      box-shadow: 0 4px 12px -3px rgba(34, 211, 238, 0.4);
+      transition: transform 0.15s ease;
+    }
+    .med-complete-btn:hover { transform: translateY(-1px); }
+    .med-complete-btn.done { background: rgba(34, 211, 238, 0.15); color: var(--cyan); box-shadow: none; }
+    .med-counter {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--text-muted);
+    }
+    .med-counter b { color: var(--cyan); }
+
+    /* ─── WORKOUT PANEL ─── */
+    .week-dots { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 10px; }
+    .dot-day {
+      position: relative; aspect-ratio: 1;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+    .dot-day .dot-label { font-size: 8px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; }
+    .dot-day .dot-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text); font-weight: 700; margin-top: 1px; }
+    .dot-day.today { border-color: var(--lime); box-shadow: 0 0 0 1px var(--lime) inset, 0 0 10px rgba(163, 230, 53, 0.25); }
+    .dot-day.workout { background: var(--grad-leo); border-color: transparent; }
+    .dot-day.workout .dot-label, .dot-day.workout .dot-num { color: #0f172a; }
+    .dot-day.workout::after { content: '✓'; position: absolute; top: 1px; right: 3px; font-size: 9px; color: #0f172a; font-weight: 900; }
+
+    .stat-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+    .stat-cell {
+      padding: 7px 4px; text-align: center;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); border-radius: 8px;
+    }
+    .stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 15px; font-weight: 700; color: var(--lime); line-height: 1.05;
+    }
+    .stat-lbl { font-size: 8px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-top: 2px; }
+
+    .log-section-title {
+      font-size: 10px; color: var(--text-muted);
+      font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 6px;
+    }
+    .workout-types { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+    .wtype-btn {
+      padding: 5px 10px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 11px; color: var(--text); font-weight: 500;
+      cursor: pointer; transition: all 0.15s ease;
+      font-family: 'Outfit', sans-serif;
+    }
+    .wtype-btn:hover { border-color: var(--lime); color: var(--lime); }
+    .wtype-btn.active { background: var(--grad-leo); border-color: transparent; color: #0f172a; font-weight: 700; }
+    .log-btn {
+      width: 100%; padding: 10px;
+      background: var(--grad-leo);
+      border: 0; border-radius: 10px;
+      color: #0f172a; font-weight: 800; font-size: 12.5px;
+      cursor: pointer; font-family: 'Outfit', sans-serif;
+      box-shadow: 0 6px 16px -5px rgba(163, 230, 53, 0.4);
+      transition: transform 0.15s ease;
+    }
+    .log-btn:hover { transform: translateY(-1px); }
+    .log-btn:disabled {
+      background: rgba(255,255,255,0.05); color: var(--text-dim);
+      cursor: not-allowed; box-shadow: none;
+    }
+    .log-history {
+      list-style: none; max-height: 110px; overflow-y: auto;
+      margin-top: 8px;
+    }
+    .log-history li {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 5px 0; font-size: 11px;
+      border-bottom: 1px solid var(--border);
+    }
+    .log-history li:last-child { border-bottom: none; }
+    .log-history .log-type { color: var(--text); font-weight: 600; }
+    .log-history .log-date { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--text-dim); }
+    .log-history .log-del { color: var(--text-dim); cursor: pointer; font-size: 10px; padding: 0 5px; }
+    .log-history .log-del:hover { color: #ef4444; }
+
+    /* ─── WORKOUT FORM (extended) ─── */
+    .form-row { margin-bottom: 9px; }
+    .form-label {
+      font-size: 9px; color: var(--text-dim);
+      font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 4px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .form-label .opt { color: var(--text-dim); font-weight: 500; font-size: 8.5px; text-transform: none; letter-spacing: 0; font-style: italic; }
+    .form-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+    .form-chip {
+      padding: 4px 9px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 10.5px; color: var(--text); font-weight: 500;
+      cursor: pointer; transition: all 0.15s ease;
+      font-family: 'Outfit', sans-serif;
+    }
+    .form-chip:hover { border-color: var(--lime); color: var(--lime); }
+    .form-chip.active { background: var(--grad-leo); border-color: transparent; color: #0f172a; font-weight: 700; }
+    .form-chip.danger.active { background: linear-gradient(135deg,#f87171,#fb923c); }
+
+    .sym-toggle {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 10px; margin-top: 6px;
+      background: rgba(251, 146, 60, 0.06);
+      border: 1px dashed rgba(251, 146, 60, 0.25);
+      border-radius: 10px; cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .sym-toggle:hover { background: rgba(251, 146, 60, 0.1); border-color: rgba(251, 146, 60, 0.4); }
+    .sym-toggle.active { background: rgba(251, 146, 60, 0.12); border-style: solid; border-color: rgba(251, 146, 60, 0.5); }
+    .sym-toggle .sym-title {
+      font-size: 11.5px; font-weight: 700; color: var(--orange);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .sym-toggle .sym-title svg { width: 14px; height: 14px; }
+    .sym-toggle .sym-caret {
+      font-size: 14px; color: var(--orange);
+      transition: transform 0.2s ease;
+    }
+    .sym-toggle.active .sym-caret { transform: rotate(180deg); }
+
+    .sym-section {
+      display: none;
+      margin-top: 8px;
+      padding: 12px;
+      background: rgba(251, 146, 60, 0.04);
+      border: 1px solid rgba(251, 146, 60, 0.15);
+      border-radius: 10px;
+    }
+    .sym-section.active { display: block; }
+
+    .sev-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 6px 0;
+    }
+    .sev-slider {
+      flex: 1; -webkit-appearance: none; appearance: none;
+      height: 5px; border-radius: 999px;
+      background: linear-gradient(to right, #84cc16 0%, #facc15 50%, #ef4444 100%);
+      outline: none;
+    }
+    .sev-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--orange);
+      cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .sev-slider::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #fff; border: 2px solid var(--orange); cursor: pointer;
+    }
+    .sev-display {
+      width: 50px; flex-shrink: 0; text-align: center;
+      padding: 3px 0; border-radius: 8px;
+      background: rgba(0,0,0,0.3);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px; font-weight: 700; color: var(--orange);
+    }
+    .sev-display .sev-emoji { display: block; font-size: 11px; margin-top: 1px; }
+
+    .sym-note {
+      width: 100%; margin-top: 4px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border); border-radius: 8px;
+      padding: 7px 9px;
+      color: var(--text); font-family: 'Outfit', sans-serif;
+      font-size: 11px; resize: vertical;
+      min-height: 40px;
+    }
+    .sym-note:focus { outline: none; border-color: var(--orange); }
+    .sym-note::placeholder { color: var(--text-dim); }
+
+    .leo-response {
+      display: none;
+      margin-top: 10px; padding: 10px 12px;
+      background: linear-gradient(135deg, rgba(163,230,53,0.06), rgba(251,146,60,0.06));
+      border: 1px solid rgba(163,230,53,0.25);
+      border-radius: 10px;
+    }
+    .leo-response.show { display: block; animation: slideIn 0.3s ease; }
+    .leo-response.escalate {
+      background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(251,146,60,0.08));
+      border-color: rgba(239,68,68,0.35);
+    }
+    @keyframes slideIn { from { opacity:0; transform: translateY(-4px); } to { opacity:1; transform: translateY(0); } }
+    .leo-response .leo-head {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 10px; color: var(--lime);
+      font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 5px;
+    }
+    .leo-response.escalate .leo-head { color: #f87171; }
+    .leo-response .leo-head::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--lime); border-radius: 50%;
+      box-shadow: 0 0 6px var(--lime);
+      animation: pulse 1.6s infinite;
+    }
+    .leo-response.escalate .leo-head::before { background: #f87171; box-shadow: 0 0 6px #f87171; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+    .leo-response .leo-text { font-size: 12px; color: var(--text); line-height: 1.45; }
+    .leo-response .leo-flag {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-top: 6px; font-size: 10px; color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Symptom badges inside history */
+    .log-history li.has-symptom { padding-top: 7px; padding-bottom: 7px; }
+    .log-history .log-main { display: flex; gap: 6px; align-items: center; flex: 1; min-width: 0; }
+    .sym-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      padding: 2px 6px; border-radius: 6px;
+      font-size: 9.5px; font-family: 'JetBrains Mono', monospace; font-weight: 700;
+      background: rgba(251, 146, 60, 0.15); color: var(--orange);
+      border: 1px solid rgba(251, 146, 60, 0.3);
+    }
+    .sym-badge.high { background: rgba(239,68,68,0.15); color: #f87171; border-color: rgba(239,68,68,0.35); }
+    .sym-badge.neuro { background: rgba(192,132,252,0.15); color: #c084fc; border-color: rgba(192,132,252,0.35); }
+
+    /* Recent symptoms section */
+    .recent-syms { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
+    .recent-syms .rs-head {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 10px; color: var(--text-muted);
+      font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-bottom: 6px;
+    }
+    .recent-syms .rs-empty { font-size: 11px; color: var(--text-dim); font-style: italic; padding: 6px 0; text-align: center; }
+    .rs-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .rs-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 9px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--orange);
+      border-radius: 8px;
+      font-size: 11px;
+    }
+    .rs-item.high { border-left-color: #f87171; }
+    .rs-item.neuro { border-left-color: #c084fc; }
+    .rs-item .rs-body { color: var(--text); font-weight: 700; min-width: 50px; }
+    .rs-item .rs-sens { color: var(--text-muted); flex: 1; font-size: 10px; }
+    .rs-item .rs-sev { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--orange); }
+    .rs-item.high .rs-sev { color: #f87171; }
+    .rs-item .rs-date { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--text-dim); }
+
+    .pattern-warn {
+      display: none;
+      margin-top: 10px; padding: 9px 11px;
+      background: rgba(192,132,252,0.08);
+      border: 1px solid rgba(192,132,252,0.3);
+      border-radius: 10px;
+      font-size: 11px; color: var(--text);
+    }
+    .pattern-warn.show { display: block; }
+    .pattern-warn .pw-head {
+      display: flex; align-items: center; gap: 6px;
+      color: #c084fc; font-weight: 700;
+      font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    /* ─── NUTRITION PANEL ─── */
+    .meals-list { display: flex; flex-direction: column; gap: 6px; }
+    .meal-row {
+      display: flex; align-items: center; gap: 9px;
+      padding: 8px 10px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+    .meal-row.done { background: rgba(251, 146, 60, 0.08); border-color: rgba(251, 146, 60, 0.3); }
+    .meal-check {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border-radius: 6px;
+      border: 1.5px solid var(--border-strong);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .meal-row.done .meal-check { background: var(--grad-leo); border-color: transparent; }
+    .meal-row.done .meal-check::after {
+      content: ''; width: 7px; height: 3.5px;
+      border-left: 2px solid #0f172a; border-bottom: 2px solid #0f172a;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+    .meal-info { flex: 1; min-width: 0; }
+    .meal-name { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.1; }
+    .meal-time { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--text-dim); margin-top: 1px; }
+    .meal-stars { display: flex; gap: 1px; flex-shrink: 0; }
+    .star {
+      width: 16px; height: 16px;
+      cursor: pointer; color: rgba(255,255,255,0.2);
+      transition: color 0.15s ease, transform 0.15s ease;
+      font-size: 14px;
+      line-height: 1; display: flex; align-items: center; justify-content: center;
+    }
+    .star:hover { transform: scale(1.15); }
+    .star.active { color: var(--orange); }
+
+    .nutri-week {
+      display: grid; grid-template-columns: repeat(7, 1fr);
+      gap: 3px; margin-top: 10px; padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+    .nweek-bar { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .nweek-label { font-size: 8px; color: var(--text-dim); font-weight: 600; text-transform: uppercase; }
+    .nweek-track { width: 100%; height: 32px; background: rgba(255,255,255,0.04); border-radius: 4px; position: relative; overflow: hidden; }
+    .nweek-fill {
+      position: absolute; left: 0; right: 0; bottom: 0;
+      background: var(--grad-leo); border-radius: 3px;
+      transition: height 0.5s cubic-bezier(.4,1.4,.6,1);
+    }
+    .nweek-num { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--text-muted); font-weight: 700; }
+    .nweek-bar.today .nweek-label { color: var(--lime); }
+    .nweek-bar.today .nweek-track { box-shadow: 0 0 0 1px var(--lime) inset; }
+
+    /* ─── WATER PANEL ─── */
+    .water-row { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-bottom: 10px; }
+    .glass {
+      position: relative; aspect-ratio: 0.7;
+      border: 1.5px solid var(--cyan); border-radius: 4px 4px 8px 8px;
+      cursor: pointer; overflow: hidden;
+      background: rgba(34, 211, 238, 0.04);
+      transition: transform 0.2s ease;
+    }
+    .glass:hover { transform: translateY(-2px); }
+    .glass::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to top, var(--cyan) 0%, #67e8f9 100%);
+      transform: translateY(100%); transition: transform 0.4s cubic-bezier(.4,1.4,.6,1);
+    }
+    .glass.full::after { transform: translateY(0); }
+    .glass.full { border-color: var(--cyan); box-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
+    .water-foot {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 8px; border-top: 1px solid var(--border);
+    }
+    .water-count-text { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--cyan); font-weight: 700; }
+    .water-percent { font-size: 10px; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+    .water-tip {
+      margin-top: 8px; padding: 8px 10px;
+      background: rgba(34, 211, 238, 0.06);
+      border: 1px solid rgba(34, 211, 238, 0.15);
+      border-radius: 8px;
+      font-size: 11px; color: var(--text-muted); line-height: 1.4;
+    }
+    .water-tip b { color: var(--cyan); }
+
+    /* ─── PILATES MINI CARD ─── */
+    .pilates-card {
+      padding: 12px; background: var(--panel);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      display: flex; gap: 10px; align-items: center;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 8px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .pilates-card:hover { transform: translateY(-2px); border-color: var(--border-strong); }
+    .pilates-card.full { opacity: 0.7; filter: grayscale(0.8); }
+    
+    .pilates-time {
+      flex-shrink: 0;
+      padding: 8px 12px;
+      background: var(--grad-leo);
+      border-radius: 8px;
+      color: #0f172a; font-weight: 800;
+      text-align: center;
+      box-shadow: 0 5px 14px -4px rgba(251, 146, 60, 0.55);
+    }
+    .pilates-card.full .pilates-time {
+      background: rgba(255,255,255,0.1); color: var(--text-muted); box-shadow: none;
+    }
+    .pilates-time .day { font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+    .pilates-time .hour { font-family: 'JetBrains Mono', monospace; font-size: 14px; margin-top: 1px; line-height: 1; }
+    
+    .pilates-info { flex: 1; min-width: 0; }
+    .pilates-place { font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.1; display: flex; justify-content: space-between; }
+    .pilates-badge { font-size: 9px; padding: 2px 6px; border-radius: 4px; background: var(--lime-soft); color: var(--lime); font-family: 'JetBrains Mono', monospace; }
+    .pilates-card.full .pilates-badge { background: rgba(255,255,255,0.1); color: var(--text-muted); }
+    .pilates-desc { font-size: 10.5px; color: var(--text-muted); line-height: 1.35; margin-top: 2px; }
+    .pilates-link {
+      display: inline-block; margin-top: 3px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; color: var(--orange);
+      text-decoration: none; font-weight: 600;
+    }
+    .pilates-link::after { content: ' ↗'; }
+
+    .schedule-header {
+      font-size: 10px; color: var(--text-muted);
+      font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; margin: 10px 0 6px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .schedule-loader { font-size: 9px; font-family: monospace; color: var(--cyan); animation: pulse 1s infinite alternate; }
+    @keyframes pulse { from { opacity: 0.5; } to { opacity: 1; } }
+
+    /* ─── QUOTE (COMPACT) ─── */
+    .quote-card {
+      padding: 14px 16px; background: var(--panel);
+      border: 1px solid var(--border); border-radius: var(--radius);
+      backdrop-filter: blur(20px); position: relative; overflow: hidden;
+    }
+    .quote-card::before {
+      content: '"'; position: absolute; top: -22px; right: 10px;
+      font-size: 90px; font-family: 'Outfit', serif; font-weight: 900;
+      background: var(--grad-leo);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; opacity: 0.25; line-height: 1;
+      pointer-events: none;
+    }
+    .quote-text {
+      font-size: 13px; line-height: 1.5; color: var(--text);
+      font-weight: 500; position: relative; z-index: 1;
+    }
+    .quote-author {
+      margin-top: 6px; font-size: 10.5px; color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;
+    }
+    .quote-author::before { content: '— '; }
+
+    .footer-note {
+      text-align: center; font-size: 9.5px; color: var(--text-dim);
+      padding: 6px; font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+    .footer-note span {
+      background: var(--grad-leo);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="leoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#a3e635"/>
+        <stop offset="100%" stop-color="#fb923c"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <div class="app">
+    <a href="index.html" class="back-btn">חזרה לדשבורד</a>
+
+    <!-- ─── HERO (COMPACT) ─── -->
+    <header class="hero">
+      <div class="hero-top">
+        <div class="avatar-frame">
+          <img src="assets/agent_leo.png" alt="Leo Avatar" />
+          <div class="avatar-status"></div>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-name">ליאו · Leo</div>
+          <div class="hero-role">סוכן אורח חיים בריא · COACH</div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-val" id="streak-days">0d</div>
+            <div class="hero-stat-lbl">סטריק</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-val" id="weekly-workouts">0/4</div>
+            <div class="hero-stat-lbl">אימונים</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ─── SCORE + MISSIONS ─── -->
+    <div class="top-card">
+      <div class="score-row">
+        <div class="score-ring">
+          <svg width="78" height="78" viewBox="0 0 78 78">
+            <circle class="track" cx="39" cy="39" r="33" fill="none" stroke-width="7"/>
+            <circle id="score-arc" class="progress" cx="39" cy="39" r="33" fill="none" stroke-width="7"
+                    stroke-dasharray="207.34" stroke-dashoffset="207.34"/>
+          </svg>
+          <div class="score-center">
+            <div class="score-value" id="score-val">0</div>
+            <div class="score-suffix">/ 100</div>
+          </div>
+        </div>
+        <div class="score-info">
+          <div class="score-title">Wellness · היום</div>
+          <div class="score-headline" id="score-headline">בוא נתחיל</div>
+          <div class="score-sub" id="score-sub">סמן משימות למטה כדי לטעון את היום שלך.</div>
+        </div>
+      </div>
+
+      <div class="mission-grid">
+        <div class="mission m-workout" id="m-workout">
+          <div class="mission-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 5v14M18 5v14M3 9h3M3 15h3M18 9h3M18 15h3M6 12h12"/>
+            </svg>
+          </div>
+          <div class="mission-val" id="m-workout-val">אימון</div>
+          <div class="mission-status" id="m-workout-status">לא נרשם</div>
+        </div>
+        <div class="mission m-nutrition" id="m-nutrition">
+          <div class="mission-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C8 2 5 5 5 9c0 4 7 13 7 13s7-9 7-13c0-4-3-7-7-7z"/>
+              <circle cx="12" cy="9" r="2.5"/>
+            </svg>
+          </div>
+          <div class="mission-val" id="m-nutrition-val">0/3</div>
+          <div class="mission-status" id="m-nutrition-status">ארוחות</div>
+        </div>
+        <div class="mission m-zen" id="m-zen">
+          <div class="mission-icon">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"/>
+              <path d="M8 15c1.5 1.5 6.5 1.5 8 0"/>
+              <circle cx="9" cy="10" r="0.6" fill="currentColor"/>
+              <circle cx="15" cy="10" r="0.6" fill="currentColor"/>
+            </svg>
+          </div>
+          <div class="mission-val">5 דק'</div>
+          <div class="mission-status" id="m-zen-status">ממתין</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── TABS ─── -->
+    <div class="tabs" role="tablist">
+      <button class="tab t-zen active" data-tab="zen" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="9"/>
+          <path d="M8 15c1.5 1.5 6.5 1.5 8 0"/>
+          <circle cx="9" cy="10" r="0.6" fill="currentColor"/>
+          <circle cx="15" cy="10" r="0.6" fill="currentColor"/>
+        </svg>
+        מדיטציה
+      </button>
+      <button class="tab t-workout" data-tab="workout" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 5v14M18 5v14M3 9h3M3 15h3M18 9h3M18 15h3M6 12h12"/>
+        </svg>
+        אימון
+      </button>
+      <button class="tab t-nutri" data-tab="nutri" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2C8 2 5 5 5 9c0 4 7 13 7 13s7-9 7-13c0-4-3-7-7-7z"/>
+          <circle cx="12" cy="9" r="2.5"/>
+        </svg>
+        תזונה
+      </button>
+      <button class="tab t-water" data-tab="water" role="tab">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3c-3 5-6 8-6 12a6 6 0 0 0 12 0c0-4-3-7-6-12z"/>
+        </svg>
+        מים
+      </button>
+    </div>
+
+    <!-- ─── PANELS ─── -->
+
+    <!-- ZEN -->
+    <div class="panel active" id="panel-zen" role="tabpanel">
+      <div class="panel-head">
+        <div class="panel-title">המדיטציה היומית · 5 דקות</div>
+        <span class="panel-tag tag-cyan" id="med-week-tag">0 / 7</span>
+      </div>
+      <div class="med-row">
+        <div class="med-icon-box">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            <circle cx="12" cy="12" r="3.5" fill="#0f172a" stroke="none"/>
+          </svg>
+        </div>
+        <div class="med-meta">
+          <div class="med-eyebrow">היום · נשימה ושקט</div>
+          <div class="med-title" id="meditation-title">טוען...</div>
+        </div>
+        <button class="med-refresh" id="med-refresh-btn" title="החלף תרגול">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/>
+          </svg>
+        </button>
+      </div>
+      <div class="med-frame-wrap">
+        <iframe id="meditation-frame" src="" title="Meditation"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+      <div class="med-foot">
+        <div class="med-counter">השבוע: <b id="med-week-count">0</b> תרגולים</div>
+        <button class="med-complete-btn" id="med-complete-btn">סמן כהושלם ✓</button>
+      </div>
+    </div>
+
+    <!-- WORKOUT -->
+    <div class="panel" id="panel-workout" role="tabpanel">
+      <div class="panel-head">
+        <div class="panel-title">טראקר אימונים · השבוע</div>
+        <span class="panel-tag tag-lime" id="workout-week-tag">0 אימונים</span>
+      </div>
+      <div class="week-dots" id="week-dots"></div>
+      <div class="stat-row">
+        <div class="stat-cell"><div class="stat-val" id="stat-week">0</div><div class="stat-lbl">שבוע</div></div>
+        <div class="stat-cell"><div class="stat-val" id="stat-month">0</div><div class="stat-lbl">חודש</div></div>
+        <div class="stat-cell"><div class="stat-val" id="stat-streak-w">0</div><div class="stat-lbl">סטריק</div></div>
+      </div>
+      <div class="log-section-title">תיעוד אימון חדש</div>
+
+      <div class="form-row">
+        <div class="form-label">סוג</div>
+        <div class="workout-types form-chips" id="workout-types">
+          <button class="wtype-btn form-chip" data-type="פילאטיס">פילאטיס</button>
+          <button class="wtype-btn form-chip" data-type="ריצה">ריצה</button>
+          <button class="wtype-btn form-chip" data-type="חדר כושר">חדר כושר</button>
+          <button class="wtype-btn form-chip" data-type="הליכה">הליכה</button>
+          <button class="wtype-btn form-chip" data-type="יוגה">יוגה</button>
+          <button class="wtype-btn form-chip" data-type="שחייה">שחייה</button>
+          <button class="wtype-btn form-chip" data-type="אחר">אחר</button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-label">משך <span class="opt">אופציונלי</span></div>
+        <div class="form-chips" id="duration-chips">
+          <button class="form-chip" data-dur="20">20'</button>
+          <button class="form-chip" data-dur="30">30'</button>
+          <button class="form-chip" data-dur="45">45'</button>
+          <button class="form-chip" data-dur="60">60'</button>
+          <button class="form-chip" data-dur="90">90'</button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-label">עצימות <span class="opt">אופציונלי</span></div>
+        <div class="form-chips" id="intensity-chips">
+          <button class="form-chip" data-int="קל">קל</button>
+          <button class="form-chip" data-int="בינוני">בינוני</button>
+          <button class="form-chip" data-int="חזק">חזק</button>
+        </div>
+      </div>
+
+      <div class="sym-toggle" id="sym-toggle">
+        <span class="sym-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6M12 22v-3M4.93 4.93l4.24 4.24M14.83 14.83l4.24 4.24M2 12h6M22 12h-6M4.93 19.07l4.24-4.24M14.83 9.17l4.24-4.24"/></svg>
+          הרגשת כאב או אי-נוחות?
+        </span>
+        <span class="sym-caret">▾</span>
+      </div>
+
+      <div class="sym-section" id="sym-section">
+        <div class="form-row">
+          <div class="form-label">איבר</div>
+          <div class="form-chips" id="bodypart-chips">
+            <button class="form-chip" data-bp="מרפק">מרפק</button>
+            <button class="form-chip" data-bp="כתף">כתף</button>
+            <button class="form-chip" data-bp="גב עליון">גב עליון</button>
+            <button class="form-chip" data-bp="גב תחתון">גב תחתון</button>
+            <button class="form-chip" data-bp="צוואר">צוואר</button>
+            <button class="form-chip" data-bp="ברך">ברך</button>
+            <button class="form-chip" data-bp="קרסול">קרסול</button>
+            <button class="form-chip" data-bp="יד">יד / שורש</button>
+            <button class="form-chip" data-bp="ירך">ירך</button>
+            <button class="form-chip" data-bp="אחר">אחר</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-label">סוג תחושה</div>
+          <div class="form-chips" id="sens-chips">
+            <button class="form-chip" data-sens="כאב חד">כאב חד</button>
+            <button class="form-chip" data-sens="כאב עמום">כאב עמום</button>
+            <button class="form-chip" data-sens="נימול">נימול</button>
+            <button class="form-chip" data-sens="חולשה">חולשה</button>
+            <button class="form-chip" data-sens="קשיון">קשיון</button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-label">עוצמה · 1-10</div>
+          <div class="sev-row">
+            <div class="sev-display"><span id="sev-num">5</span><span class="sev-emoji" id="sev-emoji">😐</span></div>
+            <input type="range" class="sev-slider" id="sev-slider" min="1" max="10" value="5" />
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-bottom:0;">
+          <div class="form-label">הערה <span class="opt">אופציונלי</span></div>
+          <textarea class="sym-note" id="sym-note" placeholder="למשל: התחיל בתרגיל פלאנק, חלף אחרי מתיחה..."></textarea>
+        </div>
+      </div>
+
+      <button class="log-btn" id="log-workout-btn" disabled style="margin-top:10px;">בחר סוג אימון</button>
+
+      <div class="leo-response" id="leo-response">
+        <div class="leo-head">Leo · המלצה</div>
+        <div class="leo-text" id="leo-response-text"></div>
+        <div class="leo-flag" id="leo-response-flag"></div>
+      </div>
+
+      <div class="pattern-warn" id="pattern-warn">
+        <div class="pw-head">🔍 דפוס שזיהיתי</div>
+        <div id="pattern-warn-text"></div>
+      </div>
+
+      <ul class="log-history" id="workout-history"></ul>
+
+      <div class="recent-syms">
+        <div class="rs-head">
+          <span>סימפטומים אחרונים · 14 ימים</span>
+          <span id="rs-count" style="color:var(--text-dim); font-family:'JetBrains Mono',monospace;">0</span>
+        </div>
+        <ul class="rs-list" id="rs-list"></ul>
+      </div>
+    </div>
+
+    <!-- NUTRITION -->
+    <div class="panel" id="panel-nutri" role="tabpanel">
+      <div class="panel-head">
+        <div class="panel-title">3 ארוחות היום</div>
+        <span class="panel-tag tag-orange" id="nutri-tag">0 / 3</span>
+      </div>
+      <div class="meals-list">
+        <div class="meal-row" data-meal="breakfast">
+          <div class="meal-check"></div>
+          <div class="meal-info">
+            <div class="meal-name">ארוחת בוקר</div>
+            <div class="meal-time">07:00 — 10:00</div>
+          </div>
+          <div class="meal-stars" data-stars-for="breakfast">
+            <span class="star" data-val="1">★</span>
+            <span class="star" data-val="2">★</span>
+            <span class="star" data-val="3">★</span>
+          </div>
+        </div>
+        <div class="meal-row" data-meal="lunch">
+          <div class="meal-check"></div>
+          <div class="meal-info">
+            <div class="meal-name">ארוחת צהריים</div>
+            <div class="meal-time">12:00 — 15:00</div>
+          </div>
+          <div class="meal-stars" data-stars-for="lunch">
+            <span class="star" data-val="1">★</span>
+            <span class="star" data-val="2">★</span>
+            <span class="star" data-val="3">★</span>
+          </div>
+        </div>
+        <div class="meal-row" data-meal="dinner">
+          <div class="meal-check"></div>
+          <div class="meal-info">
+            <div class="meal-name">ארוחת ערב</div>
+            <div class="meal-time">18:00 — 21:00</div>
+          </div>
+          <div class="meal-stars" data-stars-for="dinner">
+            <span class="star" data-val="1">★</span>
+            <span class="star" data-val="2">★</span>
+            <span class="star" data-val="3">★</span>
+          </div>
+        </div>
+      </div>
+      <div class="nutri-week" id="nutri-week"></div>
+    </div>
+
+    <!-- WATER -->
+    <div class="panel" id="panel-water" role="tabpanel">
+      <div class="panel-head">
+        <div class="panel-title">הידרציה · 8 כוסות · 2 ליטר</div>
+        <span class="panel-tag tag-cyan" id="water-tag">0 / 8</span>
+      </div>
+      <div class="water-row" id="water-grid"></div>
+      <div class="water-foot">
+        <span class="water-count-text" id="water-count-text">0 / 8 כוסות</span>
+        <span class="water-percent" id="water-percent">0% מהיעד</span>
+      </div>
+      <div class="water-tip"><b>טיפ:</b> כוס מים מיד אחרי הקימה ולפני כל ארוחה — עוזר לעיכול ולמיקוד.</div>
+    </div>
+
+    <!-- ─── PILATES MINI ─── -->
+    <div class="schedule-header">
+      <span>לוח שיעורי פילאטיס · Icon</span>
+      <span class="schedule-loader" id="schedule-loader">טוען...</span>
+    </div>
+    <div id="pilates-container">
+      <!-- Dynamic content will be injected here -->
+    </div>
+
+    <!-- ─── QUOTE ─── -->
+    <div class="quote-card">
+      <div class="quote-text" id="daily-quote">…</div>
+      <div class="quote-author" id="daily-author">Leo</div>
+    </div>
+
+    <div class="footer-note">
+      <span>LEO</span> · MOVE · NOURISH · BREATHE · v3
+    </div>
+  </div>
+
+  <script>
+  /* ============================================================
+     0. UTILS
+  ============================================================ */
+  const todayStr = new Date().toDateString();
+  function daysAgo(n) { const d = new Date(); d.setDate(d.getDate() - n); return d; }
+  function dateKey(d) { return d.toDateString(); }
+  function lsGet(k, fallback) { try { const v = localStorage.getItem(k); return v == null ? fallback : JSON.parse(v); } catch(e) { return fallback; } }
+  function lsSet(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+  const DOW_HE = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
+
+  /* ============================================================
+     1. TABS
+  ============================================================ */
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+  function switchTab(name) {
+    document.querySelector('.tab[data-tab="' + name + '"]').click();
+  }
+
+  /* ============================================================
+     2. MEDITATIONS — simple, bulletproof
+     - Always shows a working embedded YouTube video.
+     - Backend (get_meditation.py) pre-validates videos via oEmbed
+       server-side, so anything it returns is guaranteed embeddable.
+     - If backend is unreachable (e.g. opened via file://), we rotate
+       through a curated list of videos verified by hand to allow
+       embedding (see VERIFIED list below).
+     - The iframe URL is deliberately minimal — no `enablejsapi`,
+       no `origin` — those parameters cause Error 153 when the page
+       is opened from file:// or a non-matching origin.
+  ============================================================ */
+  const VERIFIED = [
+    { id: "inpok4MKVLM", title: "5-Minute Meditation You Can Do Anywhere · Goodful" },
+    { id: "MR57rug8NsM", title: "5 Minute Quick Anxiety Reduction · Mindful Peace" },
+    { id: "ssss7V1_eyA", title: "5 Minute Mindfulness Meditation · Great Meditation" },
+    { id: "z6X5oEIg6Ak", title: "10-Minute Meditation For Stress · Goodful" },
+    { id: "O-6f5wQXSu8", title: "10-Minute Meditation For Anxiety · Goodful" },
+    { id: "dEzbdLn2bJc", title: "5 Minute Meditation for Focus" },
+    { id: "krBvzDlL0mM", title: "5 Minute Mindful Body Scan" }
+  ];
+
+  let lastMedIdx = -1;
+  function pickRotatingVerified() {
+    let idx = Math.floor(Math.random() * VERIFIED.length);
+    if (VERIFIED.length > 1) {
+      while (idx === lastMedIdx) idx = Math.floor(Math.random() * VERIFIED.length);
+    }
+    lastMedIdx = idx;
+    return VERIFIED[idx];
+  }
+
+  function setMedVideo(id, title) {
+    document.getElementById('meditation-title').textContent = title;
+    // MINIMAL embed URL — no enablejsapi, no origin → no Error 153.
+    document.getElementById('meditation-frame').src =
+      'https://www.youtube.com/embed/' + id + '?rel=0&modestbranding=1';
+  }
+
+  async function loadMeditation() {
+    document.getElementById('meditation-title').textContent = "מחפש מדיטציה מרעננת...";
+    // 1) Try the backend (which pre-validates via oEmbed server-side).
+    try {
+      const res = await fetch('http://localhost:8000/api/meditation?t=' + Date.now(), { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.id && /^[A-Za-z0-9_-]{11}$/.test(data.id)) {
+          setMedVideo(data.id, data.title || "מדיטציה יומית · 5 דקות");
+          return;
+        }
+      }
+    } catch (e) { /* backend unreachable — fall through */ }
+
+    // 2) Fallback to the verified curated list.
+    const pick = pickRotatingVerified();
+    setMedVideo(pick.id, pick.title);
+  }
+  document.getElementById('med-refresh-btn').addEventListener('click', loadMeditation);
+  loadMeditation();
+
+  const medLog = lsGet('leo_med_log', {});
+  function renderMedCount() {
+    let weekCount = 0;
+    for (let i = 0; i < 7; i++) {
+      if (medLog[dateKey(daysAgo(i))]) weekCount++;
+    }
+    document.getElementById('med-week-count').textContent = weekCount;
+    document.getElementById('med-week-tag').textContent = weekCount + ' / 7';
+    const btn = document.getElementById('med-complete-btn');
+    if (medLog[todayStr]) {
+      btn.classList.add('done'); btn.textContent = '✓ הושלם היום';
+      document.getElementById('m-zen').classList.add('done');
+      document.getElementById('m-zen-status').textContent = '✓ הושלם';
+    } else {
+      btn.classList.remove('done'); btn.textContent = 'סמן כהושלם ✓';
+      document.getElementById('m-zen').classList.remove('done');
+      document.getElementById('m-zen-status').textContent = 'ממתין';
+    }
+  }
+  document.getElementById('med-complete-btn').addEventListener('click', () => {
+    if (medLog[todayStr]) { delete medLog[todayStr]; }
+    else { medLog[todayStr] = true; }
+    lsSet('leo_med_log', medLog);
+    renderMedCount();
+    updateScore();
+  });
+
+  /* ============================================================
+     3. QUOTES
+  ============================================================ */
+  const quotes = [
+    { text: "האוכל שאתה אוכל יכול להיות התרופה הכי בטוחה או הרעל הכי איטי.", author: "אן ויגמור" },
+    { text: "תדאג לגוף שלך, זה המקום היחיד שאתה חייב לחיות בו.", author: "ג'ים רוהן" },
+    { text: "אורח חיים בריא הוא לא עונש, זו השקעה לטווח ארוך.", author: "Leo" },
+    { text: "אל תחשוב על דיאטה. תחשוב על להזין את הגוף בכל מה שצריך כדי לנצח את היום.", author: "Leo" },
+    { text: "הכוח הוא לא ביכולת להרים — הוא ביכולת לקום שוב מחר.", author: "Leo" },
+    { text: "נשימה עמוקה אחת שווה יותר מעשר החלטות פזיזות.", author: "Leo" },
+    { text: "המנוחה היא חלק מהאימון, לא הפסקה ממנו.", author: "Leo" }
+  ];
+  const q = quotes[new Date().getDay() % quotes.length];
+  document.getElementById('daily-quote').textContent = q.text;
+  document.getElementById('daily-author').textContent = q.author;
+
+  /* ============================================================
+     4. HYDRATION
+  ============================================================ */
+  const TARGET = 8;
+  let waterCount = lsGet('leo_water_count', 0);
+  const lastWaterDate = lsGet('leo_water_date', null);
+  if (lastWaterDate !== todayStr) {
+    waterCount = 0;
+    lsSet('leo_water_count', 0);
+    lsSet('leo_water_date', todayStr);
+  }
+  const waterGrid = document.getElementById('water-grid');
+  function renderWater() {
+    waterGrid.innerHTML = '';
+    for (let i = 1; i <= TARGET; i++) {
+      const g = document.createElement('div');
+      g.className = 'glass' + (i <= waterCount ? ' full' : '');
+      g.onclick = () => toggleWater(i);
+      waterGrid.appendChild(g);
+    }
+    const pct = Math.round((waterCount / TARGET) * 100);
+    document.getElementById('water-count-text').textContent = waterCount + ' / ' + TARGET + ' כוסות';
+    document.getElementById('water-tag').textContent = waterCount + ' / ' + TARGET;
+    document.getElementById('water-percent').textContent = pct + '% מהיעד';
+    lsSet('leo_water_count', waterCount);
+    updateScore();
+  }
+  function toggleWater(i) { waterCount = (i === waterCount) ? i - 1 : i; renderWater(); }
+
+  /* ============================================================
+     5. WORKOUT TRACKER
+  ============================================================ */
+  let workouts = lsGet('leo_workouts', []);
+  let selectedWType = null;
+
+  function renderWeekDots() {
+    const wrap = document.getElementById('week-dots');
+    wrap.innerHTML = '';
+    for (let i = 6; i >= 0; i--) {
+      const d = daysAgo(i);
+      const k = dateKey(d);
+      const hasWorkout = workouts.some(w => w.date === k);
+      const el = document.createElement('div');
+      el.className = 'dot-day' + (hasWorkout ? ' workout' : '') + (i === 0 ? ' today' : '');
+      el.innerHTML = '<div class="dot-label">' + DOW_HE[d.getDay()] + '</div>' +
+                     '<div class="dot-num">' + d.getDate() + '</div>';
+      wrap.appendChild(el);
+    }
+  }
+  function renderWorkoutStats() {
+    const weekKeys = new Set();
+    for (let i = 0; i < 7; i++) weekKeys.add(dateKey(daysAgo(i)));
+    const monthKeys = new Set();
+    for (let i = 0; i < 30; i++) monthKeys.add(dateKey(daysAgo(i)));
+    const wWeek = workouts.filter(w => weekKeys.has(w.date)).length;
+    const wMonth = workouts.filter(w => monthKeys.has(w.date)).length;
+    let streak = 0;
+    for (let i = 0; i < 365; i++) {
+      const k = dateKey(daysAgo(i));
+      if (workouts.some(w => w.date === k)) streak++;
+      else if (i === 0) continue;
+      else break;
+    }
+    document.getElementById('stat-week').textContent = wWeek;
+    document.getElementById('stat-month').textContent = wMonth;
+    document.getElementById('stat-streak-w').textContent = streak;
+    document.getElementById('workout-week-tag').textContent = wWeek + ' אימונים';
+    document.getElementById('weekly-workouts').textContent = wWeek + '/4';
+
+    const todayWorkouts = workouts.filter(w => w.date === todayStr);
+    if (todayWorkouts.length) {
+      document.getElementById('m-workout').classList.add('done');
+      document.getElementById('m-workout-val').textContent = todayWorkouts[0].type;
+      document.getElementById('m-workout-status').textContent = '✓ ' + todayWorkouts.length;
+    } else {
+      document.getElementById('m-workout').classList.remove('done');
+      document.getElementById('m-workout-val').textContent = 'אימון';
+      document.getElementById('m-workout-status').textContent = 'לא נרשם';
+    }
+  }
+  function renderWorkoutHistory() {
+    const ul = document.getElementById('workout-history');
+    ul.innerHTML = '';
+    const sorted = [...workouts].sort((a,b) => b.ts - a.ts).slice(0, 8);
+    if (!sorted.length) {
+      ul.innerHTML = '<li style="color:var(--text-dim); justify-content:center; font-style:italic;">עוד אין אימונים. בחר סוג ולחץ תיעוד ↑</li>';
+      return;
+    }
+    sorted.forEach((w, idx) => {
+      const li = document.createElement('li');
+      const d = new Date(w.ts);
+      const dateLbl = d.getDate() + '/' + (d.getMonth() + 1) + ' · ' + DOW_HE[d.getDay()];
+      li.innerHTML = '<span class="log-type">' + w.type + '</span>' +
+                     '<span class="log-date">' + dateLbl + '</span>' +
+                     '<span class="log-del" data-idx="' + idx + '">✕</span>';
+      ul.appendChild(li);
+    });
+    ul.querySelectorAll('.log-del').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const i = +e.target.dataset.idx;
+        const target = [...workouts].sort((a,b) => b.ts - a.ts).slice(0,8)[i];
+        workouts = workouts.filter(w => w.ts !== target.ts);
+        lsSet('leo_workouts', workouts);
+        renderAllWorkouts();
+        updateScore();
+      });
+    });
+  }
+  function renderAllWorkouts() {
+    renderWeekDots();
+    renderWorkoutStats();
+    renderWorkoutHistory();
+  }
+  document.querySelectorAll('#workout-types .wtype-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#workout-types .wtype-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedWType = btn.dataset.type;
+      const logBtn = document.getElementById('log-workout-btn');
+      logBtn.disabled = false;
+      logBtn.textContent = 'תיעוד · ' + selectedWType;
+    });
+  });
+  document.getElementById('log-workout-btn').addEventListener('click', () => {
+    if (!selectedWType) return;
+    workouts.push({ date: todayStr, type: selectedWType, ts: Date.now() });
+    lsSet('leo_workouts', workouts);
+    renderAllWorkouts();
+    updateScore();
+    document.querySelectorAll('#workout-types .wtype-btn').forEach(b => b.classList.remove('active'));
+    selectedWType = null;
+    const logBtn = document.getElementById('log-workout-btn');
+    logBtn.disabled = true;
+    logBtn.textContent = 'נשמר ✓';
+    setTimeout(() => { logBtn.textContent = 'בחר סוג אימון'; }, 1500);
+  });
+  renderAllWorkouts();
+
+  /* ============================================================
+     6. NUTRITION TRACKER
+  ============================================================ */
+  let nutritionLog = lsGet('leo_nutrition', {});
+  if (!nutritionLog[todayStr]) {
+    nutritionLog[todayStr] = {
+      breakfast: { done: false, stars: 0 },
+      lunch: { done: false, stars: 0 },
+      dinner: { done: false, stars: 0 }
+    };
+    lsSet('leo_nutrition', nutritionLog);
+  }
+  function renderNutrition() {
+    const todayMeals = nutritionLog[todayStr] || { breakfast:{}, lunch:{}, dinner:{} };
+    let doneCount = 0;
+    ['breakfast', 'lunch', 'dinner'].forEach(meal => {
+      const row = document.querySelector('.meal-row[data-meal="'+meal+'"]');
+      const m = todayMeals[meal] || { done:false, stars:0 };
+      if (m.done) { row.classList.add('done'); doneCount++; }
+      else row.classList.remove('done');
+      const stars = document.querySelectorAll('[data-stars-for="'+meal+'"] .star');
+      stars.forEach(s => {
+        if (parseInt(s.dataset.val) <= (m.stars || 0)) s.classList.add('active');
+        else s.classList.remove('active');
+      });
+    });
+    document.getElementById('nutri-tag').textContent = doneCount + ' / 3';
+    document.getElementById('m-nutrition-val').textContent = doneCount + '/3';
+    document.getElementById('m-nutrition-status').textContent = doneCount === 3 ? '✓ הכל' : 'ארוחות';
+    if (doneCount === 3) document.getElementById('m-nutrition').classList.add('done');
+    else document.getElementById('m-nutrition').classList.remove('done');
+
+    const week = document.getElementById('nutri-week');
+    week.innerHTML = '';
+    for (let i = 6; i >= 0; i--) {
+      const d = daysAgo(i);
+      const k = dateKey(d);
+      const day = nutritionLog[k] || {};
+      let cnt = 0;
+      ['breakfast','lunch','dinner'].forEach(m => { if (day[m] && day[m].done) cnt++; });
+      const heightPct = (cnt / 3) * 100;
+      const bar = document.createElement('div');
+      bar.className = 'nweek-bar' + (i === 0 ? ' today' : '');
+      bar.innerHTML =
+        '<div class="nweek-label">' + DOW_HE[d.getDay()] + '</div>' +
+        '<div class="nweek-track"><div class="nweek-fill" style="height:' + heightPct + '%"></div></div>' +
+        '<div class="nweek-num">' + cnt + '/3</div>';
+      week.appendChild(bar);
+    }
+  }
+  document.querySelectorAll('.meal-row').forEach(row => {
+    const meal = row.dataset.meal;
+    row.querySelector('.meal-check').addEventListener('click', () => {
+      nutritionLog[todayStr][meal].done = !nutritionLog[todayStr][meal].done;
+      if (nutritionLog[todayStr][meal].done && nutritionLog[todayStr][meal].stars === 0) {
+        nutritionLog[todayStr][meal].stars = 2;
+      }
+      lsSet('leo_nutrition', nutritionLog);
+      renderNutrition();
+      updateScore();
+    });
+  });
+  document.querySelectorAll('.meal-stars').forEach(starsEl => {
+    const meal = starsEl.dataset.starsFor;
+    starsEl.querySelectorAll('.star').forEach(s => {
+      s.addEventListener('click', () => {
+        const v = parseInt(s.dataset.val);
+        const cur = nutritionLog[todayStr][meal].stars || 0;
+        nutritionLog[todayStr][meal].stars = (cur === v) ? v - 1 : v;
+        if (nutritionLog[todayStr][meal].stars > 0) nutritionLog[todayStr][meal].done = true;
+        lsSet('leo_nutrition', nutritionLog);
+        renderNutrition();
+        updateScore();
+      });
+    });
+  });
+  renderNutrition();
+
+  /* ============================================================
+     7. STREAK + SCORE
+  ============================================================ */
+  function computeOverallStreak() {
+    let streak = 0;
+    for (let i = 0; i < 365; i++) {
+      const k = dateKey(daysAgo(i));
+      const hasWorkout = workouts.some(w => w.date === k);
+      const hasMed = !!medLog[k];
+      const nutri = nutritionLog[k];
+      const hasMeal = nutri && (nutri.breakfast?.done || nutri.lunch?.done || nutri.dinner?.done);
+      if (hasWorkout || hasMed || hasMeal) streak++;
+      else if (i === 0) continue;
+      else break;
+    }
+    return streak;
+  }
+  function updateScore() {
+    const waterScore = Math.round((waterCount / TARGET) * 35);
+    const medScore = medLog[todayStr] ? 20 : 0;
+    const workoutScore = workouts.some(w => w.date === todayStr) ? 25 : 0;
+    const nutri = nutritionLog[todayStr] || {};
+    const mealsCount = ['breakfast','lunch','dinner'].reduce((a,k) => a + (nutri[k] && nutri[k].done ? 1 : 0), 0);
+    const nutriScore = Math.round((mealsCount / 3) * 20);
+    const score = Math.min(100, waterScore + medScore + workoutScore + nutriScore);
+
+    const arc = document.getElementById('score-arc');
+    const CIRC = 2 * Math.PI * 33;
+    arc.setAttribute('stroke-dasharray', CIRC.toFixed(2));
+    arc.setAttribute('stroke-dashoffset', (CIRC * (1 - score / 100)).toFixed(2));
+    document.getElementById('score-val').textContent = score;
+
+    const headline = document.getElementById('score-headline');
+    const sub = document.getElementById('score-sub');
+    if (score >= 85) { headline.textContent = 'יום אלוף 💪'; sub.textContent = 'נצחת את היום. תמשיך ככה.'; }
+    else if (score >= 60) { headline.textContent = 'בקצב טוב'; sub.textContent = 'עוד דחיפה אחת — אתה קרוב למלא.'; }
+    else if (score >= 30) { headline.textContent = 'מתחיל לקרות'; sub.textContent = 'תוסיף ארוחה או כוס מים. פעולה קטנה = ניצחון.'; }
+    else { headline.textContent = 'בוא נתחיל'; sub.textContent = 'סמן משימות למטה כדי לטעון את היום שלך.'; }
+
+    document.getElementById('streak-days').textContent = computeOverallStreak() + 'd';
+  }
+
+  // Mission cards → switch tabs
+  document.getElementById('m-zen').addEventListener('click', () => switchTab('zen'));
+  document.getElementById('m-workout').addEventListener('click', () => switchTab('workout'));
+  document.getElementById('m-nutrition').addEventListener('click', () => switchTab('nutri'));
+
+  /* ============================================================
+     8. ICON FITNESS SCHEDULE
+  ============================================================ */
+  async function fetchSchedule() {
+    const container = document.getElementById('pilates-container');
+    const loader = document.getElementById('schedule-loader');
+    try {
+      const res = await fetch('http://localhost:8000/api/schedule?t=' + Date.now());
+      if (!res.ok) throw new Error('API Error');
+      const data = await res.json();
+      loader.style.display = 'none';
+      
+      const pilates = (data.classes || []).filter(c => c.name.includes('Pilates')).slice(0, 2);
+      
+      if (pilates.length === 0) {
+        container.innerHTML = '<div class="pilates-desc" style="text-align:center; padding: 10px;">אין שיעורי פילאטיס היום.</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      pilates.forEach(cls => {
+        const isFull = cls.available_spots === 0;
+        const statusBadge = isFull ? 'מלא' : `${cls.available_spots} מקומות`;
+        
+        container.innerHTML += `
+          <div class="pilates-card ${isFull ? 'full' : ''}">
+            <div class="pilates-time">
+              <div class="day">היום</div>
+              <div class="hour">${cls.time}</div>
+            </div>
+            <div class="pilates-info">
+              <div class="pilates-place">
+                <span>פילאטיס עם ${cls.instructor}</span>
+                <span class="pilates-badge">${statusBadge}</span>
+              </div>
+              <div class="pilates-desc">Icon Fitness · הוד השרון. ${cls.registered}/${cls.capacity} רשומים.</div>
+              <a class="pilates-link" href="https://www.iconfitness.co.il/personal-area-login/" target="_blank">
+                ${isFull ? 'הירשם להמתנה' : 'הירשם עכשיו'}
+              </a>
+            </div>
+          </div>
+        `;
+      });
+    } catch (e) {
+      loader.textContent = 'שגיאה בטעינה';
+      loader.style.color = '#ef4444';
+      container.innerHTML = '<div class="pilates-desc" style="text-align:center; padding: 10px;">לא ניתן לטעון נתונים חיים כעת.</div>';
+    }
+  }
+
+  fetchSchedule();
+  renderWater();
+  renderMedCount();
+  updateScore();
+  </script>
+</body>
+</html>

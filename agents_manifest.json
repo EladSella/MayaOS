@@ -1,0 +1,272 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-05-20",
+  "purpose": "Machine-readable manifest of MayaOS agents for programmatic discovery by agentic tools (Anti-Gravity, Claude, etc.). Source of truth for agent inventory.",
+  "system_state": {
+    "v1_status": "frozen",
+    "v2_status": "partial_activation",
+    "v2_active_divisions": [
+      "health",
+      "admin"
+    ],
+    "v2_planned_divisions": [
+      "career",
+      "relationship",
+      "ayala",
+      "property",
+      "events",
+      "meta"
+    ]
+  },
+  "agents": [
+    {
+      "agent_id": "maya",
+      "display_name": "Maya",
+      "role": "Supreme CEO",
+      "division": "executive",
+      "tier": 0,
+      "status": "v1_active",
+      "build_form": "single_file_persona",
+      "files": {
+        "persona": "agents/maya_agent.txt",
+        "master_prompt": "prompts/maya_master_prompt.txt"
+      },
+      "runner": null,
+      "standalone_invokable": true,
+      "network_invokable": true,
+      "notes": "Master prompt describes the full V2 architecture as long-term blueprint. Operational scope is V1 + active V2-partial divisions."
+    },
+    {
+      "agent_id": "amir",
+      "display_name": "Amir",
+      "role": "Chief Legal Officer",
+      "division": "legal",
+      "tier": 1,
+      "status": "v1_active",
+      "build_form": "single_file_persona",
+      "files": {
+        "persona": "agents/amir_agent.txt"
+      },
+      "runner": null,
+      "active_sub_agents": [
+        "Michal",
+        "Gil"
+      ]
+    },
+    {
+      "agent_id": "daniel",
+      "display_name": "Daniel",
+      "role": "Finance Executive (CFO)",
+      "division": "finance",
+      "tier": 1,
+      "status": "v1_active",
+      "build_form": "single_file_persona",
+      "files": {
+        "persona": "agents/daniel_agent.txt"
+      },
+      "runner": null,
+      "active_sub_agents": [
+        "Ron"
+      ]
+    },
+    {
+      "agent_id": "dr_liam",
+      "display_name": "Dr. Liam",
+      "role": "Health Executive",
+      "division": "health",
+      "tier": 1,
+      "status": "v2_partial_active",
+      "build_form": "folder_with_runner",
+      "files": {
+        "dir": "agents/dr_liam",
+        "persona": "agents/dr_liam/persona.md",
+        "state": "agents/dr_liam/state.json",
+        "history": "agents/dr_liam/history.json",
+        "protocol": "agents/dr_liam/protocol.md",
+        "inbox": "agents/dr_liam/inbox.json",
+        "outbox": "agents/dr_liam/outbox.json"
+      },
+      "runner": "network/invoke_dr_liam.py",
+      "standalone_invokable": true,
+      "network_invokable": true,
+      "data_model": "cross_sub_agent_synthesis",
+      "cli_commands": [
+        "--status",
+        "--synthesize",
+        "--log-synthesis",
+        "message"
+      ],
+      "special_capability": "live aggregation of state from all 4 sub-agents via --synthesize",
+      "active_sub_agents": [
+        "Gabriel",
+        "Dana",
+        "Mia",
+        "Lian",
+        "Leo"
+      ]
+    },
+    {
+      "agent_id": "lian",
+      "display_name": "Lian",
+      "role": "Energy Monitoring",
+      "division": "health",
+      "tier": 2,
+      "status": "v2_partial_active",
+      "build_form": "folder_with_runner",
+      "files": {
+        "dir": "agents/lian",
+        "persona": "agents/lian/persona.md",
+        "state": "agents/lian/state.json",
+        "history": "agents/lian/history.json",
+        "protocol": "agents/lian/protocol.md",
+        "inbox": "agents/lian/inbox.json",
+        "outbox": "agents/lian/outbox.json"
+      },
+      "runner": "network/invoke_lian.py",
+      "standalone_invokable": true,
+      "network_invokable": true,
+      "data_model": "continuous_readings",
+      "cli_commands": [
+        "--status",
+        "--log",
+        "message"
+      ]
+    },
+    {
+      "agent_id": "gabriel",
+      "display_name": "Gabriel",
+      "role": "Emergency Health / Triage",
+      "division": "health",
+      "tier": 2,
+      "status": "v2_partial_active",
+      "build_form": "folder_with_runner",
+      "files": {
+        "dir": "agents/gabriel",
+        "persona": "agents/gabriel/persona.md",
+        "state": "agents/gabriel/state.json",
+        "history": "agents/gabriel/history.json",
+        "protocol": "agents/gabriel/protocol.md",
+        "inbox": "agents/gabriel/inbox.json",
+        "outbox": "agents/gabriel/outbox.json"
+      },
+      "runner": "network/invoke_gabriel.py",
+      "standalone_invokable": true,
+      "network_invokable": true,
+      "direct_user_access": true,
+      "data_model": "discrete_events",
+      "cli_commands": [
+        "--status",
+        "--log",
+        "--check",
+        "message"
+      ],
+      "special_capability": "red_flag_keyword_pre_screen supports English and Hebrew"
+    },
+    {
+      "agent_id": "dana",
+      "display_name": "Dana",
+      "role": "Medical Appointments",
+      "division": "health",
+      "tier": 2,
+      "status": "v2_partial_active",
+      "build_form": "folder_with_runner",
+      "files": {
+        "dir": "agents/dana",
+        "persona": "agents/dana/persona.md",
+        "state": "agents/dana/state.json",
+        "history": "agents/dana/history.json",
+        "protocol": "agents/dana/protocol.md",
+        "inbox": "agents/dana/inbox.json",
+        "outbox": "agents/dana/outbox.json"
+      },
+      "runner": "network/invoke_dana.py",
+      "standalone_invokable": true,
+      "network_invokable": true,
+      "data_model": "appointments_and_document_checklist",
+      "cli_commands": [
+        "--status",
+        "--gaps",
+        "--got",
+        "--ref",
+        "message"
+      ],
+      "special_capability": "days_remaining auto-calculation and gap reporting"
+    },
+    {
+      "agent_id": "mia",
+      "display_name": "Mia",
+      "role": "Stress Regulation",
+      "division": "health",
+      "tier": 2,
+      "status": "v2_partial_active",
+      "build_form": "folder_with_runner",
+      "files": {
+        "dir": "agents/mia",
+        "persona": "agents/mia/persona.md",
+        "state": "agents/mia/state.json",
+        "history": "agents/mia/history.json",
+        "protocol": "agents/mia/protocol.md",
+        "inbox": "agents/mia/inbox.json",
+        "outbox": "agents/mia/outbox.json"
+      },
+      "runner": "network/invoke_mia.py",
+      "standalone_invokable": true,
+      "network_invokable": true,
+      "data_model": "stress_observations_and_correlations",
+      "cli_commands": [
+        "--status",
+        "--correlations",
+        "--log",
+        "message"
+      ],
+      "special_capability": "pulls emotional_memory.json into boot prompt"
+    },
+    {
+      "agent_id": "leo",
+      "display_name": "Leo",
+      "role": "Healthy Lifestyle",
+      "division": "health",
+      "tier": 2,
+      "status": "v2_partial_active",
+      "build_form": "folder_with_runner",
+      "files": {
+        "dir": "agents/leo",
+        "persona": "agents/leo/persona.md",
+        "state": "agents/leo/state.json",
+        "history": "agents/leo/history.json",
+        "protocol": "agents/leo/protocol.md",
+        "inbox": "agents/leo/inbox.json",
+        "outbox": "agents/leo/outbox.json"
+      },
+      "runner": "network/invoke_leo.py",
+      "standalone_invokable": true,
+      "network_invokable": true,
+      "data_model": "fitness_nutrition_meditation_tracking",
+      "cli_commands": [
+        "--status",
+        "--log",
+        "message"
+      ],
+      "special_capability": "issues daily meditation youtube links"
+    },
+    {
+      "agent_id": "chen",
+      "display_name": "Chen",
+      "role": "Bureaucracy (insurance reimbursement scope only)",
+      "division": "admin",
+      "tier": 2,
+      "status": "v2_partial_active",
+      "build_form": "single_file_persona",
+      "files": {
+        "persona": "agents/chen_agent.txt"
+      },
+      "runner": null,
+      "scope_limit": "insurance_reimbursement_only"
+    }
+  ],
+  "message_schema": "network/message_schema.json",
+  "registry": "configs/agents_registry.json",
+  "governance": "configs/core_rules.md",
+  "discovery_doc": "AGENTS.md",
+  "build_instructions": "docs/AntiGravity_Build_Instructions_Health_Agent.md"
+}

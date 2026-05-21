@@ -1,0 +1,11 @@
+{
+  "id": "task_3_draft_response",
+  "title": "Draft Boundary-Setting Response",
+  "assignee": "Amir (Gil)",
+  "status": "todo",
+  "priority": "high",
+  "description": "Draft a calm, professional, but firm boundary-setting message to the lawyer reiterating the agreed-upon payment timeline.",
+  "dependencies": [
+    "task_1_review_agreement"
+  ]
+}

@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>MayaOS · מחלקת בריאות</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-0: #0f172a;
+      --bg-1: #111c33;
+      --bg-2: #1a2542;
+      --panel: rgba(255, 255, 255, 0.045);
+      --panel-strong: rgba(255, 255, 255, 0.075);
+      --border: rgba(255, 255, 255, 0.09);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --blue: #60a5fa;
+      --blue-strong: #3b82f6;
+      --purple: #c084fc;
+      --purple-strong: #a855f7;
+      --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.15);
+      --warning: #f59e0b;
+      --warning-soft: rgba(245, 158, 11, 0.12);
+      --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.12);
+      --grad-primary: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
+      --grad-soft: linear-gradient(135deg, rgba(59, 130, 246, 0.18) 0%, rgba(168, 85, 247, 0.18) 100%);
+      --shadow-card: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg-0);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.005em;
+    }
+
+    body {
+      background:
+        radial-gradient(ellipse 80% 50% at 80% -10%, rgba(59, 130, 246, 0.18), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 10% 20%, rgba(168, 85, 247, 0.14), transparent 70%),
+        radial-gradient(ellipse 50% 60% at 50% 100%, rgba(59, 130, 246, 0.08), transparent 70%),
+        var(--bg-0);
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+
+    .app {
+      max-width: 440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ─── HEADER ─── */
+    .header {
+      padding: 24px 22px;
+      border-radius: var(--radius);
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent 60%);
+      pointer-events: none;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .brand-name {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .brand-divider {
+      color: var(--text-dim);
+      font-weight: 300;
+      font-size: 22px;
+    }
+
+    .brand-division {
+      color: var(--text-muted);
+      font-size: 15px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .executive {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .executive-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--grad-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: white;
+      letter-spacing: 0.02em;
+    }
+
+    .executive-meta { flex: 1; }
+    .executive-name { font-size: 14px; font-weight: 600; }
+    .executive-role { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+    .mode-tag {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 4px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--blue);
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 999px;
+      letter-spacing: 0.02em;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: var(--success-soft);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-sm);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--success);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .status-dot::after {
+      content: '';
+      position: absolute;
+      top: -3px; left: -3px; right: -3px; bottom: -3px;
+      border-radius: 50%;
+      background: var(--success);
+      opacity: 0.5;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50%      { transform: scale(2.2); opacity: 0; }
+    }
+
+    .status-text {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #6ee7b7;
+      letter-spacing: 0.005em;
+    }
+
+    /* ─── SECTION ─── */
+    .section { display: flex; flex-direction: column; gap: 12px; }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 6px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .section-agent {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    /* ─── TIMELINE ─── */
+    .timeline {
+      padding: 20px 22px;
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      position: relative;
+    }
+
+    .timeline-list {
+      list-style: none;
+      position: relative;
+    }
+
+    .timeline-list::before {
+      content: '';
+      position: absolute;
+      right: 7px;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--border-strong), var(--border) 30%, var(--border) 70%, transparent);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-right: 28px;
+      padding-bottom: 18px;
+      cursor: default;
+      transition: transform 0.2s ease;
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-item:hover { transform: translateX(-2px); }
+
+    .timeline-marker {
+      position: absolute;
+      right: 0;
+      top: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--bg-2);
+      border: 2px solid var(--blue);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.08);
+    }
+
+    .timeline-item.severity-high .timeline-marker {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+    }
+
+    .timeline-item.severity-warn .timeline-marker {
+      border-color: var(--warning);
+      box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.1);
+    }
+
+    .timeline-item.severity-info .timeline-marker {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.1);
+    }
+
+    .timeline-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .timeline-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+      letter-spacing: -0.005em;
+    }
+
+    .timeline-desc {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .timeline-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-dim);
+      padding: 2px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+    }
+
+    /* ─── APPOINTMENT CARDS ─── */
+    .appointments { display: flex; flex-direction: column; gap: 14px; }
+
+    .appt {
+      padding: 20px 22px;
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .appt::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      padding: 1px;
+      border-radius: var(--radius);
+      background: var(--grad-primary);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .appt:hover { transform: translateY(-2px); }
+    .appt:hover::before { opacity: 1; }
+
+    .appt-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .appt-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .appt-when {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      letter-spacing: 0.03em;
+    }
+
+    .appt-time-badge {
+      padding: 6px 11px;
+      border-radius: 10px;
+      background: var(--grad-soft);
+      border: 1px solid rgba(168, 85, 247, 0.25);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--purple);
+      flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .countdown-cell {
+      flex: 1;
+      padding: 12px 8px;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-align: center;
+      transition: background 0.2s ease;
+    }
+
+    .countdown-cell:hover { background: rgba(255, 255, 255, 0.045); }
+
+    .countdown-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      background: var(--grad-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    .countdown-label {
+      margin-top: 4px;
+      font-size: 9.5px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-weight: 600;
+    }
+
+    .appt-docs-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .appt-docs {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .appt-docs li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12.5px;
+      color: var(--text);
+      padding: 6px 0;
+    }
+
+    .doc-check {
+      width: 16px;
+      height: 16px;
+      border-radius: 5px;
+      border: 1.5px solid var(--border-strong);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .appt-docs li.done .doc-check {
+      background: var(--grad-primary);
+      border-color: transparent;
+    }
+
+    .appt-docs li.done .doc-check::after {
+      content: '';
+      width: 8px;
+      height: 4px;
+      border-left: 2px solid white;
+      border-bottom: 2px solid white;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+
+    .appt-docs li.done .doc-text {
+      color: var(--text-dim);
+      text-decoration: line-through;
+      text-decoration-color: var(--text-dim);
+    }
+
+    .doc-text { line-height: 1.4; }
+
+    .doc-pending-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9.5px;
+      color: var(--warning);
+      margin-right: auto;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: var(--warning-soft);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      letter-spacing: 0.04em;
+    }
+
+    /* ─── AGENT ROSTER ─── */
+    .roster { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    
+    .agent-card {
+      background: var(--panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.2s ease;
+      box-shadow: var(--shadow-card);
+    }
+    
+    .agent-card:hover { transform: translateY(-3px); }
+    
+    .agent-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid var(--border-strong);
+      margin-bottom: 12px;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    
+    .agent-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    
+    .agent-role {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--blue);
+      margin-top: 4px;
+      margin-bottom: 8px;
+    }
+    
+    .agent-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .footer-note {
+      text-align: center;
+      font-size: 10.5px;
+      color: var(--text-dim);
+      padding: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- ─── HEADER ─── -->
+    <header class="header">
+      <div class="brand">
+        <span class="brand-name">MayaOS</span>
+        <span class="brand-divider">|</span>
+        <span class="brand-division">מחלקת בריאות</span>
+      </div>
+      <span class="mode-tag">post_hospitalization_recovery</span>
+
+      <div class="executive">
+        <div class="executive-avatar">ד"ר</div>
+        <div class="executive-meta">
+          <div class="executive-name">ד"ר ליאם</div>
+          <div class="executive-role">מנהל בריאות · Tier 1</div>
+        </div>
+      </div>
+
+      <div class="status-pill">
+        <div class="status-dot"></div>
+        <div class="status-text">מערכת יציבה · אין דגלים אדומים אקטיביים</div>
+      </div>
+    </header>
+
+    <!-- ─── TIMELINE ─── -->
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">ציר זמן רפואי ונתונים (Medical Timeline & Labs)</div>
+        <div class="section-agent">gabriel · mia</div>
+      </div>
+
+      <div class="timeline">
+        <ol class="timeline-list">
+          <li class="timeline-item" style="border-left-color: var(--success);">
+            <div class="timeline-marker" style="background: var(--success); border-color: rgba(16,185,129,0.3)"></div>
+            <div class="timeline-date" style="color: var(--success)">28 באפריל 2026</div>
+            <div class="timeline-title">פאנל בדיקות דם מקיף</div>
+            <div class="timeline-desc">ANA שלילי, מדדי דלקת (CRP/ESR) תקינים, ספירה וכימיה פיקס. נשללו גורמים אוטואימוניים רבים.</div>
+            <div class="timeline-meta" style="color: var(--success)">מנותח ומוכן לראומטולוג</div>
+          </li>
+
+          <li class="timeline-item severity-high">
+            <div class="timeline-marker"></div>
+            <div class="timeline-date">14 במאי · חמישי</div>
+            <div class="timeline-title">אירוע אקוטי בגסטרו</div>
+            <div class="timeline-desc">הקאות (~10 פעמים), רעידות, הזעה, חולשה קיצונית. תחילת נימול ביד שמאל.</div>
+            <div class="timeline-meta">2 דגלים אדומים בזמן אמת</div>
+          </li>
+
+          <li class="timeline-item severity-warn">
+            <div class="timeline-marker"></div>
+            <div class="timeline-date">15-16 במאי · שישי-שבת</div>
+            <div class="timeline-title">אשפוז · מרכז רפואי מאיר</div>
+            <div class="timeline-desc">אובחן כגסטרואנטריטיס חדה. אירוע לבבי נשלל (טרופונין שלילי). שוחרר עם פרמין 10 מ"ג לפי הצורך.</div>
+            <div class="timeline-meta">המתנה למבחן מאמץ כמעקב</div>
+          </li>
+
+          <li class="timeline-item severity-info">
+            <div class="timeline-marker"></div>
+            <div class="timeline-date">19 במאי · שלישי</div>
+            <div class="timeline-title">לחצים משפטיים (תשלום לעו"ד)</div>
+            <div class="timeline-desc">גורם לחץ אקטיבי. יוצב דרך תגובה מקורקעת. בפיקוח אמיר (משפטים).</div>
+            <div class="timeline-meta">רמת סטרס 5/10</div>
+          </li>
+
+          <li class="timeline-item severity-warn">
+            <div class="timeline-marker"></div>
+            <div class="timeline-date">20 במאי · רביעי</div>
+            <div class="timeline-title">אירועי הכחלת ידיים</div>
+            <div class="timeline-desc">יד ימין, שינוי צבע באזור המדיאלי/אולנרי עם ורידים בולטים. תמונה תועדה ב-10:01. חלף לאחר חימום. דיווח על חולשה וריפלוקס בשעות הערב.</div>
+            <div class="timeline-meta">רמת פחד 8/10</div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ─── APPOINTMENTS ─── -->
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">תורים קרובים</div>
+        <div class="section-agent">dana</div>
+      </div>
+
+      <div class="appointments">
+
+        <article class="appt" data-appt-time="2026-05-26T18:30:00+03:00">
+          <div class="appt-header">
+            <div>
+              <div class="appt-title">ראומטולוג</div>
+              <div class="appt-when">יום שלישי · 26 במאי · 2026</div>
+            </div>
+            <div class="appt-time-badge">18:30</div>
+          </div>
+
+          <div class="countdown" data-countdown>
+            <div class="countdown-cell"><div class="countdown-value" data-d>—</div><div class="countdown-label">ימים</div></div>
+            <div class="countdown-cell"><div class="countdown-value" data-h>—</div><div class="countdown-label">שעות</div></div>
+            <div class="countdown-cell"><div class="countdown-value" data-m>—</div><div class="countdown-label">דקות</div></div>
+          </div>
+
+          <div class="appt-docs-label">מסמכים נדרשים</div>
+          <ul class="appt-docs">
+            <li class="done"><span class="doc-check"></span><span class="doc-text">מכתב שחרור מאשפוז</span></li>
+            <li><span class="doc-check"></span><span class="doc-text">תוצאות בדיקות דם</span><span class="doc-pending-label">חסר</span></li>
+            <li><span class="doc-check"></span><span class="doc-text">הפניה לראומטולוג</span><span class="doc-pending-label">חסר</span></li>
+          </ul>
+        </article>
+
+        <article class="appt" data-appt-time="2026-05-26T20:00:00+03:00">
+          <div class="appt-header">
+            <div>
+              <div class="appt-title">פסיכיאטר</div>
+              <div class="appt-when">יום שלישי · 26 במאי · 2026</div>
+            </div>
+            <div class="appt-time-badge">20:00</div>
+          </div>
+
+          <div class="countdown" data-countdown>
+            <div class="countdown-cell"><div class="countdown-value" data-d>—</div><div class="countdown-label">ימים</div></div>
+            <div class="countdown-cell"><div class="countdown-value" data-h>—</div><div class="countdown-label">שעות</div></div>
+            <div class="countdown-cell"><div class="countdown-value" data-m>—</div><div class="countdown-label">דקות</div></div>
+          </div>
+
+          <div class="appt-docs-label">מסמכים נדרשים</div>
+          <ul class="appt-docs">
+            <li><span class="doc-check"></span><span class="doc-text">ציר זמן רגשי (Stress timeline)</span><span class="doc-pending-label">בכתיבה</span></li>
+            <li><span class="doc-check"></span><span class="doc-text">שתי קבלות שונות</span><span class="doc-pending-label">חסר</span></li>
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- ─── AGENT ROSTER ─── -->
+    <section class="section">
+      <div class="section-head">
+        <div class="section-title">סגל סוכני בריאות</div>
+        <div class="section-agent">maya · admin</div>
+      </div>
+
+      <div class="roster">
+        <!-- Lian -->
+        <div class="agent-card" onclick="window.location.href='lian.html'" style="cursor: pointer;">
+          <img class="agent-img" src="assets/agent_lian.png" alt="Lian Avatar" />
+          <div class="agent-name">ליאן (Lian)</div>
+          <div class="agent-role">ניטור אנרגיה</div>
+          <div class="agent-desc">עוקבת אחר מדדי חיוניות, סטרס ומיקוד, ומתריעה על שחיקה.</div>
+        </div>
+
+        <!-- Gabriel -->
+        <div class="agent-card" onclick="window.location.href='gabriel.html'" style="cursor: pointer;">
+          <img class="agent-img" src="assets/agent_gabriel.png" alt="Gabriel Avatar" />
+          <div class="agent-name">גבריאל (Gabriel)</div>
+          <div class="agent-role">מיון רפואי וחירום</div>
+          <div class="agent-desc">מסנן סימפטומים בזמן אמת ומזהה "דגלים אדומים" לפינוי.</div>
+        </div>
+
+        <!-- Dana -->
+        <div class="agent-card" onclick="window.location.href='dana.html'" style="cursor: pointer;">
+          <img class="agent-img" src="assets/agent_dana.png" alt="Dana Avatar" />
+          <div class="agent-name">דנה (Dana)</div>
+          <div class="agent-role">ניהול תורים</div>
+          <div class="agent-desc">מנהלת את הבירוקרטיה, רשימות התיוג והמסמכים לתורים.</div>
+        </div>
+
+        <!-- Mia -->
+        <div class="agent-card" onclick="window.location.href='mia.html'" style="cursor: pointer;">
+          <img class="agent-img" src="assets/agent_mia.png" alt="Mia Avatar" />
+          <div class="agent-name">מיה (Mia)</div>
+          <div class="agent-role">ויסות סטרס</div>
+          <div class="agent-desc">מזהה טריגרים ללחץ ומרגיעה מנגנוני חרדה גופניים.</div>
+        </div>
+        
+        <!-- Leo -->
+        <div class="agent-card" onclick="window.location.href='leo.html'" style="cursor: pointer;">
+          <img class="agent-img" src="assets/agent_leo.png" alt="Leo Avatar" />
+          <div class="agent-name">ליאו (Leo)</div>
+          <div class="agent-role">אורח חיים בריא</div>
+          <div class="agent-desc">מנהל תזונה, ספורט, שינה ומחלק מדיטציות יומיות.</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">v2-partial · מופעל על ידי maya · עדכון אחרון 2026-05-20</div>
+
+  </div>
+
+  <script>
+    function tickCountdown(card) {
+      const target = new Date(card.dataset.apptTime).getTime();
+      const now = Date.now();
+      let diff = Math.max(0, target - now);
+
+      const day = 24 * 60 * 60 * 1000;
+      const hour = 60 * 60 * 1000;
+      const minute = 60 * 1000;
+
+      const d = Math.floor(diff / day); diff -= d * day;
+      const h = Math.floor(diff / hour); diff -= h * hour;
+      const m = Math.floor(diff / minute);
+
+      const pad = n => String(n).padStart(2, '0');
+      card.querySelector('[data-d]').textContent = pad(d);
+      card.querySelector('[data-h]').textContent = pad(h);
+      card.querySelector('[data-m]').textContent = pad(m);
+    }
+
+    function tickAll() {
+      document.querySelectorAll('.appt').forEach(tickCountdown);
+    }
+
+    tickAll();
+    setInterval(tickAll, 30 * 1000); // רענון כל 30 שניות
+  </script>
+</body>
+</html>

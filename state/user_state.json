@@ -1,0 +1,11 @@
+{
+    "energy": 6,
+    "stress": 5,
+    "focus": 4,
+    "burnout_risk": "medium",
+    "active_domains": [
+        "career",
+        "finance",
+        "health"
+    ]
+}

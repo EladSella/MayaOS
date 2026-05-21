@@ -1,0 +1,20 @@
+{
+  "mode": "elevated",
+  "stress_thresholds": {
+    "normal": 0,
+    "elevated": 5,
+    "recovery": 7,
+    "crisis": 9
+  },
+  "transition_rules": {
+    "crisis_activation": [
+      "Must have elevated stress",
+      "Must have unresolved escalation AND/OR sustained overload",
+      "Do NOT activate based on task count alone"
+    ],
+    "recovery_activation": {
+      "elevated_to_recovery": "Triggered when active stabilization signals are detected (e.g., immediate threat contained, but cognitive load remains high).",
+      "recovery_to_normal": "Triggered when cognitive load returns to baseline and sustained execution capacity is restored."
+    }
+  }
+}

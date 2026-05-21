@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Mia · ויסות סטרס</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-agent.css" />
+  <style>
+    :root {
+      --grad-primary: linear-gradient(135deg, #c084fc 0%, #2dd4bf 100%);
+    }
+    body { background-image: radial-gradient(ellipse at top right, rgba(45, 212, 191, 0.15), transparent 60%); }
+    .agent-name { background: var(--grad-primary); -webkit-background-clip: text; color: transparent; }
+    
+    .stressor { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 10px; }
+    .stressor:last-child { margin-bottom: 0; }
+    .str-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .str-title { font-size: 14px; font-weight: 600; color: var(--text); }
+    .str-level { font-family: 'JetBrains Mono', monospace; font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 600; }
+    .level-high { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+    .level-med { background: rgba(96, 165, 250, 0.15); color: #93c5fd; border: 1px solid rgba(96,165,250,0.3); }
+    .str-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+    .bullet-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .bullet-list li { display: flex; gap: 10px; font-size: 13.5px; line-height: 1.4; color: var(--text); }
+    .bullet-list li::before { content: '•'; color: var(--teal); font-weight: bold; }
+
+    /* SOS Breathing Widget */
+    .sos-card { background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), rgba(192, 132, 252, 0.1)); border: 1px solid var(--purple); text-align: center; }
+    .sos-btn { background: var(--grad-primary); color: white; border: none; padding: 12px 24px; border-radius: 999px; font-weight: bold; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(192, 132, 252, 0.4); transition: transform 0.2s; font-family: inherit; }
+    .sos-btn:hover { transform: scale(1.05); }
+    .breathing-container { display: none; flex-direction: column; align-items: center; margin-top: 20px; }
+    .breathe-circle { width: 120px; height: 120px; border-radius: 50%; background: var(--grad-primary); display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 22px; box-shadow: 0 0 30px rgba(45, 212, 191, 0.4); transition: transform 4s linear; transform: scale(1); }
+    .instruction { margin-top: 20px; font-size: 18px; font-weight: 600; color: var(--teal); height: 24px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <a href="index.html" class="back-btn">חזרה לדשבורד</a>
+    
+    <div class="header">
+      <img src="assets/agent_mia.png" alt="Mia" class="agent-img">
+      <div>
+        <div class="agent-name">מיה (Mia)</div>
+        <div class="agent-role">סוכנת ויסות סטרס וחרדה</div>
+      </div>
+    </div>
+
+    <!-- SOS Breathing Card -->
+    <div class="card sos-card" id="sos-section">
+      <h3 style="color: var(--text); margin-bottom: 10px;">מרגיש לחץ עכשיו?</h3>
+      <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">טכניקת 4-7-8 עוזרת להרגיע את מערכת העצבים המרכזית בתוך דקה.</p>
+      <button class="sos-btn" id="start-breathing-btn" onclick="startBreathing()">התחל תרגיל נשימה מיידי</button>
+      
+      <div class="breathing-container" id="breathing-ui">
+        <div class="breathe-circle" id="breathe-circle">4</div>
+        <div class="instruction" id="breathe-text">התכונן...</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">טריגרים פעילים (Stressors)</div>
+      
+      <div class="stressor">
+        <div class="str-head">
+          <div class="str-title">פחד מסימפטומים פיזיים (ידיים)</div>
+          <div class="str-level level-high">ELEVATED</div>
+        </div>
+        <div class="str-desc">פחד אקוטי וטבעי בתגובה לסימפטומים הויזואלים. נמצא במוקד ההרגעה שלי.</div>
+      </div>
+
+      <div class="stressor">
+        <div class="str-head">
+          <div class="str-title">טראומה פיזית (האשפוז והגסטרו)</div>
+          <div class="str-level level-high">ELEVATED</div>
+        </div>
+        <div class="str-desc">עומס נפשי טבעי בעקבות אשפוז בסופ"ש, מערכת העצבים מנסה להתאושש.</div>
+      </div>
+
+      <div class="stressor">
+        <div class="str-head">
+          <div class="str-title">לחצים משפטיים ועורך דין</div>
+          <div class="str-level level-med">STABILIZED</div>
+        </div>
+        <div class="str-desc">טופל על ידי הסוכן המשפטי (אמיר). עבר לסטטוס רעש רקע (לא אקוטי כרגע).</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">קורלציות הנחקרות כעת</div>
+      <ul class="bullet-list">
+        <li><strong>רמת סטרס בלילה מול הכחלת ידיים:</strong> תועדה פעם אחת ב-1:25 בלילה. נדרשות עוד דוגמאות לביסוס ודאי. האם הסטרס מקדים את ההכחלה, או שההכחלה מייצרת סטרס?</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    let breathingInterval;
+    
+    function startBreathing() {
+      document.getElementById('start-breathing-btn').style.display = 'none';
+      const container = document.getElementById('breathing-ui');
+      const circle = document.getElementById('breathe-circle');
+      const text = document.getElementById('breathe-text');
+      
+      container.style.display = 'flex';
+      
+      // 4-7-8 Timing
+      const totalCycleTime = 19000; // 4 + 7 + 8 = 19 seconds
+      
+      function breatheCycle() {
+        // Inhale (4s)
+        text.textContent = 'שאיפה עמוקה (מהאף)...';
+        text.style.color = 'var(--blue)';
+        circle.style.transition = 'transform 4s ease-out';
+        circle.style.transform = 'scale(1.5)';
+        countdown(4, circle);
+        
+        // Hold (7s)
+        setTimeout(() => {
+          text.textContent = 'להחזיק (לא לשחרר)...';
+          text.style.color = 'var(--warning)';
+          circle.style.transition = 'none'; // stay big
+          countdown(7, circle);
+        }, 4000);
+        
+        // Exhale (8s)
+        setTimeout(() => {
+          text.textContent = 'נשיפה איטית (מהפה)...';
+          text.style.color = 'var(--teal)';
+          circle.style.transition = 'transform 8s ease-in-out';
+          circle.style.transform = 'scale(1)';
+          countdown(8, circle);
+        }, 11000);
+      }
+
+      function countdown(seconds, element) {
+        let current = seconds;
+        element.textContent = current;
+        const countInt = setInterval(() => {
+          current--;
+          if (current > 0) {
+            element.textContent = current;
+          } else {
+            clearInterval(countInt);
+          }
+        }, 1000);
+      }
+
+      breatheCycle();
+      breathingInterval = setInterval(breatheCycle, totalCycleTime);
+      
+      // Stop after 4 cycles (~76 seconds)
+      setTimeout(() => {
+        clearInterval(breathingInterval);
+        container.style.display = 'none';
+        document.getElementById('start-breathing-btn').style.display = 'inline-block';
+        document.getElementById('start-breathing-btn').textContent = 'עשית עבודה מעולה. חזור שוב אם תצטרך.';
+      }, totalCycleTime * 4);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+[
+    {
+        "id": "task_1_review_agreement",
+        "title": "Review Legal Fee Agreement",
+        "assignee": "Amir (Michal)",
+        "status": "todo",
+        "priority": "high",
+        "description": "Review the original signed agreement with the lawyer to confirm the exact payment terms and timeline.",
+        "last_updated": "2026-05-19",
+        "dependencies": []
+    },
+    {
+        "id": "task_3_draft_response",
+        "title": "Draft Boundary-Setting Response",
+        "assignee": "Amir (Gil)",
+        "status": "todo",
+        "priority": "high",
+        "description": "Draft a calm, professional, but firm boundary-setting message to the lawyer reiterating the agreed-upon payment timeline.",
+        "last_updated": "2026-05-19",
+        "dependencies": [
+            "task_1_review_agreement"
+        ]
+    }
+]

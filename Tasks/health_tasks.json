@@ -1,0 +1,114 @@
+[
+    {
+        "id": "task_health_1_track_symptoms",
+        "title": "Track Hand Symptoms",
+        "assignee": "Dr. Liam (Gabriel)",
+        "status": "active",
+        "priority": "high",
+        "description": "Document when hands change color, one/both hands, duration, accompanying symptoms (pain, numbness, weakness, cold), and triggers (cold, stress, static posture, caffeine).",
+        "last_updated": "2026-05-20",
+        "dependencies": []
+    },
+    {
+        "id": "task_health_2_photo_documentation",
+        "title": "Photograph Hands During Events",
+        "assignee": "Dr. Liam (Gabriel)",
+        "status": "active",
+        "priority": "high",
+        "description": "Take clear photos in real-time when hands change color, veins bulge, or there are differences between hands. Photo from 2026-05-20 10:01 already logged in health_memory.json.",
+        "last_updated": "2026-05-20",
+        "dependencies": []
+    },
+    {
+        "id": "task_health_3_prep_rheumatologist",
+        "title": "Prepare for Rheumatologist (Tuesday 2026-05-26, 18:30)",
+        "assignee": "Dr. Liam (Dana)",
+        "status": "todo",
+        "priority": "high",
+        "description": "Organize full description of Thursday's acute event, weekend hospitalization, hand color changes, neck pain, durations, triggers, and photos for the appointment. Bring: blood test results, referral, photo log, hospital discharge summary, current medications list.",
+        "last_updated": "2026-05-20",
+        "dependencies": [
+            "task_health_1_track_symptoms",
+            "task_health_2_photo_documentation",
+            "task_health_5_obtain_discharge_summary",
+            "task_health_6_obtain_blood_tests",
+            "task_health_7_obtain_referrals"
+        ]
+    },
+    {
+        "id": "task_health_4_prep_psychiatrist",
+        "title": "Prepare for Psychiatrist (Tuesday 2026-05-26, 20:00)",
+        "assignee": "Dr. Liam (Mia)",
+        "status": "todo",
+        "priority": "high",
+        "description": "Prepare structured psychiatric briefing: timeline of stressors (lawyer pressure background), Thursday's acute event with somatic features, weekend hospitalization psychological impact, current sleep/eating/cognitive function, fear response to hand discoloration. Include medication list. Do not pre-diagnose; present pattern only.",
+        "last_updated": "2026-05-20",
+        "dependencies": [
+            "task_health_5_obtain_discharge_summary"
+        ]
+    },
+    {
+        "id": "task_health_5_obtain_discharge_summary",
+        "title": "Obtain Weekend Hospital Discharge Summary",
+        "assignee": "Elad (manual) → Dana",
+        "status": "todo",
+        "priority": "high",
+        "description": "Retrieve the discharge summary from the weekend hospitalization. Must include: reason for admission, diagnoses considered, tests run, medications prescribed at discharge, follow-up instructions. Once obtained, store reference in health_memory.json and supply to both specialists on 2026-05-26.",
+        "last_updated": "2026-05-20",
+        "dependencies": []
+    },
+    {
+        "id": "task_health_6_obtain_blood_tests",
+        "title": "Retrieve Recent Blood Test Results",
+        "assignee": "Elad (manual) → Dana",
+        "status": "todo",
+        "priority": "high",
+        "description": "Pull most recent blood test panel. If results from the weekend hospitalization are available, include those. Bring printed copies to both 2026-05-26 appointments.",
+        "last_updated": "2026-05-20",
+        "dependencies": []
+    },
+    {
+        "id": "task_health_7_obtain_referrals",
+        "title": "Obtain Specialist Referrals (הפניות)",
+        "assignee": "Elad (manual) → Dana",
+        "status": "todo",
+        "priority": "high",
+        "description": "Confirm both referrals exist and are valid: one for the rheumatologist, one for the psychiatrist. If missing, request from family physician or sick fund before Tuesday 2026-05-26.",
+        "last_updated": "2026-05-20",
+        "dependencies": []
+    },
+    {
+        "id": "task_health_8_insurance_reimbursement_check",
+        "title": "Verify Insurance Reimbursement Coverage",
+        "assignee": "Ella (Chen)",
+        "status": "todo",
+        "priority": "medium",
+        "description": "Verify reimbursement coverage for both specialist visits on 2026-05-26 (rheumatologist 18:30, psychiatrist 20:00). Identify required documents per claim. Prepare checklist for Elad to file the claims post-visit. Chen does not call insurance directly — prepares the checklist only.",
+        "last_updated": "2026-05-20",
+        "dependencies": []
+    },
+    {
+        "id": "task_health_9_post_appointment_synthesis",
+        "title": "Post-Appointment Synthesis (2026-05-26 evening)",
+        "assignee": "Dr. Liam",
+        "status": "todo",
+        "priority": "medium",
+        "description": "After both Tuesday appointments, synthesize findings from rheumatologist and psychiatrist into a single update for health_memory.json. Log: diagnoses given, tests ordered, medications prescribed, follow-up timeline, any contradictions between the two specialists' views. Update hypotheses_monitored list based on what was ruled in or out.",
+        "last_updated": "2026-05-20",
+        "dependencies": [
+            "task_health_3_prep_rheumatologist",
+            "task_health_4_prep_psychiatrist"
+        ]
+    }
+    },
+    {
+        "id": "task_health_10_obtain_sick_days",
+        "title": "Obtain Missing Sick Days (ימי מחלה)",
+        "assignee": "Ella (Chen) / Elad (manual)",
+        "status": "in_progress",
+        "priority": "medium",
+        "description": "User has hospital discharge (15-16/05) and medical approvals for 17-18/05. Request sent to family doctor for the remaining missing certificates for 19/05 and 20/05. Waiting for doctor's response.",
+        "last_updated": "2026-05-20",
+        "dependencies": []
+    }
+]

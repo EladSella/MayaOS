@@ -1,0 +1,271 @@
+{
+  "schema_version": "1.2",
+  "last_updated": "2026-05-20",
+  "activation_legend": {
+    "v1_active": "Fully operational in V1 freeze scope",
+    "v2_partial": "Activated under V2 Partial Activation Directive (2026-05-20)",
+    "v2_planned": "Defined in architecture but NOT active. Do not invoke."
+  },
+  "finance": {
+    "status": "v1_active",
+    "executive": "Daniel",
+    "executive_file": "agents/daniel_agent.txt",
+    "active_sub_agents": [
+      "Ron"
+    ],
+    "planned_sub_agents": [
+      "Hila",
+      "Omer",
+      "Guy",
+      "Rina",
+      "Shahar",
+      "Tal"
+    ]
+  },
+  "legal": {
+    "status": "v1_active",
+    "executive": "Amir",
+    "executive_file": "agents/amir_agent.txt",
+    "active_sub_agents": [
+      "Michal",
+      "Gil"
+    ],
+    "planned_sub_agents": [
+      "Vered",
+      "Ido",
+      "Ronit",
+      "Amit"
+    ]
+  },
+  "health": {
+    "status": "v2_partial",
+    "activation_reason": "Active medical situation: post-hospitalization, hand discoloration, two appointments 2026-05-26.",
+    "executive": "Dr. Liam",
+    "executive_file": "agents/dr_liam_agent.txt",
+    "master_prompt": "prompts/dr_liam_master_prompt.txt",
+    "active_sub_agents": [
+      "Gabriel",
+      "Dana",
+      "Mia",
+      "Lian",
+      "Leo"
+    ],
+    "planned_sub_agents": [
+      "Eva",
+      "Ariel",
+      "Orion",
+      "Roy"
+    ],
+    "agent_directories": {
+      "Lian": {
+        "dir": "agents/lian",
+        "persona": "agents/lian/persona.md",
+        "state": "agents/lian/state.json",
+        "history": "agents/lian/history.json",
+        "protocol": "agents/lian/protocol.md",
+        "inbox": "agents/lian/inbox.json",
+        "outbox": "agents/lian/outbox.json",
+        "runner": "network/invoke_lian.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "build_status": "first_full_v2_agent",
+        "data_model": "continuous_readings",
+        "cli_commands": [
+          "--status",
+          "--log",
+          "message"
+        ]
+      },
+      "Gabriel": {
+        "dir": "agents/gabriel",
+        "persona": "agents/gabriel/persona.md",
+        "state": "agents/gabriel/state.json",
+        "history": "agents/gabriel/history.json",
+        "protocol": "agents/gabriel/protocol.md",
+        "inbox": "agents/gabriel/inbox.json",
+        "outbox": "agents/gabriel/outbox.json",
+        "runner": "network/invoke_gabriel.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "direct_user_access": true,
+        "build_status": "second_full_v2_agent",
+        "data_model": "discrete_events",
+        "special_capability": "red_flag_keyword_pre_screen via --check, supports English and Hebrew",
+        "cli_commands": [
+          "--status",
+          "--log",
+          "--check",
+          "message"
+        ]
+      },
+      "Dana": {
+        "dir": "agents/dana",
+        "persona": "agents/dana/persona.md",
+        "state": "agents/dana/state.json",
+        "history": "agents/dana/history.json",
+        "protocol": "agents/dana/protocol.md",
+        "inbox": "agents/dana/inbox.json",
+        "outbox": "agents/dana/outbox.json",
+        "runner": "network/invoke_dana.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "build_status": "third_full_v2_agent",
+        "data_model": "appointments_and_document_checklist",
+        "special_capability": "days_remaining auto-calculation and gap reporting via --gaps and --got",
+        "cli_commands": [
+          "--status",
+          "--gaps",
+          "--got",
+          "--ref",
+          "message"
+        ]
+      },
+      "Mia": {
+        "dir": "agents/mia",
+        "persona": "agents/mia/persona.md",
+        "state": "agents/mia/state.json",
+        "history": "agents/mia/history.json",
+        "protocol": "agents/mia/protocol.md",
+        "inbox": "agents/mia/inbox.json",
+        "outbox": "agents/mia/outbox.json",
+        "runner": "network/invoke_mia.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "build_status": "fourth_full_v2_agent",
+        "data_model": "stress_observations_and_correlations",
+        "special_capability": "pulls emotional_memory.json into boot prompt automatically",
+        "cli_commands": [
+          "--status",
+          "--correlations",
+          "--log",
+          "message"
+        ]
+      },
+      "Leo": {
+        "dir": "agents/leo",
+        "persona": "agents/leo/persona.md",
+        "state": "agents/leo/state.json",
+        "history": "agents/leo/history.json",
+        "protocol": "agents/leo/protocol.md",
+        "inbox": "agents/leo/inbox.json",
+        "outbox": "agents/leo/outbox.json",
+        "runner": "network/invoke_leo.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "build_status": "fifth_full_v2_agent",
+        "data_model": "fitness_nutrition_meditation_tracking",
+        "special_capability": "issues daily meditation youtube links",
+        "cli_commands": [
+          "--status",
+          "--log",
+          "message"
+        ]
+      },
+      "Dr_Liam": {
+        "dir": "agents/dr_liam",
+        "persona": "agents/dr_liam/persona.md",
+        "state": "agents/dr_liam/state.json",
+        "history": "agents/dr_liam/history.json",
+        "protocol": "agents/dr_liam/protocol.md",
+        "inbox": "agents/dr_liam/inbox.json",
+        "outbox": "agents/dr_liam/outbox.json",
+        "runner": "network/invoke_dr_liam.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "tier": 1,
+        "role": "Health Executive (synthesizer over Gabriel, Lian, Mia, Dana)",
+        "build_status": "executive_v2_agent",
+        "data_model": "cross_sub_agent_synthesis",
+        "special_capability": "live aggregation via --synthesize, mode-transition recommendations",
+        "cli_commands": [
+          "--status",
+          "--synthesize",
+          "--log-synthesis",
+          "message"
+        ]
+      }
+    }
+  },
+  "admin": {
+    "status": "v2_partial",
+    "activation_reason": "Insurance reimbursement scope only. All other Admin functions frozen.",
+    "executive": "Ella",
+    "executive_file": null,
+    "active_sub_agents": [
+      "Chen"
+    ],
+    "planned_sub_agents": [
+      "Sapir",
+      "Rotem",
+      "Ori",
+      "Shir"
+    ]
+  },
+  "career": {
+    "status": "v2_planned",
+    "executive": "Noa",
+    "planned_sub_agents": [
+      "Maya L",
+      "Dean",
+      "Karin",
+      "Yarden",
+      "Bar",
+      "Adam",
+      "Niv"
+    ]
+  },
+  "relationship": {
+    "status": "v2_planned",
+    "executive": "Sofia",
+    "planned_sub_agents": [
+      "Kim",
+      "Lia",
+      "Daniel R",
+      "Nico",
+      "Emma",
+      "Sara",
+      "Jake"
+    ]
+  },
+  "ayala": {
+    "status": "v2_planned",
+    "executive": "Yael",
+    "planned_sub_agents": [
+      "Hadas",
+      "Neta",
+      "Lior",
+      "Shani",
+      "Ravit"
+    ]
+  },
+  "property": {
+    "status": "v2_planned",
+    "executive": "Eitan",
+    "planned_sub_agents": [
+      "Kobi",
+      "Alon",
+      "Talia",
+      "Ben"
+    ]
+  },
+  "events": {
+    "status": "v2_planned",
+    "executive": "Tom",
+    "planned_sub_agents": [
+      "Oren",
+      "Gal",
+      "Yuval",
+      "Maya T",
+      "Itay"
+    ]
+  },
+  "meta_agents": {
+    "status": "v2_planned",
+    "agents": [
+      "Shadow",
+      "Focus",
+      "Life Balance",
+      "Crisis Prevention"
+    ]
+  }
+}

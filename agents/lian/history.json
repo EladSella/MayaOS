@@ -1,0 +1,18 @@
+[
+  {
+    "timestamp": "2026-05-20T11:30:00+03:00",
+    "energy": 6,
+    "stress": 5,
+    "focus": 4,
+    "burnout_risk": "medium",
+    "context": "Initial baseline reading at Lian activation. Post-hospitalization recovery phase active. Reading sourced from state/user_state.json."
+  },
+  {
+    "timestamp": "2026-05-20T07:27:16.440499+00:00",
+    "energy": 5,
+    "stress": 6,
+    "focus": 4,
+    "burnout_risk": null,
+    "context": "Recovery_day_check-in_after_hospitalization"
+  }
+]

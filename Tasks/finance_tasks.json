@@ -1,0 +1,12 @@
+[
+    {
+        "id": "task_2_check_cashflow",
+        "title": "Check Liquidity and Cashflow",
+        "assignee": "Daniel (Ron)",
+        "status": "todo",
+        "priority": "high",
+        "description": "Analyze current liquid cash and cashflow status to understand financial position regarding the lawyer's early payment demand.",
+        "last_updated": "2026-05-19",
+        "dependencies": []
+    }
+]

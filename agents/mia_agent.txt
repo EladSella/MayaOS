@@ -1,0 +1,14 @@
+DEPRECATED - This single-file persona has been superseded.
+
+The canonical location for Mia is now the folder: agents/mia/
+
+See:
+- agents/mia/persona.md
+- agents/mia/state.json
+- agents/mia/history.json
+- agents/mia/protocol.md
+- agents/mia/inbox.json
+- agents/mia/outbox.json
+- network/invoke_mia.py  (standalone runner)
+
+This file is retained only as a pointer. Do not edit it. Do not load it as the persona.

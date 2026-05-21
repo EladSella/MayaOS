@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "description": "Inter-agent message schema for MayaOS V2 partial. All agents communicate using this exact shape.",
+  "schema": {
+    "msg_id": {
+      "type": "string",
+      "required": true,
+      "description": "Unique message identifier. UUID or incrementing per-sender counter."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "ISO 8601 with timezone",
+      "required": true
+    },
+    "from": {
+      "type": "string",
+      "required": true,
+      "description": "Sender agent_id. Must be a valid registered agent.",
+      "valid_values": [
+        "maya",
+        "dr_liam",
+        "gabriel",
+        "dana",
+        "mia",
+        "lian",
+        "chen",
+        "amir",
+        "daniel"
+      ]
+    },
+    "to": {
+      "type": "string",
+      "required": true,
+      "description": "Recipient agent_id. Use 'broadcast' for division-wide or system-wide alerts."
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "valid_values": ["request", "response", "broadcast", "alert"],
+      "description": "request: asking for something. response: answering a prior request. broadcast: informational, no answer expected. alert: high-priority broadcast."
+    },
+    "payload": {
+      "type": "object",
+      "required": true,
+      "schema": {
+        "intent": {
+          "type": "string",
+          "description": "Short verb-noun describing the action (e.g., 'read_current_state', 'log_new_reading')."
+        },
+        "data": {
+          "type": "object",
+          "description": "Free-form payload data specific to the intent."
+        },
+        "context_refs": {
+          "type": "array",
+          "items": "string",
+          "description": "Optional list of file paths or memory IDs the recipient should consult."
+        }
+      }
+    },
+    "confidence_level": {
+      "type": "string",
+      "valid_values": ["high", "medium", "low", "unknown"],
+      "required": true
+    },
+    "requires_response": {
+      "type": "boolean",
+      "required": true,
+      "description": "If true, the recipient must enqueue an outbox response. If false, no reply expected."
+    }
+  },
+  "example_message": {
+    "msg_id": "msg_2026_05_20_001",
+    "timestamp": "2026-05-20T12:00:00+03:00",
+    "from": "maya",
+    "to": "lian",
+    "type": "request",
+    "payload": {
+      "intent": "read_current_state",
+      "data": {},
+      "context_refs": ["state/user_state.json"]
+    },
+    "confidence_level": "high",
+    "requires_response": true
+  }
+}

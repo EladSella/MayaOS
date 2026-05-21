@@ -1,0 +1,14 @@
+[
+  {
+    "timestamp": "2026-05-20T11:30:00+03:00",
+    "type": "initial_synthesis",
+    "summary": "Health division activated. Four sub-agents online. Initial picture: post-hospitalization recovery from acute gastroenteritis. Unresolved hand discoloration routed to rheumatology. Psychological load elevated but proportional.",
+    "confidence_level": "medium-high",
+    "source_refs": [
+      "agents/gabriel/state.json",
+      "agents/lian/state.json",
+      "agents/mia/state.json",
+      "agents/dana/state.json"
+    ]
+  }
+]
