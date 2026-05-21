@@ -532,13 +532,13 @@
     .agent-card:hover { transform: translateY(-3px); }
     
     .agent-img {
-      width: 60px;
-      height: 60px;
+      width: 140px;
+      height: 140px;
       border-radius: 50%;
-      border: 2px solid var(--border-strong);
-      margin-bottom: 12px;
+      border: 3px solid var(--border-strong);
+      margin-bottom: 16px;
       object-fit: cover;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     }
     
     .agent-name {
@@ -576,6 +576,11 @@
   <div class="app">
 
     <!-- ─── HEADER ─── -->
+    <a href="maya.html" style="display: inline-flex; align-items: center; gap: 8px; color: var(--blue); text-decoration: none; font-size: 14px; font-weight: 600; margin-bottom: 16px; background: rgba(59, 130, 246, 0.1); padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(59, 130, 246, 0.2); transition: all 0.2s ease;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+      חזור ללוח הבקרה של מאיה (Global View)
+    </a>
+
     <header class="header">
       <div class="brand">
         <span class="brand-name">MayaOS</span>
@@ -585,7 +590,7 @@
       <span class="mode-tag">post_hospitalization_recovery</span>
 
       <div class="executive">
-        <div class="executive-avatar">ד"ר</div>
+        <img src="assets/agent_dr_liam.png" alt="Dr. Liam" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-strong);">
         <div class="executive-meta">
           <div class="executive-name">ד"ר ליאם</div>
           <div class="executive-role">מנהל בריאות · Tier 1</div>

@@ -8,6 +8,9 @@ echo Starting MayaOS Local UI Server...
 REM Start the python server in the background
 start /B python "%~dp0network\ui_server.py"
 
+REM Start the Auto Git Sync in the background
+start /B python "%~dp0network\auto_git.py"
+
 REM Wait a moment for server to start
 timeout /t 2 /nobreak > nul
 

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <title>MayaOS · חמ"ל מערכת ליבה</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-0: #020617;
+      --bg-1: #0f172a;
+      --panel: rgba(255, 255, 255, 0.03);
+      --panel-hover: rgba(255, 255, 255, 0.06);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.15);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #475569;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.5);
+      --success: #10b981;
+      --frozen: #64748b;
+      --radius: 24px;
+      --radius-sm: 12px;
+      --shadow-card: 0 20px 40px -10px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Outfit', system-ui, sans-serif;
+      background: var(--bg-0);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.1) 0%, transparent 50%);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* ─── CEO HEADER ─── */
+    .ceo-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius);
+      padding: 32px;
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ceo-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    }
+
+    .ceo-avatar {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--accent);
+      box-shadow: 0 0 40px var(--accent-glow);
+      margin-bottom: 20px;
+    }
+
+    .ceo-title {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .ceo-subtitle {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .ceo-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 999px;
+      font-size: 13px;
+      color: #34d399;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px var(--success);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ─── SECTIONS ─── */
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+      padding-right: 12px;
+      border-right: 3px solid var(--accent);
+    }
+
+    .divisions-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ─── DIVISION CARDS ─── */
+    .division {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .division:hover {
+      background: var(--panel-hover);
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+    }
+
+    .div-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .exec-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--border-strong);
+    }
+
+    .div-info { flex: 1; }
+
+    .div-name {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .div-exec-name {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .div-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-active { background: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-partial { background: rgba(245, 158, 11, 0.15); color: #fcd34d; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-frozen { background: rgba(100, 116, 139, 0.15); color: #cbd5e1; border: 1px solid rgba(100, 116, 139, 0.3); }
+
+    .sub-agents {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding-top: 16px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .sub-agent {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .sub-agent img {
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      transition: transform 0.2s;
+    }
+
+    .sub-agent:hover img {
+      transform: scale(1.1);
+      border-color: var(--accent);
+    }
+
+    .sub-agent-name {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    /* ─── FROZEN ─── */
+    .division.frozen {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .division.frozen:hover {
+      transform: none;
+      background: var(--panel);
+    }
+
+    .frozen .exec-avatar { filter: grayscale(100%); }
+
+    /* Custom connection lines */
+    .connector {
+      text-align: center;
+      color: var(--border-strong);
+      height: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .connector::after {
+      content: '';
+      width: 1px;
+      height: 100%;
+      background: var(--border-strong);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app">
+
+    <!-- CEO -->
+    <div class="ceo-card">
+      <img src="assets/agent_maya.png" class="ceo-avatar" alt="Maya CEO">
+      <div class="ceo-title">Maya</div>
+      <div class="ceo-subtitle">Chief Executive Agent</div>
+      <div class="ceo-status">
+        <div class="status-dot"></div>
+        System Online · V2
+      </div>
+    </div>
+
+    <div class="connector"></div>
+
+    <!-- Active Divisions -->
+    <div class="divisions-grid">
+      <h2 class="section-title">Executive Divisions (Active)</h2>
+
+      <!-- Health -->
+      <div class="division" onclick="window.location.href='index.html'">
+        <div class="div-header">
+          <img src="assets/agent_dr_liam.png" class="exec-avatar" alt="Dr. Liam">
+          <div class="div-info">
+            <div class="div-name">מחלקת בריאות (Health)</div>
+            <div class="div-exec-name">Dir: Dr. Liam</div>
+          </div>
+          <div class="div-badge badge-active">V2_PARTIAL</div>
+        </div>
+        <div class="sub-agents">
+          <div class="sub-agent"><img src="assets/agent_gabriel.png" title="Gabriel"><span class="sub-agent-name">Gabriel</span></div>
+          <div class="sub-agent"><img src="assets/agent_dana.png" title="Dana"><span class="sub-agent-name">Dana</span></div>
+          <div class="sub-agent"><img src="assets/agent_mia.png" title="Mia"><span class="sub-agent-name">Mia</span></div>
+          <div class="sub-agent"><img src="assets/agent_lian.png" title="Lian"><span class="sub-agent-name">Lian</span></div>
+          <div class="sub-agent"><img src="assets/agent_leo.png" title="Leo"><span class="sub-agent-name">Leo</span></div>
+        </div>
+      </div>
+
+      <!-- Finance -->
+      <div class="division">
+        <div class="div-header">
+          <img src="assets/agent_daniel.png" class="exec-avatar" alt="Daniel">
+          <div class="div-info">
+            <div class="div-name">מחלקת כספים (Finance)</div>
+            <div class="div-exec-name">Dir: Daniel</div>
+          </div>
+          <div class="div-badge badge-active">V1_ACTIVE</div>
+        </div>
+        <div class="sub-agents">
+          <div class="sub-agent"><img src="assets/agent_ron.png" title="Ron"><span class="sub-agent-name">Ron</span></div>
+        </div>
+      </div>
+
+      <!-- Legal -->
+      <div class="division">
+        <div class="div-header">
+          <img src="assets/agent_amir.png" class="exec-avatar" alt="Amir">
+          <div class="div-info">
+            <div class="div-name">מחלקת משפטים (Legal)</div>
+            <div class="div-exec-name">Dir: Amir</div>
+          </div>
+          <div class="div-badge badge-active">V1_ACTIVE</div>
+        </div>
+        <div class="sub-agents">
+          <div class="sub-agent"><img src="assets/agent_michal.png" title="Michal"><span class="sub-agent-name">Michal</span></div>
+          <div class="sub-agent"><img src="assets/agent_gil.png" title="Gil"><span class="sub-agent-name">Gil</span></div>
+        </div>
+      </div>
+
+      <!-- Admin -->
+      <div class="division">
+        <div class="div-header">
+          <img src="assets/agent_ella.png" class="exec-avatar" alt="Ella">
+          <div class="div-info">
+            <div class="div-name">מחלקת אדמין (Admin)</div>
+            <div class="div-exec-name">Dir: Ella</div>
+          </div>
+          <div class="div-badge badge-partial">SCOPED</div>
+        </div>
+        <div class="sub-agents">
+          <div class="sub-agent"><img src="assets/agent_chen.png" title="Chen"><span class="sub-agent-name">Chen</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Frozen Divisions -->
+    <div class="divisions-grid" style="margin-top: 16px;">
+      <h2 class="section-title">Planned Divisions (Frozen)</h2>
+
+      <div class="division frozen">
+        <div class="div-header">
+          <div class="exec-avatar" style="background: var(--border-strong); display:flex; align-items:center; justify-content:center; color: var(--text-dim); font-weight: bold;">N</div>
+          <div class="div-info">
+            <div class="div-name">מחלקת קריירה (Career)</div>
+            <div class="div-exec-name">Dir: Noa</div>
+          </div>
+          <div class="div-badge badge-frozen">V2_PLANNED</div>
+        </div>
+      </div>
+
+      <div class="division frozen">
+        <div class="div-header">
+          <div class="exec-avatar" style="background: var(--border-strong); display:flex; align-items:center; justify-content:center; color: var(--text-dim); font-weight: bold;">S</div>
+          <div class="div-info">
+            <div class="div-name">מערכות יחסים (Relationship)</div>
+            <div class="div-exec-name">Dir: Sofia</div>
+          </div>
+          <div class="div-badge badge-frozen">V2_PLANNED</div>
+        </div>
+      </div>
+      
+      <div class="division frozen">
+        <div class="div-header">
+          <div class="exec-avatar" style="background: var(--border-strong); display:flex; align-items:center; justify-content:center; color: var(--text-dim); font-weight: bold;">E</div>
+          <div class="div-info">
+            <div class="div-name">נדל"ן ונכסים (Property)</div>
+            <div class="div-exec-name">Dir: Eitan</div>
+          </div>
+          <div class="div-badge badge-frozen">V2_PLANNED</div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
