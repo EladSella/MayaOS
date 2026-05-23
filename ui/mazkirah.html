@@ -11,911 +11,590 @@
   <style>
     :root {
       --bg-0: #0f172a;
-      --bg-1: #111c33;
-      --bg-2: #1a2542;
-      --panel: rgba(255, 255, 255, 0.045);
-      --panel-strong: rgba(255, 255, 255, 0.075);
-      --border: rgba(255, 255, 255, 0.09);
-      --border-strong: rgba(255, 255, 255, 0.16);
+      --panel: rgba(255,255,255,0.045);
+      --border: rgba(255,255,255,0.09);
+      --border-strong: rgba(255,255,255,0.16);
       --text: #f1f5f9;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
       --blue: #60a5fa;
-      --blue-strong: #3b82f6;
       --purple: #c084fc;
       --purple-strong: #a855f7;
       --teal: #2dd4bf;
       --teal-strong: #14b8a6;
       --success: #10b981;
-      --success-soft: rgba(16, 185, 129, 0.15);
-      --warning: #f59e0b;
-      --warning-soft: rgba(245, 158, 11, 0.12);
-      --danger: #ef4444;
-      --danger-soft: rgba(239, 68, 68, 0.12);
-      --grad-primary: linear-gradient(135deg, #14b8a6 0%, #a855f7 100%);
-      --shadow-card: 0 10px 40px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+      --success-soft: rgba(16,185,129,0.15);
+      --warning-soft: rgba(245,158,11,0.12);
+      --grad-primary: linear-gradient(135deg,#14b8a6 0%,#a855f7 100%);
+      --shadow-card: 0 10px 40px -10px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.04) inset;
       --radius: 18px;
       --radius-sm: 12px;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html, body {
-      height: 100%;
-      font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text);
-      background: var(--bg-0);
-      -webkit-font-smoothing: antialiased;
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html,body{
+      font-family:'Outfit',system-ui,sans-serif;
+      color:var(--text);background:var(--bg-0);
+      -webkit-font-smoothing:antialiased;
     }
-
-    body {
+    body{
       background:
-        radial-gradient(ellipse 80% 50% at 80% -10%, rgba(20, 184, 166, 0.15), transparent 70%),
-        radial-gradient(ellipse 60% 40% at 10% 20%, rgba(168, 85, 247, 0.12), transparent 70%),
-        radial-gradient(ellipse 50% 60% at 50% 100%, rgba(20, 184, 166, 0.06), transparent 70%),
+        radial-gradient(ellipse 80% 50% at 80% -10%,rgba(20,184,166,.15),transparent 70%),
+        radial-gradient(ellipse 60% 40% at 10% 20%,rgba(168,85,247,.12),transparent 70%),
         var(--bg-0);
-      min-height: 100vh;
-      padding: 24px 16px 60px;
+      min-height:100vh;
+      padding:24px 16px 60px;
+    }
+    .app{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:20px;}
+
+    /* BACK */
+    .back-link{
+      display:inline-flex;align-items:center;gap:8px;
+      color:var(--teal);text-decoration:none;font-size:14px;font-weight:600;
+      background:rgba(20,184,166,.1);padding:8px 16px;border-radius:12px;
+      border:1px solid rgba(20,184,166,.2);transition:all .2s;
+    }
+    .back-link:hover{background:rgba(20,184,166,.18);transform:translateX(2px);}
+
+    /* CARD */
+    .card{
+      padding:22px;border-radius:var(--radius);
+      background:var(--panel);backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      border:1px solid var(--border);box-shadow:var(--shadow-card);
     }
 
-    .app {
-      max-width: 440px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
+    /* HEADER */
+    .header{position:relative;overflow:hidden;}
+    .header::before{
+      content:'';position:absolute;top:-60px;right:-40px;
+      width:180px;height:180px;
+      background:radial-gradient(circle,rgba(20,184,166,.18),transparent 60%);
+      pointer-events:none;
+    }
+    .agent-header{display:flex;align-items:center;gap:16px;}
+    .agent-avatar{
+      width:64px;height:64px;border-radius:50%;object-fit:cover;
+      border:2px solid rgba(20,184,166,.4);
+      box-shadow:0 0 20px rgba(20,184,166,.2);flex-shrink:0;
+    }
+    .agent-title{
+      font-size:22px;font-weight:800;letter-spacing:-.02em;
+      background:var(--grad-primary);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .agent-sub{font-size:13px;color:var(--text-muted);margin-top:3px;}
+    .badge{
+      display:inline-block;margin-top:10px;padding:3px 10px;
+      font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;
+      color:var(--teal);background:rgba(20,184,166,.1);
+      border:1px solid rgba(20,184,166,.25);border-radius:999px;letter-spacing:.05em;
     }
 
-    /* ── BACK LINK ── */
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--teal);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 600;
-      background: rgba(20, 184, 166, 0.1);
-      padding: 8px 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(20, 184, 166, 0.2);
-      transition: all 0.2s ease;
-    }
-    .back-link:hover { background: rgba(20, 184, 166, 0.18); transform: translateX(2px); }
-
-    /* ── HEADER ── */
-    .header {
-      padding: 24px 22px;
-      border-radius: var(--radius);
-      background: var(--panel);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-card);
-      position: relative;
-      overflow: hidden;
+    /* SECTION TITLE */
+    .card-title{
+      font-size:12px;font-weight:700;color:var(--text-muted);
+      text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px;
     }
 
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -40px;
-      width: 180px; height: 180px;
-      background: radial-gradient(circle, rgba(20, 184, 166, 0.18), transparent 60%);
-      pointer-events: none;
+    /* HOW IT WORKS */
+    .steps{display:flex;flex-direction:column;gap:10px;}
+    .step{
+      display:flex;align-items:center;gap:12px;
+      padding:12px 14px;border-radius:var(--radius-sm);
+      background:rgba(255,255,255,.03);border:1px solid var(--border);
+    }
+    .step-num{
+      width:28px;height:28px;border-radius:50%;
+      background:var(--grad-primary);
+      display:flex;align-items:center;justify-content:center;
+      font-size:13px;font-weight:800;color:#fff;flex-shrink:0;
+    }
+    .step-text{font-size:13px;color:var(--text-muted);line-height:1.4;}
+    .step-text strong{color:var(--text);}
+
+    /* MIC */
+    .mic-container{display:flex;flex-direction:column;align-items:center;gap:20px;padding:10px 0 6px;}
+    .mic-ring{position:relative;width:110px;height:110px;display:flex;align-items:center;justify-content:center;}
+    .mic-ring::before{
+      content:'';position:absolute;inset:-10px;border-radius:50%;
+      border:2px solid rgba(20,184,166,.2);transition:all .3s;
+    }
+    .mic-ring.listening::before{
+      border-color:rgba(20,184,166,.7);
+      animation:micPulse 1.4s ease-in-out infinite;
+    }
+    .mic-ring::after{
+      content:'';position:absolute;inset:-22px;border-radius:50%;
+      border:1px solid rgba(20,184,166,.08);transition:all .3s;
+    }
+    .mic-ring.listening::after{
+      border-color:rgba(20,184,166,.3);
+      animation:micPulse 1.4s ease-in-out infinite .3s;
+    }
+    @keyframes micPulse{
+      0%{box-shadow:0 0 0 0 rgba(20,184,166,.5);}
+      70%{box-shadow:0 0 0 18px rgba(20,184,166,0);}
+      100%{box-shadow:0 0 0 0 rgba(20,184,166,0);}
+    }
+    .mic-btn{
+      width:110px;height:110px;border-radius:50%;border:none;
+      background:linear-gradient(135deg,rgba(20,184,166,.15),rgba(168,85,247,.15));
+      border:2px solid rgba(20,184,166,.35);
+      color:var(--teal);font-size:40px;cursor:pointer;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .25s;
+      box-shadow:0 8px 30px rgba(20,184,166,.12);
+    }
+    .mic-btn:hover{transform:scale(1.06);box-shadow:0 12px 40px rgba(20,184,166,.28);}
+    .mic-btn.listening{
+      background:linear-gradient(135deg,rgba(20,184,166,.35),rgba(168,85,247,.25));
+      border-color:var(--teal);
+      box-shadow:0 0 35px rgba(20,184,166,.4);
+      animation:micGlow 1.4s ease-in-out infinite;
+    }
+    @keyframes micGlow{
+      0%,100%{box-shadow:0 0 25px rgba(20,184,166,.3);}
+      50%{box-shadow:0 0 50px rgba(20,184,166,.6);}
+    }
+    .mic-state-label{
+      font-size:14px;color:var(--text-muted);
+      text-align:center;line-height:1.5;min-height:42px;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .mic-state-label.active{color:var(--teal);font-weight:600;}
+    .transcript-box{
+      width:100%;min-height:58px;padding:14px 16px;
+      border-radius:var(--radius-sm);
+      background:rgba(255,255,255,.03);border:1px solid var(--border);
+      color:var(--text);font-size:15px;font-weight:500;
+      text-align:center;line-height:1.55;
+    }
+    .transcript-box.has-text{
+      border-color:rgba(20,184,166,.3);
+      background:rgba(20,184,166,.06);
     }
 
-    .agent-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+    /* EXAMPLES */
+    .examples-grid{display:flex;flex-direction:column;gap:8px;}
+    .example-chip{
+      padding:11px 14px;border-radius:var(--radius-sm);
+      background:rgba(255,255,255,.03);border:1px solid var(--border);
+      color:var(--text-muted);font-size:13px;cursor:pointer;
+      transition:all .2s;font-family:'JetBrains Mono',monospace;
+      direction:rtl;text-align:right;
+    }
+    .example-chip:hover{
+      background:rgba(20,184,166,.08);
+      border-color:rgba(20,184,166,.3);color:var(--teal);
+      transform:translateX(-2px);
     }
 
-    .agent-avatar {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(20, 184, 166, 0.4);
-      box-shadow: 0 0 20px rgba(20, 184, 166, 0.2);
-      flex-shrink: 0;
+    /* PREVIEW */
+    .preview-card{
+      display:none;padding:20px;border-radius:var(--radius);
+      background:rgba(20,184,166,.07);border:1px solid rgba(20,184,166,.28);
+      animation:slideIn .3s ease;
+    }
+    @keyframes slideIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+    .preview-card.visible{display:block;}
+    .preview-label-head{
+      font-size:11px;font-weight:700;color:var(--teal);
+      text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;
+    }
+    .preview-row{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;
+    }
+    .preview-row:last-of-type{border-bottom:none;}
+    .preview-row-label{color:var(--text-muted);font-weight:500;}
+    .edit-input{
+      background:rgba(255,255,255,.06);border:1px solid var(--border-strong);
+      border-radius:8px;padding:5px 10px;color:var(--text);
+      font-family:'Outfit',sans-serif;font-size:14px;font-weight:600;
+      max-width:190px;direction:ltr;text-align:left;
+    }
+    .edit-input:focus{outline:none;border-color:var(--teal);}
+    .preview-actions{display:flex;gap:10px;margin-top:16px;}
+    .btn-confirm{
+      flex:1;padding:14px;border-radius:var(--radius-sm);border:none;
+      background:var(--grad-primary);color:#fff;
+      font-size:14px;font-weight:700;cursor:pointer;
+      font-family:'Outfit',sans-serif;transition:all .2s;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .btn-confirm:hover{opacity:.9;transform:translateY(-1px);box-shadow:0 8px 25px rgba(20,184,166,.3);}
+    .btn-cancel{
+      padding:14px 18px;border-radius:var(--radius-sm);
+      border:1px solid var(--border-strong);background:transparent;
+      color:var(--text-muted);font-size:14px;font-weight:600;
+      cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;
+    }
+    .btn-cancel:hover{background:rgba(255,255,255,.05);color:var(--text);}
+
+    /* LOG */
+    .log-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
+    .log-item{
+      display:flex;gap:12px;align-items:flex-start;
+      padding:12px 14px;border-radius:var(--radius-sm);
+      background:rgba(255,255,255,.03);border:1px solid var(--border);font-size:13px;
+    }
+    .log-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+    .log-meta{flex:1;}
+    .log-summary{font-weight:600;color:var(--text);}
+    .log-time{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-dim);margin-top:3px;}
+
+    /* TOAST */
+    .toast{
+      display:none;position:fixed;bottom:30px;left:50%;
+      transform:translateX(-50%);
+      padding:14px 24px;border-radius:999px;
+      background:rgba(16,185,129,.93);color:#fff;
+      font-size:14px;font-weight:700;
+      backdrop-filter:blur(20px);
+      box-shadow:0 8px 30px rgba(0,0,0,.3);
+      z-index:999;white-space:nowrap;
+    }
+    .toast.visible{display:block;animation:toastIn .4s ease;}
+    @keyframes toastIn{
+      from{opacity:0;transform:translateX(-50%) translateY(20px);}
+      to{opacity:1;transform:translateX(-50%) translateY(0);}
     }
 
-    .agent-info { flex: 1; }
-
-    .agent-title {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      background: var(--grad-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+    .footer-note{
+      text-align:center;font-size:10.5px;color:var(--text-dim);
+      padding:8px;font-family:'JetBrains Mono',monospace;letter-spacing:.05em;
     }
-
-    .agent-sub {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    .badge {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 3px 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--teal);
-      background: rgba(20, 184, 166, 0.1);
-      border: 1px solid rgba(20, 184, 166, 0.25);
-      border-radius: 999px;
-      letter-spacing: 0.05em;
-    }
-
-    /* ── AUTH SECTION ── */
-    .card {
-      padding: 22px;
-      border-radius: var(--radius);
-      background: var(--panel);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-card);
-    }
-
-    .card-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 16px;
-    }
-
-    /* ── GOOGLE AUTH BUTTON ── */
-    .google-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      width: 100%;
-      padding: 14px 20px;
-      border-radius: var(--radius-sm);
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border-strong);
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .google-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-1px); }
-    .google-btn svg { flex-shrink: 0; }
-
-    .auth-status {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .auth-status.connected {
-      background: var(--success-soft);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: #6ee7b7;
-    }
-
-    .auth-status.disconnected {
-      background: var(--warning-soft);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      color: #fcd34d;
-    }
-
-    /* ── MIC SECTION ── */
-    .mic-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      padding: 30px 22px;
-    }
-
-    .mic-ring {
-      position: relative;
-      width: 100px;
-      height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .mic-ring::before {
-      content: '';
-      position: absolute;
-      inset: -8px;
-      border-radius: 50%;
-      border: 2px solid rgba(20, 184, 166, 0.2);
-      transition: all 0.3s ease;
-    }
-
-    .mic-ring.listening::before {
-      border-color: rgba(20, 184, 166, 0.6);
-      box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.4);
-      animation: micPulse 1.5s ease-in-out infinite;
-    }
-
-    @keyframes micPulse {
-      0%   { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0.5); }
-      70%  { box-shadow: 0 0 0 20px rgba(20, 184, 166, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(20, 184, 166, 0); }
-    }
-
-    .mic-btn {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: none;
-      background: linear-gradient(135deg, rgba(20, 184, 166, 0.2), rgba(168, 85, 247, 0.2));
-      border: 2px solid rgba(20, 184, 166, 0.4);
-      color: var(--teal);
-      font-size: 36px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      box-shadow: 0 8px 30px rgba(20, 184, 166, 0.15);
-    }
-
-    .mic-btn:hover:not(:disabled) {
-      transform: scale(1.05);
-      box-shadow: 0 12px 40px rgba(20, 184, 166, 0.3);
-    }
-
-    .mic-btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    .mic-btn.listening {
-      background: linear-gradient(135deg, rgba(20, 184, 166, 0.4), rgba(168, 85, 247, 0.3));
-      border-color: var(--teal);
-      color: var(--teal);
-      box-shadow: 0 0 30px rgba(20, 184, 166, 0.4);
-    }
-
-    .mic-hint {
-      font-size: 14px;
-      color: var(--text-muted);
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    .transcript-box {
-      width: 100%;
-      min-height: 60px;
-      padding: 14px 16px;
-      border-radius: var(--radius-sm);
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-size: 15px;
-      font-weight: 500;
-      text-align: center;
-      line-height: 1.5;
-      font-family: 'Outfit', sans-serif;
-      letter-spacing: 0.01em;
-    }
-
-    /* ── EXAMPLES ── */
-    .examples-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .example-chip {
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: right;
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .example-chip:hover {
-      background: rgba(20, 184, 166, 0.08);
-      border-color: rgba(20, 184, 166, 0.3);
-      color: var(--teal);
-    }
-
-    /* ── PREVIEW CARD ── */
-    .preview-card {
-      display: none;
-      padding: 20px;
-      border-radius: var(--radius);
-      background: rgba(20, 184, 166, 0.07);
-      border: 1px solid rgba(20, 184, 166, 0.25);
-      animation: slideIn 0.3s ease;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .preview-card.visible { display: block; }
-
-    .preview-title-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--teal);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
-    }
-
-    .preview-field {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-      font-size: 14px;
-    }
-    .preview-field:last-of-type { border-bottom: none; }
-
-    .preview-label { color: var(--text-muted); font-weight: 500; }
-    .preview-value { color: var(--text); font-weight: 600; text-align: left; }
-
-    .preview-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .btn-confirm {
-      flex: 1;
-      padding: 13px;
-      border-radius: var(--radius-sm);
-      border: none;
-      background: linear-gradient(135deg, var(--teal-strong), var(--purple-strong));
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      font-family: 'Outfit', sans-serif;
-      transition: all 0.2s ease;
-    }
-    .btn-confirm:hover { opacity: 0.9; transform: translateY(-1px); }
-
-    .btn-cancel {
-      padding: 13px 18px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border-strong);
-      background: transparent;
-      color: var(--text-muted);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      font-family: 'Outfit', sans-serif;
-      transition: all 0.2s ease;
-    }
-    .btn-cancel:hover { background: rgba(255,255,255,0.05); color: var(--text); }
-
-    /* ── SUCCESS TOAST ── */
-    .toast {
-      display: none;
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 14px 24px;
-      border-radius: 999px;
-      background: rgba(16, 185, 129, 0.9);
-      color: white;
-      font-size: 14px;
-      font-weight: 700;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-      z-index: 999;
-      white-space: nowrap;
-    }
-    .toast.visible { display: block; animation: toastIn 0.4s ease; }
-
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
-    /* ── LOG ── */
-    .log-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .log-item {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 12px 14px;
-      border-radius: var(--radius-sm);
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      font-size: 13px;
-    }
-
-    .log-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
-    .log-meta { flex: 1; }
-    .log-summary { font-weight: 600; color: var(--text); }
-    .log-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-dim); margin-top: 3px; }
-
-    .footer-note {
-      text-align: center;
-      font-size: 10.5px;
-      color: var(--text-dim);
-      padding: 8px;
-      font-family: 'JetBrains Mono', monospace;
-      letter-spacing: 0.05em;
-    }
-
-    /* ── EDITABLE FIELDS ── */
-    .edit-input {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border-strong);
-      border-radius: 8px;
-      padding: 6px 10px;
-      color: var(--text);
-      font-family: 'Outfit', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      text-align: left;
-      direction: ltr;
-      max-width: 180px;
-    }
-    .edit-input:focus { outline: none; border-color: var(--teal); }
   </style>
 </head>
 <body>
-  <div class="app">
+<div class="app">
 
-    <!-- BACK -->
-    <a href="index.html" class="back-link">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-      חזור לדשבורד
-    </a>
+  <!-- BACK -->
+  <a href="index.html" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    חזור לדשבורד
+  </a>
 
-    <!-- HEADER -->
-    <header class="card">
-      <div class="agent-header">
-        <img class="agent-avatar" src="assets/agent_mazkirah.png" alt="לדה" onerror="this.style.display='none'"/>
-        <div class="agent-info">
-          <div class="agent-title">לדה — מזכירה קולית</div>
-          <div class="agent-sub">מחלקת אדמין · תזכורות ויומן</div>
-          <div class="badge">V1_ACTIVE</div>
-        </div>
-      </div>
-    </header>
-
-    <!-- GOOGLE AUTH -->
-    <div class="card" id="authSection">
-      <div class="card-title">חיבור ל-Google Calendar</div>
-      <button class="google-btn" id="googleSignIn" onclick="handleAuthClick()">
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-          <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
-          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-        </svg>
-        התחבר עם Google
-      </button>
-      <div class="auth-status disconnected" id="authStatus">
-        <span>⚠️</span>
-        <span>לא מחובר — לחץ להתחבר ולאשר גישה ליומן</span>
+  <!-- HEADER -->
+  <header class="card header">
+    <div class="agent-header">
+      <img class="agent-avatar" src="assets/agent_mazkirah.png" alt="לדה"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2264%22><rect width=%2264%22 height=%2264%22 rx=%2232%22 fill=%22%2314b8a6%22/><text x=%2232%22 y=%2238%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2228%22>ל</text></svg>'"/>
+      <div>
+        <div class="agent-title">לדה — מזכירה קולית</div>
+        <div class="agent-sub">מחלקת אדמין · תזכורות ויומן Google</div>
+        <div class="badge">V1_ACTIVE</div>
       </div>
     </div>
+  </header>
 
-    <!-- MIC -->
-    <div class="card">
-      <div class="card-title">הוראה קולית בעברית</div>
-      <div class="mic-container">
-        <div class="mic-ring" id="micRing">
-          <button class="mic-btn" id="micBtn" onclick="toggleMic()" disabled>
-            🎤
-          </button>
-        </div>
-        <div class="mic-hint" id="micHint">
-          התחבר ל-Google תחילה,<br/>ואז לחץ כאן ואמור את התזכורת
-        </div>
-        <div class="transcript-box" id="transcriptBox">
-          תוצאת הזיהוי תופיע כאן...
-        </div>
+  <!-- HOW IT WORKS -->
+  <div class="card">
+    <div class="card-title">איך זה עובד</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">לחץ על המיקרופון ואמור את התזכורת <strong>בעברית</strong></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">לדה <strong>מנתחת</strong> את הכותרת, התאריך והשעה</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">לחץ <strong>"פתח ביומן"</strong> — Google Calendar נפתח עם הכל ממולא. לחץ שמור.</div>
       </div>
     </div>
-
-    <!-- EXAMPLES -->
-    <div class="card">
-      <div class="card-title">דוגמאות להוראות קוליות</div>
-      <div class="examples-list">
-        <div class="example-chip" onclick="simulateTranscript(this.textContent.trim())">
-          "תזכיר לי מחר בשעה 10 לצלצל לרופא"
-        </div>
-        <div class="example-chip" onclick="simulateTranscript(this.textContent.trim())">
-          "תוסיף פגישה ביום ראשון בשעה 14:00 עם הרואה חשבון"
-        </div>
-        <div class="example-chip" onclick="simulateTranscript(this.textContent.trim())">
-          "תזכיר לי היום בשעה 20 לקחת תרופות"
-        </div>
-        <div class="example-chip" onclick="simulateTranscript(this.textContent.trim())">
-          "תוסיף אימון בחדר כושר ביום שישי בשש בבוקר"
-        </div>
-      </div>
-    </div>
-
-    <!-- PREVIEW -->
-    <div class="preview-card" id="previewCard">
-      <div class="preview-title-label">📋 תצוגה מקדימה — אשר לפני יצירה</div>
-      <div class="preview-field">
-        <span class="preview-label">כותרת</span>
-        <input class="edit-input" id="prevTitle" type="text" />
-      </div>
-      <div class="preview-field">
-        <span class="preview-label">תאריך</span>
-        <input class="edit-input" id="prevDate" type="date" />
-      </div>
-      <div class="preview-field">
-        <span class="preview-label">שעת התחלה</span>
-        <input class="edit-input" id="prevTime" type="time" />
-      </div>
-      <div class="preview-field">
-        <span class="preview-label">משך (דקות)</span>
-        <input class="edit-input" id="prevDuration" type="number" min="5" max="480" value="30" style="max-width: 80px;" />
-      </div>
-      <div class="preview-actions">
-        <button class="btn-confirm" onclick="createCalendarEvent()">✅ צור אירוע ביומן</button>
-        <button class="btn-cancel" onclick="cancelPreview()">ביטול</button>
-      </div>
-    </div>
-
-    <!-- LOG -->
-    <div class="card" id="logSection" style="display:none;">
-      <div class="card-title">תזכורות שנוצרו בסשן זה</div>
-      <ul class="log-list" id="logList"></ul>
-    </div>
-
-    <div class="footer-note">lada · admin division · v1-active · mayaos</div>
   </div>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast">✅ האירוע נוצר בהצלחה ביומן!</div>
+  <!-- MIC -->
+  <div class="card">
+    <div class="card-title">הוראה קולית</div>
+    <div class="mic-container">
+      <div class="mic-ring" id="micRing">
+        <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎤</button>
+      </div>
+      <div class="mic-state-label" id="micLabel">לחץ על המיקרופון ואמור את התזכורת</div>
+      <div class="transcript-box" id="transcriptBox">תוצאת הזיהוי תופיע כאן...</div>
+    </div>
+  </div>
 
-  <!-- Google API -->
-  <script src="https://apis.google.com/js/api.js"></script>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- EXAMPLES -->
+  <div class="card">
+    <div class="card-title">דוגמאות — לחץ לסימולציה</div>
+    <div class="examples-grid">
+      <div class="example-chip" onclick="simulateTranscript(this.innerText.trim())">"תזכיר לי מחר בשעה 10 לצלצל לרופא"</div>
+      <div class="example-chip" onclick="simulateTranscript(this.innerText.trim())">"תוסיף פגישה ביום שלישי בשעה 14 עם רואה חשבון"</div>
+      <div class="example-chip" onclick="simulateTranscript(this.innerText.trim())">"תזכיר לי היום בשעה 20 לקחת תרופות"</div>
+      <div class="example-chip" onclick="simulateTranscript(this.innerText.trim())">"אימון בחדר כושר ביום שישי בשש בבוקר"</div>
+      <div class="example-chip" onclick="simulateTranscript(this.innerText.trim())">"ביום ראשון בשעה 9 בדיקת דם בקופת חולים"</div>
+    </div>
+  </div>
 
-  <script>
-    // ─── CONFIG ───────────────────────────────────────────────
-    // הכנס כאן את Client ID שלך מ-Google Cloud Console
-    const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID_HERE';
-    const SCOPES = 'https://www.googleapis.com/auth/calendar.events';
+  <!-- PREVIEW -->
+  <div class="preview-card" id="previewCard">
+    <div class="preview-label-head">📋 אישור לפני שליחה ליומן</div>
+    <div class="preview-row">
+      <span class="preview-row-label">כותרת</span>
+      <input class="edit-input" id="prevTitle" type="text" style="max-width:200px;direction:rtl;text-align:right;" />
+    </div>
+    <div class="preview-row">
+      <span class="preview-row-label">תאריך</span>
+      <input class="edit-input" id="prevDate" type="date" />
+    </div>
+    <div class="preview-row">
+      <span class="preview-row-label">שעת התחלה</span>
+      <input class="edit-input" id="prevTime" type="time" />
+    </div>
+    <div class="preview-row">
+      <span class="preview-row-label">משך (דק')</span>
+      <input class="edit-input" id="prevDuration" type="number" min="5" max="480" value="30" style="max-width:80px;" />
+    </div>
+    <div class="preview-actions">
+      <button class="btn-confirm" onclick="openInCalendar()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        פתח ב-Google Calendar
+      </button>
+      <button class="btn-cancel" onclick="cancelPreview()">ביטול</button>
+    </div>
+  </div>
 
-    let tokenClient;
-    let gapiInited = false;
-    let gisInited  = false;
-    let accessToken = null;
+  <!-- LOG -->
+  <div class="card" id="logSection" style="display:none;">
+    <div class="card-title">תזכורות שנשלחו ביומן בסשן זה</div>
+    <ul class="log-list" id="logList"></ul>
+  </div>
 
-    let parsedEvent = null;
+  <div class="footer-note">lada · admin division · v1-active · mayaos 2026</div>
+</div>
 
-    // ─── INIT ─────────────────────────────────────────────────
-    function gapiLoaded() {
-      gapi.load('client', async () => {
-        await gapi.client.init({
-          discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest']
-        });
-        gapiInited = true;
-        maybeEnableButtons();
-      });
-    }
+<!-- TOAST -->
+<div class="toast" id="toast">📅 Google Calendar נפתח — לחץ שמור!</div>
 
-    function gisLoaded() {
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: (tokenResponse) => {
-          if (tokenResponse.error) { console.error(tokenResponse); return; }
-          accessToken = tokenResponse.access_token;
-          gapi.client.setToken({ access_token: accessToken });
-          showConnected();
-        },
-      });
-      gisInited = true;
-      maybeEnableButtons();
-    }
+<script>
+  // ── SPEECH RECOGNITION ────────────────────────────────────────
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let isListening = false;
 
-    function maybeEnableButtons() {
-      if (gapiInited && gisInited) {
-        document.getElementById('googleSignIn').disabled = false;
-        // If we already have a token stored in this session
-        if (accessToken) showConnected();
+  if (SpeechRec) {
+    recognition = new SpeechRec();
+    recognition.lang = 'he-IL';
+    recognition.continuous = false;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      isListening = true;
+      document.getElementById('micBtn').classList.add('listening');
+      document.getElementById('micRing').classList.add('listening');
+      const lbl = document.getElementById('micLabel');
+      lbl.textContent = '🎙️ מאזין... דבר עכשיו';
+      lbl.classList.add('active');
+      document.getElementById('transcriptBox').textContent = '...';
+      document.getElementById('transcriptBox').classList.remove('has-text');
+    };
+
+    recognition.onresult = (e) => {
+      let interim = '', final = '';
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) final += t;
+        else interim += t;
       }
-    }
-
-    window.gapiLoaded = gapiLoaded;
-    window.gisLoaded  = gisLoaded;
-
-    // Load gapi
-    window.addEventListener('load', () => {
-      const s = document.createElement('script');
-      s.src = 'https://apis.google.com/js/api.js';
-      s.onload = gapiLoaded;
-      document.head.appendChild(s);
-    });
-
-    function handleAuthClick() {
-      if (!gapiInited || !gisInited) {
-        alert('Google API עדיין טוען... נסה שוב בעוד שנייה');
-        return;
+      document.getElementById('transcriptBox').textContent = final || interim || '...';
+      if (final) {
+        document.getElementById('transcriptBox').classList.add('has-text');
+        parseAndPreview(final.trim());
       }
-      tokenClient.requestAccessToken({ prompt: accessToken ? '' : 'consent' });
+    };
+
+    recognition.onerror = (e) => {
+      setLabel(`שגיאה: ${e.error}. נסה שוב.`, false);
+      stopUI();
+    };
+
+    recognition.onend = () => { stopUI(); };
+  } else {
+    document.getElementById('micLabel').textContent = '⚠️ דפדפן זה אינו תומך בזיהוי קול. נסה Chrome.';
+  }
+
+  function toggleMic() {
+    if (!recognition) return;
+    isListening ? recognition.stop() : recognition.start();
+  }
+
+  function stopUI() {
+    isListening = false;
+    document.getElementById('micBtn').classList.remove('listening');
+    document.getElementById('micRing').classList.remove('listening');
+    if (document.getElementById('micLabel').textContent.includes('מאזין')) {
+      setLabel('לחץ על המיקרופון ואמור את התזכורת', false);
     }
+  }
 
-    function showConnected() {
-      const status = document.getElementById('authStatus');
-      status.className = 'auth-status connected';
-      status.innerHTML = '<span>✅</span><span>מחובר ל-Google Calendar — מוכן לקבל הוראות!</span>';
-      document.getElementById('micBtn').disabled = false;
-      document.getElementById('micHint').textContent = 'לחץ על המיקרופון ואמור את התזכורת בעברית';
+  function setLabel(txt, active) {
+    const lbl = document.getElementById('micLabel');
+    lbl.textContent = txt;
+    active ? lbl.classList.add('active') : lbl.classList.remove('active');
+  }
+
+  function simulateTranscript(text) {
+    // Strip surrounding quotes if present
+    text = text.replace(/^["״]|["״]$/g, '').trim();
+    document.getElementById('transcriptBox').textContent = `"${text}"`;
+    document.getElementById('transcriptBox').classList.add('has-text');
+    parseAndPreview(text);
+  }
+
+  // ── HEBREW DATE/TIME PARSER ───────────────────────────────────
+  const hebrewNumbers = {
+    'אחת': 1, 'שתיים': 2, 'שלוש': 3, 'ארבע': 4, 'חמש': 5,
+    'שש': 6, 'שבע': 7, 'שמונה': 8, 'תשע': 9, 'עשר': 10,
+    'אחת עשרה': 11, 'שתים עשרה': 12, 'שלוש עשרה': 13,
+    'ארבע עשרה': 14, 'חמש עשרה': 15, 'שש עשרה': 16,
+    'שבע עשרה': 17, 'שמונה עשרה': 18, 'תשע עשרה': 19,
+    'עשרים': 20, 'עשרים ואחת': 21, 'עשרים ושתיים': 22,
+    'עשרים ושלוש': 23
+  };
+
+  function nextWeekday(targetDay) {
+    const now = new Date();
+    const cur = now.getDay();
+    let diff = targetDay - cur;
+    if (diff <= 0) diff += 7;
+    const d = new Date(now);
+    d.setDate(now.getDate() + diff);
+    return d;
+  }
+
+  function parseHebTime(text) {
+    // "בשעה 14:30" or "בשעה 14" or "בשעה עשר"
+    const numMatch = text.match(/בשעה\s+(\d{1,2})(?::(\d{2}))?/);
+    if (numMatch) return { h: parseInt(numMatch[1]), m: numMatch[2] ? parseInt(numMatch[2]) : 0 };
+    // Hebrew word numbers
+    for (const [word, val] of Object.entries(hebrewNumbers)) {
+      if (text.includes(`בשעה ${word}`)) return { h: val, m: 0 };
+      if (text.includes(`בשעה ה${word}`)) return { h: val, m: 0 };
     }
+    // common shortcuts
+    if (/בשש/.test(text))   return { h: 6, m: 0 };
+    if (/בשבע/.test(text))  return { h: 7, m: 0 };
+    if (/בשמונה/.test(text))return { h: 8, m: 0 };
+    if (/בתשע/.test(text))  return { h: 9, m: 0 };
+    if (/בעשר/.test(text))  return { h: 10, m: 0 };
+    if (/באחת עשרה/.test(text))  return { h: 11, m: 0 };
+    if (/בשתים עשרה/.test(text)) return { h: 12, m: 0 };
+    return { h: 10, m: 0 }; // default
+  }
 
-    // ─── SPEECH RECOGNITION ───────────────────────────────────
-    const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let recognition = null;
-    let isListening = false;
+  function parseAndPreview(text) {
+    const lower = text;
+    let date = new Date();
+    let { h, m } = parseHebTime(lower);
 
-    if (SpeechRec) {
-      recognition = new SpeechRec();
-      recognition.lang = 'he-IL';
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
+    // AM/PM adjustment
+    if (/(בערב|בלילה|אחר הצהריים|אחה"צ)/.test(lower) && h > 0 && h < 12) h += 12;
+    if (/בבוקר/.test(lower) && h >= 13) h -= 12;
 
-      recognition.onstart = () => {
-        isListening = true;
-        document.getElementById('micBtn').classList.add('listening');
-        document.getElementById('micRing').classList.add('listening');
-        document.getElementById('micHint').textContent = '🎙️ מאזין... דבר עכשיו';
-        document.getElementById('transcriptBox').textContent = '...';
-      };
+    // Date
+    if (/מחר/.test(lower)) {
+      date.setDate(date.getDate() + 1);
+    } else if (/ביום ראשון/.test(lower)) { date = nextWeekday(0); }
+    else if (/ביום שני/.test(lower))   { date = nextWeekday(1); }
+    else if (/ביום שלישי/.test(lower)) { date = nextWeekday(2); }
+    else if (/ביום רביעי/.test(lower)) { date = nextWeekday(3); }
+    else if (/ביום חמישי/.test(lower)) { date = nextWeekday(4); }
+    else if (/ביום שישי/.test(lower))  { date = nextWeekday(5); }
+    else if (/ביום שבת/.test(lower))   { date = nextWeekday(6); }
 
-      recognition.onresult = (e) => {
-        const text = e.results[0][0].transcript;
-        document.getElementById('transcriptBox').textContent = `"${text}"`;
-        parseAndPreview(text);
-      };
+    date.setHours(h, m, 0, 0);
 
-      recognition.onerror = (e) => {
-        document.getElementById('micHint').textContent = `שגיאה: ${e.error}. נסה שוב.`;
-        stopListening();
-      };
+    // Title — strip time/date keywords
+    let title = text
+      .replace(/תזכיר לי|תוסיף פגישה|תוסיף|תזכורת/g, '')
+      .replace(/היום|מחר/g, '')
+      .replace(/ביום (ראשון|שני|שלישי|רביעי|חמישי|שישי|שבת)/g, '')
+      .replace(/בשעה\s+[\d:]+/g, '')
+      .replace(/בשעה\s+[\u05d0-\u05ea\s]+/g, '')
+      .replace(/(בשש|בשבע|בשמונה|בתשע|בעשר|באחת עשרה|בשתים עשרה)/g,'')
+      .replace(/(בבוקר|בצהריים|אחר הצהריים|אחה"צ|בערב|בלילה)/g,'')
+      .replace(/\s+/g,' ')
+      .trim();
+    if (!title || title.length < 2) title = 'תזכורת';
 
-      recognition.onend = stopListening;
-    } else {
-      document.getElementById('micHint').textContent = '⚠️ דפדפן זה אינו תומך בזיהוי קול. נסה Chrome.';
-    }
+    // Populate fields
+    document.getElementById('prevTitle').value    = title;
+    document.getElementById('prevDate').value     = date.toISOString().split('T')[0];
+    document.getElementById('prevTime').value     = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+    document.getElementById('prevDuration').value = 30;
 
-    function toggleMic() {
-      if (!recognition) return;
-      if (isListening) {
-        recognition.stop();
-      } else {
-        recognition.start();
-      }
-    }
+    document.getElementById('previewCard').classList.add('visible');
+    document.getElementById('previewCard').scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
 
-    function stopListening() {
-      isListening = false;
-      document.getElementById('micBtn').classList.remove('listening');
-      document.getElementById('micRing').classList.remove('listening');
-      if (document.getElementById('micHint').textContent === '🎙️ מאזין... דבר עכשיו') {
-        document.getElementById('micHint').textContent = 'לחץ על המיקרופון ואמור את התזכורת בעברית';
-      }
-    }
+  // ── OPEN IN GOOGLE CALENDAR ───────────────────────────────────
+  function openInCalendar() {
+    const title    = document.getElementById('prevTitle').value || 'תזכורת';
+    const dateStr  = document.getElementById('prevDate').value;     // YYYY-MM-DD
+    const timeStr  = document.getElementById('prevTime').value;     // HH:MM
+    const duration = parseInt(document.getElementById('prevDuration').value) || 30;
 
-    // ─── SIMULATE (DEMO) ──────────────────────────────────────
-    function simulateTranscript(text) {
-      document.getElementById('transcriptBox').textContent = `"${text}"`;
-      parseAndPreview(text);
-    }
+    const [y, mo, d] = dateStr.split('-').map(Number);
+    const [hh, mm]   = timeStr.split(':').map(Number);
 
-    // ─── PARSE HEBREW DATETIME ────────────────────────────────
-    function parseAndPreview(text) {
-      const now = new Date();
-      let date = new Date(now);
-      let hours = 10, minutes = 0;
-      let title = text;
+    const start = new Date(y, mo-1, d, hh, mm, 0);
+    const end   = new Date(start.getTime() + duration * 60000);
 
-      // Remove command words to get title
-      title = title
-        .replace(/תזכיר לי|תוסיף|תוסיף פגישה|תזכורת/g, '')
-        .replace(/מחר|היום|ביום ראשון|ביום שני|ביום שלישי|ביום רביעי|ביום חמישי|ביום שישי|ביום שבת/g, '')
-        .replace(/בשעה [\d:]+|בשש|בשבע|בשמונה|בתשע|בעשר|באחת עשרה|בשתים עשרה/g, '')
-        .replace(/בבוקר|בצהריים|אחר הצהריים|בערב|בלילה/g, '')
-        .trim();
-      if (!title) title = 'תזכורת';
-
-      // Date parsing
-      if (/מחר/.test(text)) {
-        date.setDate(date.getDate() + 1);
-      } else if (/ביום ראשון/.test(text)) {
-        date = nextWeekday(0);
-      } else if (/ביום שני/.test(text)) {
-        date = nextWeekday(1);
-      } else if (/ביום שלישי/.test(text)) {
-        date = nextWeekday(2);
-      } else if (/ביום רביעי/.test(text)) {
-        date = nextWeekday(3);
-      } else if (/ביום חמישי/.test(text)) {
-        date = nextWeekday(4);
-      } else if (/ביום שישי/.test(text)) {
-        date = nextWeekday(5);
-      } else if (/ביום שבת/.test(text)) {
-        date = nextWeekday(6);
-      }
-
-      // Time parsing
-      const timeMatch = text.match(/בשעה (\d{1,2})(?::(\d{2}))?/);
-      if (timeMatch) {
-        hours   = parseInt(timeMatch[1]);
-        minutes = timeMatch[2] ? parseInt(timeMatch[2]) : 0;
-      } else if (/בשש/.test(text))         { hours = 6; }
-      else if (/בשבע/.test(text))          { hours = 7; }
-      else if (/בשמונה/.test(text))        { hours = 8; }
-      else if (/בתשע/.test(text))          { hours = 9; }
-      else if (/בעשר/.test(text))          { hours = 10; }
-      else if (/באחת עשרה/.test(text))     { hours = 11; }
-      else if (/בשתים עשרה/.test(text))    { hours = 12; }
-
-      // AM/PM context
-      if (/בלילה|בערב|אחר הצהריים/.test(text) && hours < 12) hours += 12;
-      if (/בבוקר/.test(text) && hours >= 13) hours -= 12;
-
-      date.setHours(hours, minutes, 0, 0);
-
-      // Populate preview
-      document.getElementById('prevTitle').value = title;
-      document.getElementById('prevDate').value  = date.toISOString().split('T')[0];
-      document.getElementById('prevTime').value  = `${String(hours).padStart(2,'0')}:${String(minutes).padStart(2,'0')}`;
-      document.getElementById('prevDuration').value = 30;
-
-      parsedEvent = { date, hours, minutes };
-      document.getElementById('previewCard').classList.add('visible');
-      document.getElementById('previewCard').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function nextWeekday(target) {
-      const now = new Date();
-      const day = now.getDay();
-      let diff = target - day;
-      if (diff <= 0) diff += 7;
-      const next = new Date(now);
-      next.setDate(now.getDate() + diff);
-      return next;
-    }
-
-    // ─── CREATE EVENT ─────────────────────────────────────────
-    async function createCalendarEvent() {
-      if (!accessToken) {
-        alert('אנא התחבר ל-Google Calendar תחילה');
-        return;
-      }
-
-      const title    = document.getElementById('prevTitle').value || 'תזכורת';
-      const dateStr  = document.getElementById('prevDate').value;
-      const timeStr  = document.getElementById('prevTime').value;
-      const duration = parseInt(document.getElementById('prevDuration').value) || 30;
-
-      const [y, m, d]   = dateStr.split('-').map(Number);
-      const [hh, mm]    = timeStr.split(':').map(Number);
-      const start       = new Date(y, m - 1, d, hh, mm, 0);
-      const end         = new Date(start.getTime() + duration * 60000);
-
-      const toISO = dt => {
-        const pad = n => String(n).padStart(2,'0');
-        return `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}T${pad(dt.getHours())}:${pad(dt.getMinutes())}:00`;
-      };
-
-      const event = {
-        summary: title,
-        start:   { dateTime: toISO(start), timeZone: 'Asia/Jerusalem' },
-        end:     { dateTime: toISO(end),   timeZone: 'Asia/Jerusalem' },
-        reminders: {
-          useDefault: false,
-          overrides: [
-            { method: 'popup', minutes: 10 },
-            { method: 'email', minutes: 30 }
-          ]
-        }
-      };
-
-      try {
-        const response = await gapi.client.calendar.events.insert({
-          calendarId: 'primary',
-          resource: event
-        });
-        onEventCreated(title, dateStr, timeStr, response.result.htmlLink);
-      } catch (err) {
-        console.error(err);
-        // Fallback: open Google Calendar URL
-        const gcUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${toGCalDate(start)}/${toGCalDate(end)}&ctz=Asia/Jerusalem`;
-        window.open(gcUrl, '_blank');
-        onEventCreated(title, dateStr, timeStr, gcUrl);
-      }
-    }
-
-    function toGCalDate(dt) {
+    const fmt = dt => {
       const pad = n => String(n).padStart(2,'0');
       return `${dt.getFullYear()}${pad(dt.getMonth()+1)}${pad(dt.getDate())}T${pad(dt.getHours())}${pad(dt.getMinutes())}00`;
-    }
+    };
 
-    function onEventCreated(title, dateStr, timeStr, link) {
-      // Hide preview
-      document.getElementById('previewCard').classList.remove('visible');
+    const gcalUrl = `https://www.google.com/calendar/render?action=TEMPLATE`
+      + `&text=${encodeURIComponent(title)}`
+      + `&dates=${fmt(start)}/${fmt(end)}`
+      + `&ctz=Asia/Jerusalem`
+      + `&details=${encodeURIComponent('נוצר על ידי לדה — MayaOS')}`
+      + `&sf=true&output=xml`;
 
-      // Show toast
-      const toast = document.getElementById('toast');
-      toast.classList.add('visible');
-      setTimeout(() => toast.classList.remove('visible'), 3500);
+    window.open(gcalUrl, '_blank');
 
-      // Add to log
-      addToLog(title, dateStr, timeStr, link);
+    // Log it
+    addToLog(title, dateStr, timeStr, gcalUrl);
 
-      // Reset transcript
-      document.getElementById('transcriptBox').textContent = 'תוצאת הזיהוי תופיע כאן...';
-    }
+    // Hide preview & show toast
+    document.getElementById('previewCard').classList.remove('visible');
+    document.getElementById('transcriptBox').textContent = 'תוצאת הזיהוי תופיע כאן...';
+    document.getElementById('transcriptBox').classList.remove('has-text');
 
-    function addToLog(title, dateStr, timeStr, link) {
-      document.getElementById('logSection').style.display = 'block';
-      const li = document.createElement('li');
-      li.className = 'log-item';
-      li.innerHTML = `
-        <span class="log-icon">📅</span>
-        <div class="log-meta">
-          <div class="log-summary">${title}</div>
-          <div class="log-time">${dateStr} בשעה ${timeStr} &nbsp;·&nbsp; <a href="${link}" target="_blank" style="color: var(--teal); text-decoration: none;">פתח ביומן ↗</a></div>
+    const toast = document.getElementById('toast');
+    toast.classList.add('visible');
+    setTimeout(() => toast.classList.remove('visible'), 3500);
+  }
+
+  function addToLog(title, dateStr, timeStr, link) {
+    document.getElementById('logSection').style.display = 'block';
+    const li = document.createElement('li');
+    li.className = 'log-item';
+    const d = new Date(dateStr + 'T' + timeStr);
+    const days = ['ראשון','שני','שלישי','רביעי','חמישי','שישי','שבת'];
+    const dayName = days[d.getDay()];
+    li.innerHTML = `
+      <span class="log-icon">📅</span>
+      <div class="log-meta">
+        <div class="log-summary">${title}</div>
+        <div class="log-time">יום ${dayName} · ${dateStr} · ${timeStr}
+          &nbsp;·&nbsp;
+          <a href="${link}" target="_blank" style="color:var(--teal);text-decoration:none;">פתח ביומן ↗</a>
         </div>
-      `;
-      document.getElementById('logList').prepend(li);
-    }
+      </div>`;
+    document.getElementById('logList').prepend(li);
+  }
 
-    function cancelPreview() {
-      document.getElementById('previewCard').classList.remove('visible');
-      parsedEvent = null;
-    }
-
-    // Init GIS
-    window.addEventListener('load', () => {
-      // Give GIS script time to load
-      setTimeout(() => {
-        if (window.google && window.google.accounts) {
-          gisLoaded();
-        }
-      }, 1000);
-    });
-  </script>
-
-  <!-- GIS script with callback -->
-  <script src="https://accounts.google.com/gsi/client" onload="if(window.google && window.google.accounts){ gisLoaded(); }" defer></script>
+  function cancelPreview() {
+    document.getElementById('previewCard').classList.remove('visible');
+  }
+</script>
 </body>
 </html>
