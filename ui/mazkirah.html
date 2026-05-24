@@ -417,15 +417,12 @@
 // ── CONFIG ────────────────────────────────────────────────────────
 const CLIENT_ID = '731371047133-ohte8lgdqvef98j3lr2eq7uuj3i2i817.apps.googleusercontent.com';
 const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/calendar.events';
+const LS_KEY = 'mayaos_gcal_token';
 
 let gapiReady = false, gisReady = false, tokenClient = null, accessToken = null;
 
 // ── INIT ──────────────────────────────────────────────────────────
 window.addEventListener('load', () => {
-  if (CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
-    document.getElementById('setupBanner').style.display = 'block';
-  }
-
   // Load GAPI
   const s = document.createElement('script');
   s.src = 'https://apis.google.com/js/api.js';
@@ -445,28 +442,43 @@ function initGIS() {
   if (!window.google || !window.google.accounts) {
     setTimeout(initGIS, 500); return;
   }
-  if (CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') return;
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
     callback: (resp) => {
-      if (resp.error) return;
+      if (resp.error) { console.error(resp); return; }
       accessToken = resp.access_token;
+      // שמור token + זמן תפוגה ב-localStorage
+      const expiry = Date.now() + (resp.expires_in ? resp.expires_in * 1000 : 3600000);
+      localStorage.setItem(LS_KEY, JSON.stringify({ token: accessToken, expiry }));
       gapi.client.setToken({ access_token: accessToken });
       onConnected();
     }
   });
   gisReady = true;
+  // נסה reconnect שקט אם יש token שמור ולא פג
+  trySilentReconnect();
+}
+
+function trySilentReconnect() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_KEY) || 'null');
+    if (saved && saved.token && saved.expiry > Date.now() + 60000) {
+      accessToken = saved.token;
+      gapi.client.setToken({ access_token: accessToken });
+      onConnected();
+      return;
+    }
+  } catch(e) {}
+  // נסה silent (בלי popup) — אם כבר אישרנו בעבר
+  if (gisReady && tokenClient) {
+    tokenClient.requestAccessToken({ prompt: '' });
+  }
 }
 
 function handleAuth() {
-  if (CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID_HERE') {
-    document.getElementById('setupBanner').style.display = 'block';
-    document.getElementById('setupBanner').scrollIntoView({ behavior:'smooth' });
-    return;
-  }
-  if (!gapiReady || !gisReady) { alert('טוען... נסה שוב בעוד שנייה'); return; }
-  tokenClient.requestAccessToken({ prompt: accessToken ? '' : 'consent' });
+  if (!gapiReady || !gisReady) { setTimeout(handleAuth, 800); return; }
+  tokenClient.requestAccessToken({ prompt: 'consent' });
 }
 
 function onConnected() {
@@ -569,15 +581,31 @@ function renderCalendar(events, baseDate) {
 
 // ── SPEECH ────────────────────────────────────────────────────────
 const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-let recognition = null, isListening = false;
+let isListening = false;
 
-if (SpeechRec) {
-  recognition = new SpeechRec();
-  recognition.lang = 'he-IL';
-  recognition.continuous = false;
-  recognition.interimResults = true;
+if (!SpeechRec) {
+  document.getElementById('micLabel').textContent = '⚠️ השתמש ב-Chrome לזיהוי קול';
+  document.getElementById('micBtn').style.opacity = '0.4';
+}
 
-  recognition.onstart = () => {
+function toggleMic() {
+  if (!SpeechRec) {
+    alert('זיהוי קול אינו נתמך בדפדפן זה. נסה Chrome.');
+    return;
+  }
+  if (isListening) {
+    isListening = false;
+    stopMicUI();
+    return;
+  }
+  // יצירת instance חדש בכל פעם — פתרון לבעיית מובייל
+  const rec = new SpeechRec();
+  rec.lang = 'he-IL';
+  rec.continuous = false;
+  rec.interimResults = true;
+  rec.maxAlternatives = 1;
+
+  rec.onstart = () => {
     isListening = true;
     document.getElementById('micBtn').classList.add('listening');
     document.getElementById('micRing').classList.add('listening');
@@ -587,36 +615,43 @@ if (SpeechRec) {
     tb.classList.remove('has');
   };
 
-  recognition.onresult = (e) => {
-    let interim='', final='';
-    for(let i=e.resultIndex;i<e.results.length;i++){
+  rec.onresult = (e) => {
+    let interim = '', final = '';
+    for (let i = e.resultIndex; i < e.results.length; i++) {
       const t = e.results[i][0].transcript;
-      if(e.results[i].isFinal) final+=t; else interim+=t;
+      if (e.results[i].isFinal) final += t; else interim += t;
     }
-    document.getElementById('tbox').textContent = final||interim||'...';
-    if(final){ document.getElementById('tbox').classList.add('has'); parseAndPreview(final.trim()); }
+    const tb = document.getElementById('tbox');
+    tb.textContent = final || interim || '...';
+    if (final) {
+      tb.classList.add('has');
+      isListening = false;
+      parseAndPreview(final.trim());
+    }
   };
 
-  recognition.onerror = (e) => { setLabel(`שגיאה: ${e.error}`, false); stopMicUI(); };
-  recognition.onend = stopMicUI;
-} else {
-  document.getElementById('micLabel').textContent = '⚠️ השתמש ב-Chrome לזיהוי קול';
+  rec.onerror = (e) => {
+    const msgs = { 'not-allowed': 'יש לאשר גישה למיקרופון', 'no-speech': 'לא זוהה קול — נסה שוב', 'network': 'שגיאת רשת' };
+    setLabel(msgs[e.error] || `שגיאה: ${e.error}`, false);
+    stopMicUI();
+  };
+
+  rec.onend = () => { stopMicUI(); };
+
+  try { rec.start(); }
+  catch(e) { setLabel('לחץ שוב', false); isListening = false; }
 }
 
-function toggleMic() {
-  if(!recognition) return;
-  isListening ? recognition.stop() : recognition.start();
-}
-function stopMicUI(){
-  isListening=false;
+function stopMicUI() {
+  isListening = false;
   document.getElementById('micBtn').classList.remove('listening');
   document.getElementById('micRing').classList.remove('listening');
-  if(document.getElementById('micLabel').textContent.includes('מאזין'))
+  if (document.getElementById('micLabel').textContent.includes('מאזין'))
     setLabel('לחץ ואמור תזכורת בעברית', false);
 }
-function setLabel(t,a){
-  const el=document.getElementById('micLabel');
-  el.textContent=t;
+function setLabel(t, a) {
+  const el = document.getElementById('micLabel');
+  el.textContent = t;
   a ? el.classList.add('active') : el.classList.remove('active');
 }
 
