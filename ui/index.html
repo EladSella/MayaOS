@@ -571,6 +571,29 @@
       letter-spacing: 0.05em;
     }
   </style>
+
+  <!-- PWA Meta Tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="MayaOS">
+  <meta name="theme-color" content="#0a0f1e">
+  <meta name="msapplication-navbutton-color" content="#0a0f1e">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  <!-- Apple Touch Icon -->
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+  <!-- Service Worker -->
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(e => console.warn('SW:', e));
+    });
+  }
+  </script>
 </head>
 <body>
   <div class="app">
@@ -803,11 +826,7 @@
     setInterval(tickAll, 30 * 1000); // רענון כל 30 שניות
   </script>
 
-<!--
-==============================================================
-  MAYAOS BIOMETRIC GATE v2 — תמיכה מלאה במובייל
-==============================================================
--->
+<!-- MAYAOS BIOMETRIC GATE v2 + PWA — unified patch -->
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&display=swap');
