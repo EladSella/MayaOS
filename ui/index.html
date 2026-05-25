@@ -802,5 +802,360 @@
     tickAll();
     setInterval(tickAll, 30 * 1000); // רענון כל 30 שניות
   </script>
+
+<!--
+==============================================================
+  MAYAOS BIOMETRIC GATE v2 — תמיכה מלאה במובייל
+==============================================================
+-->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;600&display=swap');
+
+#maya-gate {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  height: 100%;
+  min-height: -webkit-fill-available;
+  z-index: 99999;
+  background: #060c1a;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  color: #94a3b8;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: manipulation;
+  transition: opacity 0.5s ease;
+}
+#maya-gate.unlocked { opacity: 0; pointer-events: none; }
+
+#maya-gate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56,189,248,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56,189,248,0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.gc { position: absolute; width: 44px; height: 44px; border-color: rgba(56,189,248,0.25); border-style: solid; }
+.gc.tl { top:16px; left:16px; border-width:1.5px 0 0 1.5px; }
+.gc.tr { top:16px; right:16px; border-width:1.5px 1.5px 0 0; }
+.gc.bl { bottom:16px; left:16px; border-width:0 0 1.5px 1.5px; }
+.gc.br { bottom:16px; right:16px; border-width:0 1.5px 1.5px 0; }
+
+.gate-wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  text-align: center;
+  padding: 32px 20px;
+  width: 100%;
+  max-width: 340px;
+}
+
+.g-logo { font-size: 10px; letter-spacing: 5px; color: rgba(56,189,248,0.4); text-transform: uppercase; }
+.g-title { font-size: clamp(18px, 5vw, 22px); font-weight: 600; color: #e2e8f0; letter-spacing: 2px; }
+.g-sub { font-size: 11px; color: #475569; letter-spacing: 1.5px; margin-top: -16px; }
+
+.fp-wrap {
+  position: relative;
+  width: 120px; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.fp-ring {
+  position: absolute; border-radius: 50%;
+  border: 1px solid rgba(56,189,248,0.15);
+  animation: gp 2.5s ease-out infinite;
+}
+.fp-ring:nth-child(1) { width:120px; height:120px; animation-delay:0s; }
+.fp-ring:nth-child(2) { width:94px;  height:94px;  animation-delay:0.5s; }
+.fp-ring:nth-child(3) { width:68px;  height:68px;  animation-delay:1s; }
+@keyframes gp {
+  0%   { opacity:0; transform:scale(0.85); }
+  50%  { opacity:1; }
+  100% { opacity:0; transform:scale(1.05); }
+}
+.fp-ico { position: relative; z-index: 1; width: 56px; height: 56px; transition: filter 0.3s; }
+#maya-gate.idle    .fp-ico { filter: drop-shadow(0 0 6px rgba(56,189,248,0.2)); }
+#maya-gate.scan    .fp-ico { filter: drop-shadow(0 0 14px rgba(56,189,248,0.8)); animation: fps 1s ease-in-out infinite alternate; }
+#maya-gate.success .fp-ico { filter: drop-shadow(0 0 18px rgba(34,197,94,0.9)); }
+#maya-gate.error   .fp-ico { filter: drop-shadow(0 0 14px rgba(239,68,68,0.8)); }
+@keyframes fps { from{transform:scale(0.94);} to{transform:scale(1.06);} }
+
+.g-status {
+  font-size: 12px; letter-spacing: 1.5px; min-height: 18px;
+  transition: color 0.3s; color: #64748b;
+}
+#maya-gate.scan    .g-status { color: #38bdf8; }
+#maya-gate.success .g-status { color: #22c55e; }
+#maya-gate.error   .g-status { color: #ef4444; }
+
+.g-btn {
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(56,189,248,0.3);
+  color: #38bdf8;
+  font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 14px 24px; cursor: pointer; transition: all 0.2s;
+  -webkit-appearance: none; border-radius: 0; min-height: 48px;
+}
+.g-btn:hover, .g-btn:active { background: rgba(56,189,248,0.07); border-color: rgba(56,189,248,0.5); }
+.g-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+#g-pin-area { display: none; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+.g-pin-dots { display: flex; gap: 12px; justify-content: center; margin-bottom: 4px; }
+.g-dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 1.5px solid rgba(56,189,248,0.3);
+  background: transparent; transition: background 0.15s, border-color 0.15s;
+}
+.g-dot.filled { background: #38bdf8; border-color: #38bdf8; }
+.g-numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 260px; }
+.g-key {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(56,189,248,0.15);
+  color: #e2e8f0; font-family: 'IBM Plex Mono', 'Courier New', monospace;
+  font-size: 18px; font-weight: 400; padding: 0; height: 56px;
+  cursor: pointer; -webkit-appearance: none; border-radius: 0;
+  transition: background 0.1s; -webkit-tap-highlight-color: transparent;
+}
+.g-key:active { background: rgba(56,189,248,0.12); }
+.g-key.del { font-size: 14px; color: #64748b; }
+.g-key.ok  { font-size: 13px; color: #38bdf8; letter-spacing: 1px; border-color: rgba(56,189,248,0.3); }
+.g-key.blank { opacity: 0; pointer-events: none; }
+
+.g-reset {
+  font-size: 10px; color: #1e293b; background: none; border: none;
+  font-family: inherit; padding: 4px 8px; cursor: pointer; letter-spacing: 1px;
+  transition: color 0.2s; -webkit-tap-highlight-color: transparent;
+}
+.g-reset:hover { color: #475569; }
+.g-divider { width: 100px; height: 1px; background: linear-gradient(90deg, transparent, rgba(56,189,248,0.15), transparent); }
+.g-meta { font-size: 9px; color: #1e293b; letter-spacing: 3px; }
+</style>
+
+<div id="maya-gate" class="idle">
+  <div class="gc tl"></div><div class="gc tr"></div>
+  <div class="gc bl"></div><div class="gc br"></div>
+
+  <div class="gate-wrap">
+    <div class="g-logo">MayaOS // Security Checkpoint</div>
+
+    <div>
+      <div class="g-title">MAYA OS</div>
+      <div class="g-sub">חמ"ל מערכת ליבה — גישה מוגבלת</div>
+    </div>
+
+    <div class="fp-wrap" id="fpTap" onclick="mayaAuth()" title="הקש לאימות">
+      <div class="fp-ring"></div>
+      <div class="fp-ring"></div>
+      <div class="fp-ring"></div>
+      <div class="fp-ico">
+        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
+          <path d="M32 8C18.7 8 8 18.7 8 32" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+          <path d="M56 32C56 45.3 45.3 56 32 56" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.35"/>
+          <path d="M32 14C22 14 14 22 14 32c0 3.3.9 6.4 2.5 9" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <path d="M32 14c10 0 18 8 18 18 0 2-.3 4-.8 5.8" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+          <path d="M32 20c-6.6 0-12 5.4-12 12 0 2.2.6 4.3 1.6 6.1" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 20c6.6 0 12 5.4 12 12 0 1.5-.3 3-.8 4.3" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M32 26c-3.3 0-6 2.7-6 6 0 1.1.3 2.1.8 3" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M38 32c0-3.3-2.7-6-6-6" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
+          <circle cx="32" cy="32" r="2.5" fill="#38bdf8"/>
+          <path d="M32 34v12" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="g-status" id="gStat">הקש לאימות</div>
+
+    <button class="g-btn" id="gBioBtn" onclick="mayaAuth()">
+      ☝ אמת זהות ביומטרית
+    </button>
+
+    <div id="g-pin-area">
+      <div class="g-pin-dots">
+        <div class="g-dot" id="d0"></div>
+        <div class="g-dot" id="d1"></div>
+        <div class="g-dot" id="d2"></div>
+        <div class="g-dot" id="d3"></div>
+        <div class="g-dot" id="d4"></div>
+        <div class="g-dot" id="d5"></div>
+      </div>
+      <div class="g-numpad" id="gNumpad"></div>
+    </div>
+
+    <button class="g-reset" id="gReset" onclick="mayaReset()" style="display:none">
+      אפס רישום
+    </button>
+
+    <div class="g-divider"></div>
+    <div class="g-meta">[ AUTHORIZED PERSONNEL ONLY ]</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  const CRED_KEY = 'maya_cred_v2';
+  const PIN_KEY  = 'maya_pin_v2';
+  const SESS_KEY = 'maya_sess_v2';
+
+  const gate    = document.getElementById('maya-gate');
+  const stat    = document.getElementById('gStat');
+  const bioBtn  = document.getElementById('gBioBtn');
+  const pinArea = document.getElementById('g-pin-area');
+  const resetB  = document.getElementById('gReset');
+
+  if (sessionStorage.getItem(SESS_KEY)) { gate.remove(); return; }
+
+  function setState(s, msg) { gate.className = s; stat.textContent = msg; }
+
+  function unlock() {
+    setState('success', '✓ גישה מאושרת');
+    sessionStorage.setItem(SESS_KEY, '1');
+    setTimeout(() => { gate.classList.add('unlocked'); setTimeout(() => gate.remove(), 600); }, 900);
+  }
+
+  function buf2b64(buf) { return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+  function b64toBuf(b64) { const bin = atob(b64); return new Uint8Array([...bin].map(c => c.charCodeAt(0))).buffer; }
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  const rpId = window.location.hostname || 'mayaos.onrender.com';
+
+  let pinBuffer = '';
+
+  function buildNumpad() {
+    const pad = document.getElementById('gNumpad');
+    pad.innerHTML = '';
+    const keys = ['1','2','3','4','5','6','7','8','9','','0','⌫'];
+    keys.forEach(k => {
+      const btn = document.createElement('button');
+      btn.className = 'g-key' + (k==='' ? ' blank' : k==='⌫' ? ' del' : '');
+      btn.textContent = k || '';
+      btn.setAttribute('type','button');
+      if (k !== '') {
+        btn.ontouchstart = btn.onclick = (e) => {
+          e.preventDefault();
+          if (k === '⌫') { pinBuffer = pinBuffer.slice(0,-1); }
+          else if (pinBuffer.length < 6) { pinBuffer += k; }
+          updateDots();
+          if (pinBuffer.length === 6) setTimeout(checkPIN, 150);
+        };
+      }
+      pad.appendChild(btn);
+    });
+  }
+
+  function updateDots() {
+    for (let i = 0; i < 6; i++) {
+      document.getElementById('d'+i).classList.toggle('filled', i < pinBuffer.length);
+    }
+  }
+
+  async function checkPIN() {
+    const hash = await sha256(pinBuffer);
+    const stored = localStorage.getItem(PIN_KEY);
+    if (!stored) { localStorage.setItem(PIN_KEY, hash); unlock(); }
+    else if (stored === hash) { unlock(); }
+    else {
+      setState('error', '✗ קוד שגוי');
+      pinBuffer = ''; updateDots();
+      setTimeout(() => setState('idle', 'הזן קוד גישה'), 1200);
+    }
+  }
+
+  function showPIN(msg) {
+    setState('idle', msg || 'הזן קוד גישה');
+    bioBtn.style.display = 'none';
+    document.getElementById('fpTap').style.opacity = '0.3';
+    document.getElementById('fpTap').style.pointerEvents = 'none';
+    pinArea.style.display = 'flex';
+    buildNumpad();
+  }
+
+  async function tryBiometric() {
+    if (!window.PublicKeyCredential) return false;
+    try { return await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable(); }
+    catch(e) { return false; }
+  }
+
+  window.mayaAuth = async function() {
+    bioBtn.disabled = true;
+    setState('scan', 'בודק חיישן...');
+    const hasBio = await tryBiometric();
+    if (!hasBio) { bioBtn.disabled = false; showPIN('ביומטריה לא זמינה — הזן קוד'); return; }
+    const savedCred = localStorage.getItem(CRED_KEY);
+    try {
+      if (!savedCred) {
+        setState('scan', 'רישום טביעת אצבע...');
+        const cred = await navigator.credentials.create({ publicKey: {
+          challenge: crypto.getRandomValues(new Uint8Array(32)),
+          rp: { name: 'MayaOS', id: rpId },
+          user: { id: crypto.getRandomValues(new Uint8Array(16)), name: 'maya-commander', displayName: 'MayaOS Commander' },
+          pubKeyCredParams: [{ alg: -7, type: 'public-key' }, { alg: -257, type: 'public-key' }],
+          authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' },
+          timeout: 60000, attestation: 'none'
+        }});
+        localStorage.setItem(CRED_KEY, buf2b64(cred.rawId));
+        resetB.style.display = 'block';
+        unlock();
+      } else {
+        setState('scan', 'מאמת...');
+        await navigator.credentials.get({ publicKey: {
+          challenge: crypto.getRandomValues(new Uint8Array(32)),
+          allowCredentials: [{ id: b64toBuf(savedCred), type: 'public-key', transports: ['internal'] }],
+          userVerification: 'required', timeout: 60000
+        }});
+        resetB.style.display = 'block';
+        unlock();
+      }
+    } catch(e) {
+      bioBtn.disabled = false;
+      if (e.name === 'NotAllowedError') { showPIN('השתמש בקוד גישה'); }
+      else if (e.name === 'InvalidStateError') {
+        setState('error', 'נסה שנית');
+        setTimeout(() => { setState('idle','הקש לאימות'); bioBtn.disabled=false; }, 1500);
+      } else { showPIN('שגיאה — הזן קוד גישה'); }
+    }
+    bioBtn.disabled = false;
+  };
+
+  window.mayaReset = function() {
+    if (!confirm('למחוק רישום ולהתחיל מחדש?')) return;
+    localStorage.removeItem(CRED_KEY); localStorage.removeItem(PIN_KEY);
+    pinBuffer = ''; resetB.style.display = 'none';
+    bioBtn.style.display = ''; pinArea.style.display = 'none';
+    document.getElementById('fpTap').style.opacity = '';
+    document.getElementById('fpTap').style.pointerEvents = '';
+    setState('idle', 'הקש לאימות');
+  };
+
+  if (localStorage.getItem(CRED_KEY) || localStorage.getItem(PIN_KEY)) { resetB.style.display = 'block'; }
+
+  tryBiometric().then(has => {
+    if (!has) showPIN('הזן קוד גישה');
+    else {
+      stat.textContent = isMobile ? 'הקש לאימות ביומטרי' : 'הניח אצבע לאימות';
+      bioBtn.textContent = isMobile ? '☝ Touch ID / Face ID' : '☝ אמת זהות ביומטרית';
+    }
+  });
+})();
+</script>
+
 </body>
+
 </html>
