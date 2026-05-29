@@ -89,7 +89,7 @@ Do NOT touch without explicit user directive:
 
 - Building Career, Relationship, Ayala, Property, Events, or full Admin divisions.
 - Building autonomous loops / cron jobs.
-- Building external API integrations (WhatsApp, Gmail, Calendar, Bank, Voice) EXCEPT for Icon Fitness integration (granted by CEO override on 2026-05-21).
+- Building external API integrations (WhatsApp, Gmail, Calendar, Bank, Voice) EXCEPT for Icon Fitness integration (granted by CEO override on 2026-05-21) AND EXCEPT for Gil (Legal) Gmail + Google Drive integration (granted by CEO override on 2026-05-30, for case intelligence: Label כתיק-לירון + brumeroffice@gmail.com + Brumer Drive library).
 - Building vector DB memory.
 - Building meta-agents (Shadow, Focus, Life Balance, Crisis Prevention).
 - Letting any agent claim medical, legal, or financial diagnostic authority.
