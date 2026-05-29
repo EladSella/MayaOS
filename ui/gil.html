@@ -6,114 +6,77 @@
   <title>גיל · תיק לירון · ביון</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="shared-agent.css" />
-
-  <!-- Google API -->
   <script src="https://apis.google.com/js/api.js"></script>
   <script src="https://accounts.google.com/gsi/client"></script>
-
   <style>
-    :root {
-      --grad-primary: linear-gradient(135deg, #ef4444 0%, #f59e0b 100%);
-      --gold: #f59e0b; --red: #ef4444; --blue: #3b82f6;
-      --green: #10b981; --purple: #8b5cf6;
-    }
+    :root { --grad-primary: linear-gradient(135deg, #ef4444 0%, #f59e0b 100%); }
     body { background-image: radial-gradient(ellipse at top right, rgba(239,68,68,0.10), transparent 60%); }
     .agent-name { background: var(--grad-primary); -webkit-background-clip: text; color: transparent; }
 
-    /* TABS */
-    .tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+    .tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
     .tabs::-webkit-scrollbar { display: none; }
-    .tab {
-      flex-shrink: 0; padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
-      cursor: pointer; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04);
-      color: #94a3b8; transition: all .2s; font-family: 'Outfit', sans-serif;
-    }
-    .tab.active { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.4); color: #fca5a5; }
-    .tab-panel { display: none; }
-    .tab-panel.active { display: flex; flex-direction: column; gap: 14px; }
+    .tab { flex-shrink:0; padding:7px 13px; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:#94a3b8; transition:all .2s; font-family:'Outfit',sans-serif; }
+    .tab.active { background:rgba(239,68,68,.15); border-color:rgba(239,68,68,.4); color:#fca5a5; }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:flex; flex-direction:column; gap:14px; }
 
-    /* CONNECT BUTTON */
-    .connect-btn {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      padding: 14px 20px; border-radius: 14px; font-size: 14px; font-weight: 700;
-      cursor: pointer; border: none; transition: all .2s; width: 100%;
-      font-family: 'Outfit', sans-serif;
-    }
-    .connect-btn.gmail { background: linear-gradient(135deg,#ef4444,#dc2626); color: white; box-shadow: 0 6px 20px rgba(239,68,68,.3); }
-    .connect-btn.drive { background: linear-gradient(135deg,#3b82f6,#2563eb); color: white; box-shadow: 0 6px 20px rgba(59,130,246,.3); }
-    .connect-btn:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    .connect-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .connect-btn { display:flex; align-items:center; justify-content:center; gap:10px; padding:14px 20px; border-radius:14px; font-size:14px; font-weight:700; cursor:pointer; border:none; transition:all .2s; width:100%; font-family:'Outfit',sans-serif; }
+    .connect-btn.gmail { background:linear-gradient(135deg,#ef4444,#dc2626); color:white; box-shadow:0 6px 20px rgba(239,68,68,.3); }
+    .connect-btn.drive { background:linear-gradient(135deg,#3b82f6,#2563eb); color:white; box-shadow:0 6px 20px rgba(59,130,246,.3); }
+    .connect-btn:hover { transform:translateY(-2px); filter:brightness(1.1); }
+    .connect-btn:disabled { opacity:.5; cursor:not-allowed; transform:none; }
 
-    /* STATUS BAR */
-    .status-bar { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 10px; font-size: 13px; }
-    .status-bar.connected { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.25); color: #6ee7b7; }
-    .status-bar.disconnected { background: rgba(100,116,139,.08); border: 1px solid rgba(100,116,139,.2); color: #94a3b8; }
-    .status-bar.loading { background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.2); color: #fcd34d; }
-    .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .status-dot.green { background: #10b981; animation: pulse-g 2s infinite; }
-    .status-dot.gray { background: #475569; }
-    .status-dot.amber { background: #f59e0b; animation: pulse-a 1s infinite alternate; }
-    @keyframes pulse-g { 0%,100%{opacity:1} 50%{opacity:.5} }
-    @keyframes pulse-a { from{opacity:.5} to{opacity:1} }
+    .status-bar { display:flex; align-items:center; gap:8px; padding:10px 14px; border-radius:10px; font-size:13px; }
+    .status-bar.connected { background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.25); color:#6ee7b7; }
+    .status-bar.disconnected { background:rgba(100,116,139,.08); border:1px solid rgba(100,116,139,.2); color:#94a3b8; }
+    .status-bar.loading { background:rgba(245,158,11,.08); border:1px solid rgba(245,158,11,.2); color:#fcd34d; }
+    .status-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .status-dot.green { background:#10b981; animation:pg 2s infinite; }
+    .status-dot.gray { background:#475569; }
+    .status-dot.amber { background:#f59e0b; animation:pa 1s infinite alternate; }
+    @keyframes pg{0%,100%{opacity:1}50%{opacity:.5}} @keyframes pa{from{opacity:.5}to{opacity:1}}
 
-    /* EMAIL ITEMS */
-    .email-item {
-      padding: 13px 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,.07);
-      background: rgba(255,255,255,.03); cursor: pointer; transition: all .15s;
-    }
-    .email-item:hover { background: rgba(255,255,255,.06); border-color: rgba(239,68,68,.2); }
-    .email-subject { font-size: 13px; font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
-    .email-meta { font-size: 11px; color: #64748b; margin-bottom: 6px; font-family: 'JetBrains Mono', monospace; }
-    .email-snippet { font-size: 12px; color: #94a3b8; line-height: 1.4; }
-    .email-link { font-size: 11px; color: #ef4444; text-decoration: none; margin-top: 6px; display: inline-block; }
-    .email-link:hover { text-decoration: underline; }
+    .email-item { padding:13px 15px; border-radius:12px; border:1px solid rgba(255,255,255,.07); background:rgba(255,255,255,.03); cursor:pointer; transition:all .15s; }
+    .email-item:hover { background:rgba(255,255,255,.06); border-color:rgba(239,68,68,.2); }
+    .email-subject { font-size:13px; font-weight:600; color:#f1f5f9; margin-bottom:4px; }
+    .email-meta { font-size:11px; color:#64748b; margin-bottom:6px; font-family:'JetBrains Mono',monospace; }
+    .email-snippet { font-size:12px; color:#94a3b8; line-height:1.4; }
+    .email-link { font-size:11px; color:#ef4444; text-decoration:none; margin-top:6px; display:inline-block; }
 
-    /* DRIVE ITEMS */
-    .drive-item {
-      display: flex; align-items: center; gap: 12px; padding: 12px 14px;
-      border-radius: 10px; border: 1px solid rgba(59,130,246,.15);
-      background: rgba(59,130,246,.05); cursor: pointer; transition: all .15s; text-decoration: none;
-    }
-    .drive-item:hover { background: rgba(59,130,246,.1); border-color: rgba(59,130,246,.3); }
-    .drive-icon { font-size: 22px; flex-shrink: 0; }
-    .drive-name { font-size: 13px; font-weight: 600; color: #f1f5f9; flex: 1; }
-    .drive-date { font-size: 10px; color: #64748b; font-family: 'JetBrains Mono', monospace; }
+    .drive-item { display:flex; align-items:center; gap:12px; padding:12px 14px; border-radius:10px; border:1px solid rgba(59,130,246,.15); background:rgba(59,130,246,.05); cursor:pointer; transition:all .15s; text-decoration:none; }
+    .drive-item:hover { background:rgba(59,130,246,.1); border-color:rgba(59,130,246,.3); }
+    .drive-icon { font-size:22px; flex-shrink:0; }
+    .drive-name { font-size:13px; font-weight:600; color:#f1f5f9; flex:1; }
+    .drive-date { font-size:10px; color:#64748b; font-family:'JetBrains Mono',monospace; }
 
-    /* WHATSAPP */
-    .wa-paste {
-      width: 100%; min-height: 160px; background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.1); border-radius: 12px;
-      color: #f1f5f9; font-size: 13px; font-family: 'Outfit', sans-serif;
-      padding: 14px; resize: vertical; outline: none; direction: rtl;
-      transition: border-color .2s;
-    }
-    .wa-paste:focus { border-color: rgba(37,211,102,.4); }
-    .wa-analyze-btn {
-      padding: 12px 20px; border-radius: 10px; border: none; cursor: pointer;
-      background: linear-gradient(135deg,#25d366,#128c7e); color: white;
-      font-size: 13px; font-weight: 700; font-family: 'Outfit', sans-serif;
-      width: 100%; transition: all .2s;
-    }
-    .wa-analyze-btn:hover { transform: translateY(-1px); filter: brightness(1.1); }
+    .wa-paste { width:100%; min-height:150px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:12px; color:#f1f5f9; font-size:13px; font-family:'Outfit',sans-serif; padding:14px; resize:vertical; outline:none; direction:rtl; transition:border-color .2s; }
+    .wa-paste:focus { border-color:rgba(37,211,102,.4); }
+    .wa-btn { padding:12px 20px; border-radius:10px; border:none; cursor:pointer; background:linear-gradient(135deg,#25d366,#128c7e); color:white; font-size:13px; font-weight:700; font-family:'Outfit',sans-serif; width:100%; transition:all .2s; }
 
-    /* ASSESSMENT */
-    .assess-item { display: flex; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 13px; }
-    .assess-item:last-child { border-bottom: none; }
-    .assess-num { color: #ef4444; font-weight: 800; font-family: 'JetBrains Mono', monospace; min-width: 20px; flex-shrink: 0; }
-    .assess-text { color: #f1f5f9; flex: 1; line-height: 1.45; }
-    .assess-prio { font-size: 10px; font-family: 'JetBrains Mono', monospace; padding: 2px 7px; border-radius: 999px; margin-top: 4px; display: inline-block; }
-    .assess-prio.high { background: rgba(239,68,68,.15); color: #fca5a5; border: 1px solid rgba(239,68,68,.25); }
-    .assess-prio.med { background: rgba(245,158,11,.15); color: #fcd34d; border: 1px solid rgba(245,158,11,.25); }
+    /* ANALYSIS */
+    .gap-row { display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:13px; }
+    .gap-row:last-child { border-bottom:none; }
+    .gap-light { font-size:16px; flex-shrink:0; }
+    .gap-label { flex:1; color:#f1f5f9; }
+    .gap-note { font-size:11px; color:#64748b; font-family:'JetBrains Mono',monospace; }
 
-    .empty-state { text-align: center; padding: 30px; color: #475569; font-size: 13px; }
-    .loader { display: flex; justify-content: center; padding: 24px; }
-    .spin { width: 24px; height: 24px; border: 2px solid rgba(255,255,255,.1); border-top-color: #ef4444; border-radius: 50%; animation: spin .7s linear infinite; }
-    @keyframes spin { to{transform:rotate(360deg)} }
+    .score-bar-wrap { background:rgba(255,255,255,.06); border-radius:999px; height:10px; overflow:hidden; margin:10px 0 4px; }
+    .score-bar-fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#ef4444,#f59e0b,#10b981); transition:width .8s ease; }
+
+    .action-row { display:flex; gap:10px; padding:9px 0; border-bottom:1px solid rgba(255,255,255,.05); font-size:13px; align-items:flex-start; }
+    .action-row:last-child { border-bottom:none; }
+    .action-prio { font-size:16px; flex-shrink:0; }
+    .action-text { flex:1; color:#f1f5f9; line-height:1.45; }
+
+    .empty-state { text-align:center; padding:30px; color:#475569; font-size:13px; }
+    .loader { display:flex; justify-content:center; padding:24px; }
+    .spin { width:24px; height:24px; border:2px solid rgba(255,255,255,.1); border-top-color:#ef4444; border-radius:50%; animation:spin .7s linear infinite; }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .disclaimer { font-size:10px; color:#334155; text-align:center; padding:6px; font-family:'JetBrains Mono',monospace; border-top:1px solid rgba(255,255,255,.04); margin-top:10px; }
   </style>
 </head>
 <body>
 <div class="app">
-
   <a href="legal.html" class="back-btn">חזרה למחלקת משפטים</a>
 
   <div class="header">
@@ -121,431 +84,420 @@
          onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22><rect width=%2270%22 height=%2270%22 rx=%2235%22 fill=%22%23ef4444%22/><text x=%2235%22 y=%2244%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2226%22>ג</text></svg>'">
     <div>
       <div class="agent-name">גיל · פאנל ביון</div>
-      <div class="agent-role">CEO override · Gmail + Drive + WhatsApp · תיק לירון</div>
+      <div class="agent-role">Gmail · Drive · WhatsApp · ניתוח תיק · תיק לירון</div>
     </div>
   </div>
 
   <!-- TABS -->
-  <div class="card" style="padding:14px;">
+  <div class="card" style="padding:12px;">
     <div class="tabs">
       <button class="tab active" onclick="switchTab('gmail',this)">📧 Gmail</button>
       <button class="tab" onclick="switchTab('drive',this)">📁 Drive</button>
       <button class="tab" onclick="switchTab('whatsapp',this)">💬 WhatsApp</button>
-      <button class="tab" onclick="switchTab('assess',this)">⚖️ הערכת גיל</button>
+      <button class="tab" onclick="switchTab('analysis',this)">🧠 ניתוח</button>
+      <button class="tab" onclick="switchTab('assess',this)">⚖️ הערכה</button>
     </div>
   </div>
 
-  <!-- ═══ GMAIL TAB ═══ -->
+  <!-- ══ GMAIL ══ -->
   <div id="tab-gmail" class="tab-panel active">
     <div class="card">
-      <div class="card-title">חיבור Gmail — תיק לירון</div>
-      <div id="gmail-status" class="status-bar disconnected">
-        <div class="status-dot gray"></div>
-        לא מחובר
-      </div>
-      <div style="height:10px;"></div>
-      <button class="connect-btn gmail" id="gmail-btn" onclick="connectGmail()">
-        🔐 התחבר ל-Gmail של אלעד
-      </button>
-      <div style="margin-top:10px;font-size:11px;color:#475569;font-family:'JetBrains Mono',monospace;text-align:center;">
-        ייקרא: Label כתיק-לירון · מיילים ל/מ brumeroffice@gmail.com
+      <div class="card-title">Gmail — תיק לירון</div>
+      <div id="gmail-status" class="status-bar disconnected"><div class="status-dot gray"></div>בודק חיבור...</div>
+      <div id="gmail-btn-wrap" style="margin-top:10px;display:none;">
+        <button class="connect-btn gmail" id="gmail-btn" onclick="doAuth()">🔐 התחבר ל-Gmail</button>
+        <div style="margin-top:8px;font-size:11px;color:#475569;font-family:'JetBrains Mono',monospace;text-align:center;">Label: כתיק-לירון · brumeroffice@gmail.com</div>
       </div>
     </div>
-
     <div class="card" id="gmail-results" style="display:none;">
-      <div class="card-title" id="gmail-count-label">מיילים רלוונטיים</div>
+      <div class="card-title" id="gmail-count-label">מיילים</div>
       <div id="gmail-list" style="display:flex;flex-direction:column;gap:10px;"></div>
     </div>
   </div>
 
-  <!-- ═══ DRIVE TAB ═══ -->
+  <!-- ══ DRIVE ══ -->
   <div id="tab-drive" class="tab-panel">
     <div class="card">
-      <div class="card-title">ספריית ברומר — Google Drive</div>
-      <div id="drive-status" class="status-bar disconnected">
-        <div class="status-dot gray"></div>
-        לא מחובר
-      </div>
-      <div style="height:10px;"></div>
-      <button class="connect-btn drive" id="drive-btn" onclick="connectDrive()">
-        📂 התחבר ל-Drive — ספריית ברומר
-      </button>
-      <div style="margin-top:10px;font-size:11px;color:#475569;font-family:'JetBrains Mono',monospace;text-align:center;">
-        ייקרא: תיקיית "ברומר" / "Brumer" ב-Drive
-      </div>
+      <div class="card-title">Drive — ספריית ברומר</div>
+      <div id="drive-status" class="status-bar disconnected"><div class="status-dot gray"></div>ממתין לחיבור...</div>
     </div>
-
     <div class="card" id="drive-results" style="display:none;">
-      <div class="card-title" id="drive-count-label">קבצים בספרייה</div>
+      <div class="card-title" id="drive-count-label">קבצים</div>
       <div id="drive-list" style="display:flex;flex-direction:column;gap:8px;"></div>
     </div>
   </div>
 
-  <!-- ═══ WHATSAPP TAB ═══ -->
+  <!-- ══ WHATSAPP ══ -->
   <div id="tab-whatsapp" class="tab-panel">
     <div class="card">
       <div class="card-title">💬 ניתוח שיחת WhatsApp — לירון</div>
-      <p style="font-size:12px;color:#64748b;margin-bottom:12px;line-height:1.6;">
-        ב-WhatsApp: פתח שיחה עם לירון ← ⋮ ← <strong style="color:#94a3b8;">Export Chat</strong> ← ללא מדיה.<br>
-        העתק את תוכן הקובץ והדבק כאן:
-      </p>
-      <textarea class="wa-paste" id="wa-text" placeholder="הדבק כאן את תוכן ייצוא WhatsApp..."></textarea>
-      <div style="height:10px;"></div>
-      <button class="wa-analyze-btn" onclick="analyzeWhatsApp()">⚖️ נתח — מה רלוונטי לתיק</button>
+      <p style="font-size:12px;color:#64748b;margin-bottom:10px;line-height:1.6;">פתח שיחה עם לירון ← ⋮ ← <strong style="color:#94a3b8;">Export Chat</strong> ← ללא מדיה. הדבק כאן:</p>
+      <textarea class="wa-paste" id="wa-text" placeholder="הדבק ייצוא WhatsApp..."></textarea>
+      <div style="height:8px;"></div>
+      <button class="wa-btn" onclick="analyzeWA()">⚖️ נתח — מה רלוונטי לתיק</button>
     </div>
     <div class="card" id="wa-results" style="display:none;">
-      <div class="card-title">ממצאי גיל מהשיחה</div>
+      <div class="card-title">ממצאי גיל</div>
       <div id="wa-list" style="display:flex;flex-direction:column;gap:10px;"></div>
+      <button id="wa-copy-btn" onclick="copyToLawyer()" style="display:none;margin-top:12px;padding:10px;border-radius:10px;border:1px solid rgba(245,158,11,.3);background:rgba(245,158,11,.08);color:#fcd34d;font-size:12px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;width:100%;">📋 העתק סיכום לברומר</button>
     </div>
   </div>
 
-  <!-- ═══ ASSESSMENT TAB ═══ -->
+  <!-- ══ ANALYSIS ══ -->
+  <div id="tab-analysis" class="tab-panel">
+    <div class="card">
+      <div class="card-title">🧠 ניתוח פערים — מה קיים / מה חסר</div>
+      <div id="gap-list" style="display:flex;flex-direction:column;">
+        <div class="empty-state">חבר Gmail כדי להפעיל ניתוח אוטומטי</div>
+      </div>
+    </div>
+    <div class="card" id="collected-summary" style="display:none;">
+      <div class="card-title">ביון שנאסף</div>
+      <div id="collected-list" style="display:flex;flex-direction:column;gap:6px;font-size:13px;"></div>
+    </div>
+  </div>
+
+  <!-- ══ ASSESSMENT ══ -->
   <div id="tab-assess" class="tab-panel">
     <div class="card">
-      <div class="card-title">⚖️ הערכת גיל — מה נדרש לתעד</div>
-      <div id="assess-placeholder" style="color:#475569;font-size:13px;line-height:1.6;padding:4px 0;">
-        הערכה תתעדכן אוטומטית לאחר שתחובר ל-Gmail ו/או תנתח את ה-WhatsApp.<br><br>
-        <strong style="color:#94a3b8;">בינתיים — ניתוח ראשוני על בסיס מה שידוע:</strong>
+      <div class="card-title">⚖️ הערכת גיל — סיכויי זכייה</div>
+      <div id="score-display">
+        <div style="font-size:13px;color:#64748b;">ניתוח יתחיל לאחר חיבור Gmail</div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:0;margin-top:14px;">
-        <div class="assess-item">
-          <span class="assess-num">1</span>
-          <div class="assess-text">
-            כל ניסיון תקשורת עם לירון שלא נענה / נדחה — לתעד עם תאריך ושעה
-            <br><span class="assess-prio high">עדיפות גבוהה</span>
-          </div>
-        </div>
-        <div class="assess-item">
-          <span class="assess-num">2</span>
-          <div class="assess-text">
-            כל אמירה של לירון שנוגעת לאיילה (בריאות, לימודים, שגרה) — מהווה ראיה לצורת הורות
-            <br><span class="assess-prio high">עדיפות גבוהה</span>
-          </div>
-        </div>
-        <div class="assess-item">
-          <span class="assess-num">3</span>
-          <div class="assess-text">
-            כל אמירה על כספים, מזונות, הוצאות — רלוונטי לתיק ביטול המזונות
-            <br><span class="assess-prio high">עדיפות גבוהה</span>
-          </div>
-        </div>
-        <div class="assess-item">
-          <span class="assess-num">4</span>
-          <div class="assess-text">
-            חומר שנשלח לברומר (עו"ד) — לתעד מה נשלח ומתי, לזהות פערים
-            <br><span class="assess-prio med">עדיפות בינונית</span>
-          </div>
-        </div>
-        <div class="assess-item">
-          <span class="assess-num">5</span>
-          <div class="assess-text">
-            כל הפניה לגבי טיפול רגשי לאיילה — תגובות חיוביות ושליליות כאחד
-            <br><span class="assess-prio med">עדיפות בינונית</span>
-          </div>
-        </div>
-        <div class="assess-item">
-          <span class="assess-num">6</span>
-          <div class="assess-text">
-            אירועים שבהם לירון לא כיבדה את סידורי הקשר הקיימים — תאריכים מדויקים
-            <br><span class="assess-prio high">עדיפות גבוהה</span>
-          </div>
-        </div>
+      <div class="disclaimer">⚠️ גיל הוא סוכן ניתוח נתונים בלבד — אינו עורך דין. כל החלטה בהתייעצות עם ברומר.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📋 פעולות נדרשות לפי דחיפות</div>
+      <div id="actions-list" style="display:flex;flex-direction:column;">
+        <div class="action-row"><span class="action-prio">🔴</span><span class="action-text">שלח חומר מזונות לברומר — מוכן, רק ממתין לשליחה</span></div>
+        <div class="action-row"><span class="action-prio">🔴</span><span class="action-text">תעד כל ניסיון תקשורת עם לירון שלא נענה (תאריך + שעה)</span></div>
+        <div class="action-row"><span class="action-prio">🟡</span><span class="action-text">קבל תגובה בכתב מלירון על בקשת הטיפול הרגשי לאיילה</span></div>
+        <div class="action-row"><span class="action-prio">🟡</span><span class="action-text">וודא שסעיף ג' רשום במסמך רשמי חתום</span></div>
+        <div class="action-row"><span class="action-prio">🟢</span><span class="action-text">בדוק עם ברומר מה השלב הבא לאחר הגשת חומר המזונות</span></div>
       </div>
-      <div id="assess-live" style="margin-top:16px;"></div>
     </div>
   </div>
 
-</div>
+</div><!-- /app -->
 
 <script>
-// ══════════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════════
 const CLIENT_ID = '731371047133-ohte8lgdqvef98j3lr2eq7uuj3i2i817.apps.googleusercontent.com';
-const SCOPES = [
-  'https://www.googleapis.com/auth/gmail.readonly',
-  'https://www.googleapis.com/auth/drive.readonly'
-].join(' ');
-
-const BRUMER_EMAIL = 'brumeroffice@gmail.com';
-const LABEL_NAME   = 'כתיק-לירון';
+const SCOPES = 'https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/drive.readonly';
+const BRUMER = 'brumeroffice@gmail.com';
+const TOKEN_KEY = 'gil_access_token';
 
 let tokenClient, accessToken = null;
-let gmailConnected = false, driveConnected = false;
+const intel = { gmailCount:0, driveCount:0, waCount:0, brumerEmails:0, hasSection3:false, hasMezono:false, hasAyala:false, hasCourtDate:false, allSnippets:[] };
 
-// ══════════════════════════════════════════
-// TABS
-// ══════════════════════════════════════════
+// ══ TABS ══
 function switchTab(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
   btn.classList.add('active');
 }
 
-// ══════════════════════════════════════════
-// GOOGLE AUTH (shared token for Gmail + Drive)
-// ══════════════════════════════════════════
-function initTokenClient() {
+// ══ AUTH — SILENT FIRST ══
+window.addEventListener('load', () => {
+  google.accounts.id.initialize({ client_id: CLIENT_ID });
   tokenClient = google.accounts.oauth2.initTokenClient({
     client_id: CLIENT_ID,
     scope: SCOPES,
-    callback: (resp) => {
-      if (resp.error) { alert('שגיאת אימות: ' + resp.error); return; }
-      accessToken = resp.access_token;
-      gmailConnected = true;
-      driveConnected = true;
-      setStatus('gmail', true);
-      setStatus('drive', true);
-      loadGmail();
-      loadDrive();
-    }
+    callback: onToken
   });
-}
-window.addEventListener('load', () => {
-  google.accounts.id.initialize({ client_id: CLIENT_ID });
-  initTokenClient();
-  const saved = sessionStorage.getItem('gil_token');
+  const saved = localStorage.getItem(TOKEN_KEY);
   if (saved) {
     accessToken = saved;
-    gmailConnected = true; driveConnected = true;
-    setStatus('gmail', true); setStatus('drive', true);
-    loadGmail(); loadDrive();
+    onConnected();
+  } else {
+    // Silent attempt — no popup
+    tokenClient.requestAccessToken({ prompt: '' });
+    setTimeout(() => {
+      if (!accessToken) showAuthButton();
+    }, 3000);
   }
 });
 
-function setStatus(type, connected, loading = false) {
-  const el = document.getElementById(type + '-status');
-  if (loading) {
-    el.className = 'status-bar loading';
-    el.innerHTML = '<div class="status-dot amber"></div> טוען נתונים...';
-  } else if (connected) {
-    el.className = 'status-bar connected';
-    el.innerHTML = '<div class="status-dot green"></div> מחובר ✓';
-    document.getElementById(type + '-btn').disabled = true;
-    document.getElementById(type + '-btn').textContent = '✓ מחובר';
-  } else {
-    el.className = 'status-bar disconnected';
-    el.innerHTML = '<div class="status-dot gray"></div> לא מחובר';
+function onToken(resp) {
+  if (resp.error) { showAuthButton(); return; }
+  accessToken = resp.access_token;
+  localStorage.setItem(TOKEN_KEY, accessToken);
+  onConnected();
+}
+
+function onConnected() {
+  setStatus('gmail', 'loading');
+  setStatus('drive', 'loading');
+  document.getElementById('gmail-btn-wrap').style.display = 'none';
+  loadGmail();
+  loadDrive();
+}
+
+function showAuthButton() {
+  setStatus('gmail', 'disconnected');
+  document.getElementById('gmail-btn-wrap').style.display = '';
+}
+
+function doAuth() {
+  tokenClient.requestAccessToken({ prompt: 'consent' });
+}
+
+function setStatus(type, state) {
+  const el = document.getElementById(type+'-status');
+  const map = {
+    connected: ['status-bar connected', '<div class="status-dot green"></div>מחובר ✓'],
+    disconnected: ['status-bar disconnected', '<div class="status-dot gray"></div>לא מחובר — לחץ להתחברות'],
+    loading: ['status-bar loading', '<div class="status-dot amber"></div>טוען...'],
+  };
+  const [cls, html] = map[state] || map.disconnected;
+  el.className = cls; el.innerHTML = html;
+}
+
+// ══ API FETCH with 401 handling ══
+async function apiFetch(url) {
+  const r = await fetch(url, { headers: { Authorization: 'Bearer '+accessToken } });
+  if (r.status === 401) {
+    localStorage.removeItem(TOKEN_KEY);
+    accessToken = null;
+    showAuthButton();
+    throw new Error('Token expired — please reconnect');
   }
-}
-
-function requestToken() {
-  tokenClient.requestAccessToken({ prompt: accessToken ? '' : 'consent' });
-}
-
-function connectGmail() { requestToken(); }
-function connectDrive() { requestToken(); }
-
-// ══════════════════════════════════════════
-// GMAIL
-// ══════════════════════════════════════════
-async function gmailFetch(url) {
-  const r = await fetch(url, { headers: { Authorization: 'Bearer ' + accessToken } });
-  if (!r.ok) throw new Error('Gmail API error: ' + r.status);
+  if (!r.ok) throw new Error('API error '+r.status);
   return r.json();
 }
 
+// ══ GMAIL ══
 async function loadGmail() {
-  setStatus('gmail', false, true);
   const list = document.getElementById('gmail-list');
-  list.innerHTML = '<div class="loader"><div class="spin"></div></div>';
   document.getElementById('gmail-results').style.display = '';
+  list.innerHTML = '<div class="loader"><div class="spin"></div></div>';
 
   try {
-    // Search: label + brumer emails
-    const q = encodeURIComponent(`(label:כתיק-לירון OR from:${BRUMER_EMAIL} OR to:${BRUMER_EMAIL})`);
-    const data = await gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${q}&maxResults=30`);
+    const q = encodeURIComponent(`(label:כתיק-לירון OR from:${BRUMER} OR to:${BRUMER})`);
+    const data = await apiFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages?q=${q}&maxResults=40`);
 
-    if (!data.messages || !data.messages.length) {
-      list.innerHTML = '<div class="empty-state">לא נמצאו מיילים עם Label "כתיק-לירון" או מיילים ל/מ ברומר</div>';
-      setStatus('gmail', true);
+    if (!data.messages?.length) {
+      list.innerHTML = '<div class="empty-state">לא נמצאו מיילים עם Label "כתיק-לירון" או ל/מ ברומר</div>';
+      setStatus('gmail', 'connected');
+      runAnalysis();
       return;
     }
 
     const msgs = await Promise.all(
-      data.messages.slice(0, 20).map(m =>
-        gmailFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject,From,To,Date`)
+      data.messages.slice(0,25).map(m =>
+        apiFetch(`https://gmail.googleapis.com/gmail/v1/users/me/messages/${m.id}?format=metadata&metadataHeaders=Subject,From,To,Date`)
       )
     );
 
-    sessionStorage.setItem('gil_token', accessToken);
-
+    intel.gmailCount = msgs.length;
     list.innerHTML = '';
     document.getElementById('gmail-count-label').textContent = `${msgs.length} מיילים רלוונטיים לתיק`;
 
     msgs.forEach(msg => {
-      const h = {};
-      (msg.payload.headers || []).forEach(hdr => { h[hdr.name] = hdr.value; });
-      const subj = h['Subject'] || '(ללא נושא)';
-      const from = h['From'] || '';
-      const date = h['Date'] ? new Date(h['Date']).toLocaleDateString('he-IL') : '';
-      const snippet = msg.snippet || '';
+      const h = {}; (msg.payload.headers||[]).forEach(x=>h[x.name]=x.value);
+      const subj = h.Subject||'(ללא נושא)', from=h.From||'', date=h.Date?new Date(h.Date).toLocaleDateString('he-IL'):'';
+      const snippet = msg.snippet||'';
       const url = `https://mail.google.com/mail/u/0/#all/${msg.id}`;
-      const isBrumer = from.includes(BRUMER_EMAIL) || (h['To'] || '').includes(BRUMER_EMAIL);
+      const isBrumer = from.includes(BRUMER)||(h.To||'').includes(BRUMER);
+
+      // intel extraction
+      intel.allSnippets.push(snippet+' '+subj);
+      if (isBrumer) intel.brumerEmails++;
+      if (/סעיף ג|גישור|mediation/i.test(snippet+subj)) intel.hasSection3 = true;
+      if (/מזונות|alimony/i.test(snippet+subj)) intel.hasMezono = true;
+      if (/איילה|ayala/i.test(snippet+subj)) intel.hasAyala = true;
+      if (/דיון|hearing|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}/i.test(snippet+subj)) intel.hasCourtDate = true;
 
       const el = document.createElement('div');
       el.className = 'email-item';
       el.innerHTML = `
-        <div class="email-subject">${isBrumer ? '⚖️ ' : ''}${escHtml(subj)}</div>
-        <div class="email-meta">${escHtml(from)} · ${date}</div>
-        <div class="email-snippet">${escHtml(snippet.substring(0, 120))}${snippet.length > 120 ? '...' : ''}</div>
-        <a href="${url}" target="_blank" class="email-link">פתח ב-Gmail ↗</a>
-      `;
+        <div class="email-subject">${isBrumer?'⚖️ ':''}${esc(subj)}</div>
+        <div class="email-meta">${esc(from)} · ${date}</div>
+        <div class="email-snippet">${esc(snippet.slice(0,120))}${snippet.length>120?'...':''}</div>
+        <a href="${url}" target="_blank" class="email-link">פתח ב-Gmail ↗</a>`;
       list.appendChild(el);
     });
 
-    setStatus('gmail', true);
-    updateAssessment('gmail', msgs.length);
+    setStatus('gmail', 'connected');
+    runAnalysis();
   } catch(e) {
-    list.innerHTML = `<div class="empty-state">שגיאה: ${e.message}</div>`;
-    setStatus('gmail', false);
+    list.innerHTML = `<div class="empty-state">שגיאה: ${esc(e.message)}</div>`;
+    setStatus('gmail', 'disconnected');
   }
 }
 
-// ══════════════════════════════════════════
-// DRIVE
-// ══════════════════════════════════════════
-async function driveFetch(url) {
-  const r = await fetch(url, { headers: { Authorization: 'Bearer ' + accessToken } });
-  if (!r.ok) throw new Error('Drive API error: ' + r.status);
-  return r.json();
-}
-
+// ══ DRIVE ══
 async function loadDrive() {
-  setStatus('drive', false, true);
   const list = document.getElementById('drive-list');
-  list.innerHTML = '<div class="loader"><div class="spin"></div></div>';
   document.getElementById('drive-results').style.display = '';
+  list.innerHTML = '<div class="loader"><div class="spin"></div></div>';
 
   try {
-    // Search for Brumer folder
-    const q = encodeURIComponent(`name contains 'ברומר' OR name contains 'Brumer' OR name contains 'brumer'`);
-    const data = await driveFetch(`https://www.googleapis.com/drive/v3/files?q=${q}&fields=files(id,name,mimeType,modifiedTime,webViewLink)&pageSize=50`);
+    // Search by name AND shared with brumer
+    const q1 = encodeURIComponent(`name contains 'ברומר' OR name contains 'Brumer' OR name contains 'brumer'`);
+    const q2 = encodeURIComponent(`'${BRUMER}' in readers OR '${BRUMER}' in writers`);
 
-    if (!data.files || !data.files.length) {
-      list.innerHTML = '<div class="empty-state">לא נמצאו קבצים עם "ברומר" ב-Drive.<br>נסה לחפש ידנית את שם התיקייה המדויק.</div>';
-      setStatus('drive', true);
+    const [r1, r2] = await Promise.all([
+      apiFetch(`https://www.googleapis.com/drive/v3/files?q=${q1}&fields=files(id,name,mimeType,modifiedTime,webViewLink)&pageSize=40`),
+      apiFetch(`https://www.googleapis.com/drive/v3/files?q=${q2}&fields=files(id,name,mimeType,modifiedTime,webViewLink)&pageSize=40`)
+    ]);
+
+    // Merge & dedupe
+    const seen = new Set();
+    const all = [...(r1.files||[]), ...(r2.files||[])].filter(f => {
+      if (seen.has(f.id)) return false; seen.add(f.id); return true;
+    });
+
+    intel.driveCount = all.length;
+    if (all.some(f => /מזונות|alimony/i.test(f.name))) intel.hasMezono = true;
+
+    if (!all.length) {
+      list.innerHTML = '<div class="empty-state">לא נמצאו קבצים. ייתכן שהתיקייה בשם שונה.</div>';
+      setStatus('drive', 'connected');
       return;
     }
 
     list.innerHTML = '';
-    document.getElementById('drive-count-label').textContent = `${data.files.length} קבצים — ספריית ברומר`;
+    document.getElementById('drive-count-label').textContent = `${all.length} קבצים — ספריית ברומר`;
 
-    const iconMap = {
-      'application/vnd.google-apps.folder': '📁',
-      'application/vnd.google-apps.document': '📄',
-      'application/vnd.google-apps.spreadsheet': '📊',
-      'application/pdf': '📕',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '📝',
-    };
-
-    data.files.forEach(f => {
-      const icon = iconMap[f.mimeType] || '📎';
-      const date = f.modifiedTime ? new Date(f.modifiedTime).toLocaleDateString('he-IL') : '';
+    const iconMap = {'application/vnd.google-apps.folder':'📁','application/vnd.google-apps.document':'📄','application/vnd.google-apps.spreadsheet':'📊','application/pdf':'📕'};
+    all.forEach(f => {
+      const icon = iconMap[f.mimeType]||'📎';
+      const date = f.modifiedTime?new Date(f.modifiedTime).toLocaleDateString('he-IL'):'';
       const el = document.createElement('a');
-      el.className = 'drive-item';
-      el.href = f.webViewLink || '#';
-      el.target = '_blank';
-      el.innerHTML = `
-        <span class="drive-icon">${icon}</span>
-        <span class="drive-name">${escHtml(f.name)}</span>
-        <span class="drive-date">${date}</span>
-      `;
+      el.className='drive-item'; el.href=f.webViewLink||'#'; el.target='_blank';
+      el.innerHTML=`<span class="drive-icon">${icon}</span><span class="drive-name">${esc(f.name)}</span><span class="drive-date">${date}</span>`;
       list.appendChild(el);
     });
 
-    setStatus('drive', true);
-    updateAssessment('drive', data.files.length);
+    setStatus('drive', 'connected');
+    runAnalysis();
   } catch(e) {
-    list.innerHTML = `<div class="empty-state">שגיאה: ${e.message}</div>`;
-    setStatus('drive', false);
+    list.innerHTML = `<div class="empty-state">שגיאה: ${esc(e.message)}</div>`;
+    setStatus('drive', 'disconnected');
   }
 }
 
-// ══════════════════════════════════════════
-// WHATSAPP ANALYSIS
-// ══════════════════════════════════════════
-function analyzeWhatsApp() {
+// ══ WHATSAPP ══
+function analyzeWA() {
   const text = document.getElementById('wa-text').value.trim();
-  if (!text) { alert('הדבק קודם את תוכן ה-WhatsApp'); return; }
-
-  const lines = text.split('\n').filter(l => l.trim());
-  const results = [];
+  if (!text) { alert('הדבק ייצוא WhatsApp'); return; }
+  const lines = text.split('\n').filter(l=>l.trim());
 
   const patterns = [
-    { re: /מזונות|מזון|תשלום|כסף|העברה|פיגור|חוב/i, label: '💰 כספים / מזונות', prio: 'high' },
-    { re: /איילה|הבת|הילדה/i, label: '👧 מידע על איילה', prio: 'high' },
-    { re: /טיפול|פסיכולוג|יועץ|רגשי/i, label: '🧠 טיפול רגשי', prio: 'high' },
-    { re: /לא אבוא|לא יכולה|לא מגיע|ביטל|ביטול|לא תראה|לא ניפגש/i, label: '🚫 סירוב / ביטול', prio: 'high' },
-    { re: /גישור|עורך דין|משפט|דיון|בית משפט|ברומר/i, label: '⚖️ הליך משפטי', prio: 'med' },
-    { re: /איחר|הגיע מאוחר|לא הגיע|לא ענה|לא מגיב/i, label: '⏰ הפרת קשר / חוסר תגובה', prio: 'high' },
-    { re: /גן|בית ספר|חינוך|שיעורים|מחנה/i, label: '📚 חינוך / לימודים', prio: 'med' },
+    {re:/מזונות|מזון|תשלום|כסף|העברה|פיגור|חוב/i, label:'💰 כספים / מזונות', prio:'high'},
+    {re:/איילה|הבת|הילדה/i, label:'👧 מידע על איילה', prio:'high'},
+    {re:/טיפול|פסיכולוג|יועץ|רגשי/i, label:'🧠 טיפול רגשי', prio:'high'},
+    {re:/לא אבוא|לא יכולה|ביטל|ביטול|לא תראה|מסרב|מסרבת|מסרב/i, label:'🚫 סירוב מפורש', prio:'high'},
+    {re:/לא ענה|לא מגיב|לא הגיב|אין תגובה/i, label:'⏰ חוסר תגובה', prio:'high'},
+    {re:/בית משפט|דיון|שופט|פסיקה|ברומר/i, label:'⚖️ הליך משפטי', prio:'med'},
+    {re:/גן|בית ספר|חינוך|שיעורים/i, label:'📚 חינוך', prio:'med'},
+    {re:/\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}/i, label:'📅 תאריכים מוזכרים', prio:'high'},
+    {re:/לא אחזיר|לא יחזיר|לא שולחת/i, label:'🚫 סירוב להחזיר', prio:'high'},
+    {re:/הגבל|אסור|לא רשאי|מניעה/i, label:'🚫 הגבלת קשר', prio:'high'},
   ];
 
+  const grouped = {};
   lines.forEach(line => {
     patterns.forEach(p => {
       if (p.re.test(line)) {
-        results.push({ line: line.trim(), label: p.label, prio: p.prio });
+        if (!grouped[p.label]) grouped[p.label] = {items:[], prio:p.prio};
+        if (!grouped[p.label].items.includes(line)) grouped[p.label].items.push(line);
       }
     });
   });
 
-  const waResults = document.getElementById('wa-results');
+  const waRes = document.getElementById('wa-results');
   const waList = document.getElementById('wa-list');
-  waResults.style.display = '';
+  waRes.style.display = '';
 
-  if (!results.length) {
-    waList.innerHTML = '<div class="empty-state">לא נמצאו הודעות רלוונטיות מיידית לתיק.<br>ייתכן שהשיחה בפורמט שונה — נסה שוב עם ייצוא עברית.</div>';
-    return;
-  }
+  const totalFound = Object.values(grouped).reduce((a,g)=>a+g.items.length,0);
+  intel.waCount = totalFound;
 
-  // Group by label
-  const grouped = {};
-  results.forEach(r => {
-    if (!grouped[r.label]) grouped[r.label] = { items: [], prio: r.prio };
-    if (!grouped[r.label].items.includes(r.line)) grouped[r.label].items.push(r.line);
-  });
+  if (!totalFound) { waList.innerHTML='<div class="empty-state">לא נמצאו הודעות רלוונטיות. נסה ייצוא מלא יותר.</div>'; return; }
 
   waList.innerHTML = '';
-  Object.entries(grouped).forEach(([label, g]) => {
+  Object.entries(grouped).sort((a,b)=>a[1].prio==='high'?-1:1).forEach(([label,g]) => {
     const div = document.createElement('div');
-    div.style.cssText = 'margin-bottom:12px;';
     div.innerHTML = `
       <div style="font-size:12px;font-weight:700;color:${g.prio==='high'?'#fca5a5':'#fcd34d'};margin-bottom:8px;">${label} (${g.items.length})</div>
-      ${g.items.slice(0,5).map(i => `<div class="email-item" style="margin-bottom:6px;font-size:12px;color:#e2e8f0;">${escHtml(i)}</div>`).join('')}
-      ${g.items.length > 5 ? `<div style="font-size:11px;color:#475569;padding:4px;">...ועוד ${g.items.length-5} הודעות</div>` : ''}
-    `;
+      ${g.items.slice(0,6).map(i=>`<div class="email-item" style="margin-bottom:6px;font-size:12px;">${esc(i)}</div>`).join('')}
+      ${g.items.length>6?`<div style="font-size:11px;color:#475569;padding:4px;">...ועוד ${g.items.length-6}</div>`:''}`;
     waList.appendChild(div);
   });
 
-  updateAssessment('whatsapp', results.length);
+  document.getElementById('wa-copy-btn').style.display = '';
+  document.getElementById('wa-copy-btn')._data = grouped;
+  runAnalysis();
 }
 
-// ══════════════════════════════════════════
-// LIVE ASSESSMENT UPDATE
-// ══════════════════════════════════════════
-const assessData = {};
-function updateAssessment(source, count) {
-  assessData[source] = count;
-  const el = document.getElementById('assess-live');
-  const parts = [];
-  if (assessData.gmail) parts.push(`📧 ${assessData.gmail} מיילים רלוונטיים`);
-  if (assessData.drive) parts.push(`📁 ${assessData.drive} קבצים ב-Drive`);
-  if (assessData.whatsapp) parts.push(`💬 ${assessData.whatsapp} הודעות רלוונטיות ב-WhatsApp`);
-  if (parts.length) {
-    el.innerHTML = `
-      <div style="padding:12px 14px;border-radius:10px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);">
-        <div style="font-size:11px;font-weight:700;color:#6ee7b7;margin-bottom:6px;">ביון שנאסף עד כה</div>
-        ${parts.map(p => `<div style="font-size:13px;color:#f1f5f9;padding:3px 0;">• ${p}</div>`).join('')}
-        <div style="font-size:11px;color:#64748b;margin-top:8px;font-family:'JetBrains Mono',monospace;">שלח לברומר עם בקשה לאימות ולהתייחסות</div>
-      </div>`;
+function copyToLawyer() {
+  const grouped = document.getElementById('wa-copy-btn')._data || {};
+  let text = `סיכום ממצאי WhatsApp — תיק אלעד / לירון\nתאריך: ${new Date().toLocaleDateString('he-IL')}\n\n`;
+  Object.entries(grouped).forEach(([label,g]) => {
+    text += `${label}:\n`;
+    g.items.forEach(i => text += `  • ${i}\n`);
+    text += '\n';
+  });
+  navigator.clipboard.writeText(text).then(() => alert('הועתק — מוכן לשליחה לברומר ✓'));
+}
+
+// ══ ANALYSIS + SCORE ══
+function runAnalysis() {
+  // Gap analysis
+  const gaps = [
+    { label:'מיילים עם ברומר', ok: intel.brumerEmails > 0, note: intel.brumerEmails ? `${intel.brumerEmails} נמצאו` : 'לא נמצאו מיילים עם עו"ד' },
+    { label:'סעיף ג\' — ויתור גישור', ok: true, note: 'חתום ✓ (ידוע)' },
+    { label:'חומר ביטול מזונות ב-Drive', ok: intel.hasMezono || intel.driveCount > 0, note: intel.hasMezono ? 'נמצא ✓' : intel.driveCount > 0 ? 'Drive נטען — לבדוק ידנית' : 'לא אותר' },
+    { label:'תיעוד מצב איילה', ok: intel.hasAyala || intel.waCount > 0, note: intel.hasAyala ? 'נמצא במיילים' : intel.waCount > 0 ? 'נמצא ב-WhatsApp' : 'חסר — לתעד' },
+    { label:'תגובת לירון לטיפול רגשי', ok: false, note: 'לא מתועד — דחוף' },
+    { label:'תאריך דיון קרוב', ok: false, note: 'לא נקבע' },
+    { label:'ייצוג ע"י ברומר', ok: intel.brumerEmails > 2, note: intel.brumerEmails > 2 ? 'פעיל ✓' : intel.brumerEmails > 0 ? 'חלקי' : 'לאמת' },
+    { label:'מיילים מ/אל לירון מתועדים', ok: intel.gmailCount > 0, note: intel.gmailCount > 0 ? `${intel.gmailCount} מיילים` : 'חסר תיעוד' },
+  ];
+
+  const gapList = document.getElementById('gap-list');
+  gapList.innerHTML = '';
+  let score = 0;
+  const weights = [15, 20, 15, 10, 10, 0, 15, 15];
+  gaps.forEach((g, i) => {
+    const light = g.ok === true ? '🟢' : g.ok === false ? '🔴' : '🟡';
+    if (g.ok === true) score += weights[i];
+    else if (g.ok === 'partial') score += Math.floor(weights[i]/2);
+    const row = document.createElement('div');
+    row.className = 'gap-row';
+    row.innerHTML = `<span class="gap-light">${light}</span><span class="gap-label">${g.label}</span><span class="gap-note">${g.note}</span>`;
+    gapList.appendChild(row);
+  });
+
+  // Collected summary
+  const colEl = document.getElementById('collected-summary');
+  const colList = document.getElementById('collected-list');
+  if (intel.gmailCount || intel.driveCount || intel.waCount) {
+    colEl.style.display = '';
+    colList.innerHTML = [
+      intel.gmailCount ? `<div>📧 <strong style="color:#f1f5f9;">${intel.gmailCount}</strong> מיילים רלוונטיים (${intel.brumerEmails} עם ברומר)</div>` : '',
+      intel.driveCount ? `<div>📁 <strong style="color:#f1f5f9;">${intel.driveCount}</strong> קבצים ב-Drive</div>` : '',
+      intel.waCount ? `<div>💬 <strong style="color:#f1f5f9;">${intel.waCount}</strong> הודעות WhatsApp רלוונטיות</div>` : '',
+    ].filter(Boolean).join('');
   }
+
+  // Score display
+  const scoreEl = document.getElementById('score-display');
+  const color = score >= 70 ? '#10b981' : score >= 45 ? '#f59e0b' : '#ef4444';
+  const label = score >= 70 ? 'חזק — המשך לקדם' : score >= 45 ? 'בינוני — יש עבודה' : 'חלש — נדרשת חיזוק';
+  scoreEl.innerHTML = `
+    <div style="font-size:13px;color:#94a3b8;margin-bottom:8px;">ציון מבוסס נתונים שנאספו</div>
+    <div style="font-size:36px;font-weight:800;color:${color};font-family:'JetBrains Mono',monospace;">${score}%</div>
+    <div class="score-bar-wrap"><div class="score-bar-fill" style="width:${score}%"></div></div>
+    <div style="font-size:12px;color:${color};font-weight:600;margin-bottom:12px;">${label}</div>
+    <div style="display:flex;flex-direction:column;gap:6px;font-size:13px;">
+      ${gaps.filter(g=>g.ok===true).map(g=>`<div>✅ ${g.label}</div>`).join('')}
+      ${gaps.filter(g=>g.ok===false).map(g=>`<div style="color:#fca5a5;">❌ ${g.label} — ${g.note}</div>`).join('')}
+    </div>`;
 }
 
-function escHtml(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 </script>
 </body>
 </html>
