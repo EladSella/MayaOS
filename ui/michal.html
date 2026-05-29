@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>מיכל · תביעה כנגד הצבא</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-agent.css" />
+  <style>
+    :root { --grad-primary: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%); }
+    body { background-image: radial-gradient(ellipse at top right, rgba(99,102,241,0.14), transparent 60%); }
+    .agent-name { background: var(--grad-primary); -webkit-background-clip: text; color: transparent; }
+
+    .track { border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+    .track:last-child { margin-bottom: 0; }
+    .track-header { padding: 11px 14px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; }
+    .track-header.indigo { background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.3); border-bottom: none; border-radius: 12px 12px 0 0; color: #a5b4fc; }
+    .track-header.blue { background: rgba(59,130,246,.12); border: 1px solid rgba(59,130,246,.25); border-bottom: none; border-radius: 12px 12px 0 0; color: #93c5fd; }
+    .track-header.teal { background: rgba(20,184,166,.10); border: 1px solid rgba(20,184,166,.2); border-bottom: none; border-radius: 12px 12px 0 0; color: #5eead4; }
+    .track-body { padding: 12px 14px; border: 1px solid rgba(255,255,255,.08); border-top: none; border-radius: 0 0 12px 12px; display: flex; flex-direction: column; gap: 7px; }
+    .track-row { display: flex; gap: 10px; font-size: 13px; align-items: flex-start; }
+    .track-label { color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 10px; min-width: 72px; padding-top: 2px; flex-shrink: 0; }
+    .track-val { color: #f1f5f9; flex: 1; line-height: 1.45; }
+    .badge { display: inline-block; font-size: 9px; font-family: 'JetBrains Mono', monospace; padding: 2px 7px; border-radius: 999px; font-weight: 700; vertical-align: middle; margin-right: 4px; }
+    .badge.ok { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
+    .badge.pending { background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+    .badge.done { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.25); }
+
+    .meeting-box { padding: 13px 15px; border-radius: 10px; background: rgba(16,185,129,.08); border: 1px solid rgba(16,185,129,.25); }
+    .meeting-title { font-size: 13px; font-weight: 700; color: #6ee7b7; margin-bottom: 4px; }
+    .meeting-sub { font-size: 12px; color: #94a3b8; line-height: 1.5; }
+
+    .health-link { padding: 12px 14px; border-radius: 10px; background: rgba(99,102,241,.07); border: 1px solid rgba(99,102,241,.2); display: flex; gap: 10px; align-items: flex-start; }
+    .health-link-text { font-size: 12px; color: #a5b4fc; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <a href="legal.html" class="back-btn">חזרה למחלקת משפטים</a>
+
+    <div class="header">
+      <img src="assets/agent_michal.png" alt="Michal" class="agent-img"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22><rect width=%2270%22 height=%2270%22 rx=%2235%22 fill=%22%236366f1%22/><text x=%2235%22 y=%2244%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2226%22>מ</text></svg>'">
+      <div>
+        <div class="agent-name">מיכל (Michal)</div>
+        <div class="agent-role">מנהלת תיק צבאי · כנגד הצבא</div>
+      </div>
+    </div>
+
+    <!-- MEETING COMPLETED -->
+    <div class="card">
+      <div class="card-title">פגישה אחרונה</div>
+      <div class="meeting-box">
+        <div class="meeting-title">✅ פגישה עם פסיכיאטר — הושלמה</div>
+        <div class="meeting-sub">התבקשה חוות דעת מקצועית להכרה כנפגע טראומה (נפגע צבאי) — לצורך עורכת הדין.</div>
+      </div>
+    </div>
+
+    <!-- TRACKS -->
+    <div class="card">
+      <div class="card-title">מסלולי התביעה</div>
+
+      <!-- Track A: Trauma Recognition -->
+      <div class="track">
+        <div class="track-header indigo">🪖 &nbsp;מסלול א׳ — הכרה כנפגע טראומה</div>
+        <div class="track-body">
+          <div class="track-row">
+            <span class="track-label">נושא</span>
+            <span class="track-val">הכרה רשמית כנפגע טראומה מהשירות הצבאי</span>
+          </div>
+          <div class="track-row">
+            <span class="track-label">שלב</span>
+            <span class="track-val"><span class="badge pending">ממתין</span>חוות דעת פסיכיאטר · עדיין לא התקבלה</span>
+          </div>
+          <div class="track-row">
+            <span class="track-label">עורכת דין</span>
+            <span class="track-val">בתיק · ממתינה לחוות הדעת לפני הגשה לצבא</span>
+          </div>
+          <div class="track-row">
+            <span class="track-label">הוגש לצבא</span>
+            <span class="track-val">עדיין לא — תלוי בחוות הדעת</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Track B: Expert Opinion -->
+      <div class="track">
+        <div class="track-header blue">📋 &nbsp;מסלול ב׳ — חוות דעת פסיכיאטרית</div>
+        <div class="track-body">
+          <div class="track-row">
+            <span class="track-label">פגישה</span>
+            <span class="track-val"><span class="badge done">הושלמה</span>נפגשתי עם פסיכיאטר · ביקשתי חוות דעת</span>
+          </div>
+          <div class="track-row">
+            <span class="track-label">מה ביקשתי</span>
+            <span class="track-val">חוות דעת להכרה כנפגע טראומה עבור עורכת הדין</span>
+          </div>
+          <div class="track-row">
+            <span class="track-label">התקבלה?</span>
+            <span class="track-val"><span class="badge pending">לא עדיין</span>ממתין לחוות הדעת</span>
+          </div>
+          <div class="track-row">
+            <span class="track-label">צפי</span>
+            <span class="track-val">לא ידוע — לעקוב</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Track C: Supporting Documents -->
+      <div class="track">
+        <div class="track-header teal">📁 &nbsp;מסלול ג׳ — מסמכים תומכים</div>
+        <div class="track-body">
+          <div class="track-row">
+            <span class="track-label">חוות דעת</span>
+            <span class="track-val"><span class="badge pending">ממתין</span>פסיכיאטר · עדיין לא התקבלה</span>
+          </div>
+          <div class="track-row">
+            <span class="track-label">היסטוריה</span>
+            <span class="track-val">רשומות רפואיות רלוונטיות — לאסוף</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HEALTH DIVISION LINK -->
+    <div class="card">
+      <div class="card-title">קישור למחלקת בריאות</div>
+      <div class="health-link">
+        <span style="font-size:18px;flex-shrink:0;">🔗</span>
+        <div class="health-link-text">
+          <strong style="color:#a5b4fc;">מיה ו-ד"ר ליאם</strong> מחזיקים היסטוריית סטרס וטראומה שעשויה לתמוך בתביעה. ייתכן שיהיה צורך לשלב מסמכים מהמחלקה הרפואית.
+        </div>
+      </div>
+    </div>
+
+    <!-- NEXT ACTION -->
+    <div class="card" style="border-color:rgba(99,102,241,.3);background:rgba(99,102,241,.06);">
+      <div class="card-title" style="color:#6366f1;">פעולה נדרשת הבאה</div>
+      <div style="font-size:14px;font-weight:600;color:#a5b4fc;">המתן לחוות הדעת הפסיכיאטרית</div>
+      <div style="font-size:12px;color:#94a3b8;margin-top:6px;">כאשר תתקבל — העבר לעורכת הדין מיידית ועדכן את הסטטוס</div>
+    </div>
+
+  </div>
+</body>
+</html>

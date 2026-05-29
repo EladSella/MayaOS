@@ -323,18 +323,24 @@
       </div>
 
       <!-- Legal -->
-      <div class="division" style="cursor:default;">
+      <div class="division" onclick="window.location.href='legal.html'" style="cursor:pointer;">
         <div class="div-header">
           <img src="assets/agent_amir.png" class="exec-avatar" alt="Amir">
           <div class="div-info">
             <div class="div-name">מחלקת משפטים (Legal)</div>
-            <div class="div-exec-name">Dir: Amir</div>
+            <div class="div-exec-name">Dir: Amir · 2 תביעות פעילות</div>
           </div>
-          <div class="div-badge badge-active">V1_ACTIVE</div>
+          <div class="div-badge badge-active">V2_PARTIAL</div>
         </div>
         <div class="sub-agents">
-          <div class="sub-agent"><img src="assets/agent_michal.png" title="Michal"><span class="sub-agent-name">Michal</span></div>
-          <div class="sub-agent"><img src="assets/agent_gil.png" title="Gil"><span class="sub-agent-name">Gil</span></div>
+          <div class="sub-agent" onclick="event.stopPropagation();window.location.href='gil.html'" style="cursor:pointer;">
+            <img src="assets/agent_gil.png" title="Gil — תיק לירון">
+            <span class="sub-agent-name">Gil</span>
+          </div>
+          <div class="sub-agent" onclick="event.stopPropagation();window.location.href='michal.html'" style="cursor:pointer;">
+            <img src="assets/agent_michal.png" title="Michal — תביעה כנגד הצבא">
+            <span class="sub-agent-name">Michal</span>
+          </div>
         </div>
       </div>
 

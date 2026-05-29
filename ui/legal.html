@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MayaOS · מחלקת משפטים</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-0: #0f172a;
+      --panel: rgba(255,255,255,0.045);
+      --border: rgba(255,255,255,0.09);
+      --border-strong: rgba(255,255,255,0.16);
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --gold: #f59e0b;
+      --gold-strong: #d97706;
+      --blue: #3b82f6;
+      --success: #10b981;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+      --grad-primary: linear-gradient(135deg, #f59e0b 0%, #3b82f6 100%);
+      --shadow-card: 0 10px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset;
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { font-family: 'Outfit', system-ui, sans-serif; color: var(--text); background: var(--bg-0); -webkit-font-smoothing: antialiased; }
+    body {
+      background:
+        radial-gradient(ellipse 80% 50% at 80% -10%, rgba(245,158,11,.12), transparent 70%),
+        radial-gradient(ellipse 60% 40% at 10% 20%, rgba(59,130,246,.10), transparent 70%),
+        var(--bg-0);
+      min-height: 100vh; padding: 24px 16px 60px;
+    }
+    .app { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+    /* NAV */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--gold); text-decoration: none; font-size: 14px; font-weight: 600;
+      background: rgba(245,158,11,.1); padding: 8px 16px; border-radius: 12px;
+      border: 1px solid rgba(245,158,11,.2); transition: all .2s; width: fit-content;
+    }
+    .back-link:hover { background: rgba(245,158,11,.18); }
+
+    /* CARDS */
+    .card {
+      padding: 22px; border-radius: var(--radius);
+      background: var(--panel); backdrop-filter: blur(20px);
+      border: 1px solid var(--border); box-shadow: var(--shadow-card);
+    }
+    .card-title { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 16px; }
+
+    /* HEADER */
+    .header { position: relative; overflow: hidden; }
+    .header::before {
+      content: ''; position: absolute; top: -60px; right: -40px;
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(245,158,11,.15), transparent 60%);
+      pointer-events: none;
+    }
+    .brand-name { font-size: 11px; font-weight: 700; color: var(--text-dim); letter-spacing: .15em; text-transform: uppercase; margin-bottom: 14px; font-family: 'JetBrains Mono', monospace; }
+    .mode-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.25); border-radius: 999px; padding: 3px 10px; margin-bottom: 16px; letter-spacing: .05em; }
+    .executive { display: flex; align-items: center; gap: 14px; }
+    .exec-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(245,158,11,.4); box-shadow: 0 0 20px rgba(245,158,11,.2); flex-shrink: 0; }
+    .exec-name { font-size: 20px; font-weight: 800; background: var(--grad-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .exec-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .status-pill { display: flex; align-items: center; gap: 8px; margin-top: 14px; padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.2); font-size: 13px; font-weight: 600; color: #fcd34d; }
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: pulse 2s ease-in-out infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(.8);} }
+
+    /* SECTION */
+    .section { display: flex; flex-direction: column; gap: 14px; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .section-title { font-size: 16px; font-weight: 700; }
+    .section-agent { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--text-dim); background: rgba(255,255,255,.05); padding: 3px 8px; border-radius: 6px; }
+
+    /* CASE CARDS */
+    .case-card { border-radius: var(--radius-sm); overflow: hidden; cursor: pointer; transition: all .2s; }
+    .case-card:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,.3); }
+    .case-header { padding: 14px 16px; display: flex; align-items: center; gap: 12px; }
+    .case-header.gold { background: rgba(245,158,11,.12); border: 1px solid rgba(245,158,11,.25); border-bottom: none; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+    .case-header.blue { background: rgba(99,102,241,.12); border: 1px solid rgba(99,102,241,.25); border-bottom: none; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+    .case-icon { font-size: 22px; }
+    .case-name { font-size: 15px; font-weight: 700; }
+    .case-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .case-body { padding: 14px 16px; border: 1px solid rgba(255,255,255,.08); border-top: none; border-radius: 0 0 var(--radius-sm) var(--radius-sm); display: flex; flex-direction: column; gap: 8px; }
+    .case-row { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; }
+    .case-row-label { color: var(--text-dim); font-weight: 600; min-width: 80px; flex-shrink: 0; font-family: 'JetBrains Mono', monospace; font-size: 11px; padding-top: 1px; }
+    .case-row-val { color: var(--text); flex: 1; line-height: 1.4; }
+    .badge-stage { display: inline-block; font-size: 10px; font-family: 'JetBrains Mono', monospace; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+    .badge-stage.active { background: rgba(245,158,11,.15); color: #fcd34d; border: 1px solid rgba(245,158,11,.3); }
+    .badge-stage.pending { background: rgba(59,130,246,.15); color: #93c5fd; border: 1px solid rgba(59,130,246,.3); }
+    .badge-stage.ready { background: rgba(16,185,129,.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,.3); }
+    .badge-stage.blocked { background: rgba(239,68,68,.12); color: #fca5a5; border: 1px solid rgba(239,68,68,.25); }
+
+    /* BLOCKER */
+    .blocker-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px 14px; border-radius: var(--radius-sm); background: rgba(239,68,68,.07); border: 1px solid rgba(239,68,68,.2); font-size: 13px; }
+    .blocker-icon { flex-shrink: 0; font-size: 15px; padding-top: 1px; }
+    .blocker-text { flex: 1; color: #fca5a5; line-height: 1.4; }
+    .blocker-case { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); margin-top: 3px; }
+
+    /* ROSTER */
+    .roster { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .agent-card { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 18px 12px; border-radius: var(--radius-sm); background: rgba(255,255,255,.04); border: 1px solid var(--border); cursor: pointer; transition: all .2s; text-align: center; }
+    .agent-card:hover { background: rgba(255,255,255,.08); border-color: rgba(245,158,11,.3); transform: translateY(-2px); }
+    .agent-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(245,158,11,.3); }
+    .agent-name { font-size: 14px; font-weight: 700; }
+    .agent-role { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); }
+    .agent-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    .footer-note { text-align: center; font-size: 10.5px; color: var(--text-dim); padding: 8px; font-family: 'JetBrains Mono', monospace; letter-spacing: .05em; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <a href="maya.html" class="back-link">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+    חזור ללוח הבקרה של מאיה
+  </a>
+
+  <!-- HEADER -->
+  <header class="card header">
+    <div class="brand-name">MayaOS // Legal Division</div>
+    <div class="mode-tag">active_legal_proceedings</div>
+    <div class="executive">
+      <img src="assets/agent_amir.png" alt="Amir" class="exec-avatar"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2256%22 height=%2256%22><rect width=%2256%22 height=%2256%22 rx=%2228%22 fill=%22%23f59e0b%22/><text x=%2228%22 y=%2236%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2224%22>א</text></svg>'">
+      <div>
+        <div class="exec-name">אמיר — CLO</div>
+        <div class="exec-role">מנהל משפטים · Tier 1 · כפוף למאיה</div>
+      </div>
+    </div>
+    <div class="status-pill">
+      <div class="pulse-dot"></div>
+      2 תביעות פעילות · ממתין לחוות דעת פסיכיאטר
+    </div>
+  </header>
+
+  <!-- CASE STATUS -->
+  <section class="section">
+    <div class="card">
+      <div class="section-head">
+        <div class="section-title">סטטוס תביעות פעילות</div>
+        <span class="section-agent">amir · synthesis</span>
+      </div>
+
+      <!-- Gil / Liron -->
+      <div class="case-card" onclick="window.location.href='gil.html'" style="margin-bottom:12px;">
+        <div class="case-header gold">
+          <span class="case-icon">⚖️</span>
+          <div>
+            <div class="case-name">תיק גיל — משפחה</div>
+            <div class="case-sub">כנגד לירון · משמורת + מזונות</div>
+          </div>
+          <svg style="margin-right:auto;color:#f59e0b;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="case-body">
+          <div class="case-row">
+            <span class="case-row-label">משמורת</span>
+            <span class="case-row-val">תביעת 7:7 הוגשה · ממתין לתאריך דיון <span class="badge-stage active">פעיל</span></span>
+          </div>
+          <div class="case-row">
+            <span class="case-row-label">מזונות</span>
+            <span class="case-row-val">חומר לביטול מוכן (הוכן ע"י Claude) <span class="badge-stage ready">מוכן</span></span>
+          </div>
+          <div class="case-row">
+            <span class="case-row-label">סעיף ג'</span>
+            <span class="case-row-val">חתום — ויתור על גישור ופגישות מהות ✓</span>
+          </div>
+          <div class="case-row">
+            <span class="case-row-label">איילה</span>
+            <span class="case-row-val">בקשה לטיפול רגשי — ממתינה לתגובה <span class="badge-stage pending">ממתין</span></span>
+          </div>
+          <div class="case-row">
+            <span class="case-row-label">תקשורת</span>
+            <span class="case-row-val">מורכבת מאוד עם לירון <span class="badge-stage blocked">חסום</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Michal / IDF -->
+      <div class="case-card" onclick="window.location.href='michal.html'">
+        <div class="case-header blue">
+          <span class="case-icon">🪖</span>
+          <div>
+            <div class="case-name">תיק מיכל — צבאי</div>
+            <div class="case-sub">כנגד הצבא · הכרה כנפגע טראומה</div>
+          </div>
+          <svg style="margin-right:auto;color:#6366f1;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </div>
+        <div class="case-body">
+          <div class="case-row">
+            <span class="case-row-label">שלב</span>
+            <span class="case-row-val">ממתין לחוות דעת פסיכיאטר <span class="badge-stage pending">ממתין</span></span>
+          </div>
+          <div class="case-row">
+            <span class="case-row-label">פגישה</span>
+            <span class="case-row-val">פסיכיאטר — הושלמה ✓ · ביקשתי חוות דעת</span>
+          </div>
+          <div class="case-row">
+            <span class="case-row-label">עורכת דין</span>
+            <span class="case-row-val">בתיק · ממתינה לחוות הדעת</span>
+          </div>
+          <div class="case-row">
+            <span class="case-row-label">הגשה לצבא</span>
+            <span class="case-row-val">עדיין לא — תלוי בחוות הדעת <span class="badge-stage pending">ממתין</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCKERS -->
+  <section class="section">
+    <div class="card">
+      <div class="card-title">חסמים פעילים</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="blocker-item">
+          <span class="blocker-icon">🚧</span>
+          <div>
+            <div class="blocker-text">תקשורת קשה עם לירון — מקשה על קידום תביעת הטיפול לאיילה</div>
+            <div class="blocker-case">תיק גיל · severity: high</div>
+          </div>
+        </div>
+        <div class="blocker-item">
+          <span class="blocker-icon">⏳</span>
+          <div>
+            <div class="blocker-text">חוות דעת פסיכיאטר — לא התקבלה עדיין · עורכת הדין ממתינה</div>
+            <div class="blocker-case">תיק מיכל · severity: medium</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROSTER -->
+  <section class="section">
+    <div class="card">
+      <div class="section-head">
+        <div class="section-title">סגל סוכני משפטים</div>
+        <span class="section-agent">maya · legal</span>
+      </div>
+      <div class="roster">
+        <div class="agent-card" onclick="window.location.href='gil.html'">
+          <img class="agent-img" src="assets/agent_gil.png" alt="Gil"
+               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2272%22 height=%2272%22><rect width=%2272%22 height=%2272%22 rx=%2236%22 fill=%22%23ef4444%22/><text x=%2236%22 y=%2246%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2228%22>ג</text></svg>'">
+          <div class="agent-name">גיל</div>
+          <div class="agent-role">family law</div>
+          <div class="agent-desc">תיק לירון · משמורת + מזונות</div>
+        </div>
+        <div class="agent-card" onclick="window.location.href='michal.html'">
+          <img class="agent-img" src="assets/agent_michal.png" alt="Michal"
+               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2272%22 height=%2272%22><rect width=%2272%22 height=%2272%22 rx=%2236%22 fill=%22%236366f1%22/><text x=%2236%22 y=%2246%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2228%22>מ</text></svg>'">
+          <div class="agent-name">מיכל</div>
+          <div class="agent-role">idf claim</div>
+          <div class="agent-desc">תביעה כנגד הצבא · נפגע טראומה</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">v2-partial · legal · כפוף למאיה · עדכון 2026-05-29</div>
+</div>
+</body>
+</html>

@@ -23,9 +23,11 @@
     ]
   },
   "legal": {
-    "status": "v1_active",
+    "status": "v2_partial",
+    "activation_reason": "Two active legal proceedings: family law (custody 7:7 + alimony vs. Liron) and IDF trauma recognition claim. Activated 2026-05-29.",
     "executive": "Amir",
     "executive_file": "agents/amir_agent.txt",
+    "master_prompt": "prompts/amir_master_prompt.txt",
     "active_sub_agents": [
       "Michal",
       "Gil"
@@ -35,7 +37,58 @@
       "Ido",
       "Ronit",
       "Amit"
-    ]
+    ],
+    "agent_directories": {
+      "Amir": {
+        "dir": "agents/amir",
+        "persona": "agents/amir/persona.md",
+        "state": "agents/amir/state.json",
+        "history": "agents/amir/history.json",
+        "protocol": "agents/amir/protocol.md",
+        "inbox": "agents/amir/inbox.json",
+        "outbox": "agents/amir/outbox.json",
+        "runner": "network/invoke_amir.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "tier": 1,
+        "role": "Legal Executive (synthesizer over Gil and Michal)",
+        "build_status": "legal_executive_v2_agent",
+        "data_model": "cross_case_synthesis",
+        "cli_commands": ["--status", "--synthesize", "message"]
+      },
+      "Gil": {
+        "dir": "agents/gil",
+        "persona": "agents/gil/persona.md",
+        "state": "agents/gil/state.json",
+        "history": "agents/gil/history.json",
+        "protocol": "agents/gil/protocol.md",
+        "inbox": "agents/gil/inbox.json",
+        "outbox": "agents/gil/outbox.json",
+        "runner": "network/invoke_gil.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "build_status": "legal_sub_v2_agent",
+        "data_model": "family_law_case_tracks",
+        "special_capability": "tracks custody, alimony, and Ayala therapy as separate sub-tracks",
+        "cli_commands": ["--status", "--log", "message"]
+      },
+      "Michal": {
+        "dir": "agents/michal",
+        "persona": "agents/michal/persona.md",
+        "state": "agents/michal/state.json",
+        "history": "agents/michal/history.json",
+        "protocol": "agents/michal/protocol.md",
+        "inbox": "agents/michal/inbox.json",
+        "outbox": "agents/michal/outbox.json",
+        "runner": "network/invoke_michal.py",
+        "standalone_invokable": true,
+        "network_invokable": true,
+        "build_status": "legal_sub_v2_agent",
+        "data_model": "idf_claim_tracks",
+        "special_capability": "cross-references health division for trauma documentation",
+        "cli_commands": ["--status", "--log", "message"]
+      }
+    }
   },
   "health": {
     "status": "v2_partial",

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>אמיר · מנהל משפטים</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-agent.css" />
+  <style>
+    :root { --grad-primary: linear-gradient(135deg, #f59e0b 0%, #3b82f6 100%); }
+    body { background-image: radial-gradient(ellipse at top right, rgba(245,158,11,0.12), transparent 60%); }
+    .agent-name { background: var(--grad-primary); -webkit-background-clip: text; color: transparent; }
+
+    .case-btn {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 18px; border-radius: 14px; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04);
+      transition: all .2s; text-decoration: none; margin-bottom: 10px;
+    }
+    .case-btn:last-child { margin-bottom: 0; }
+    .case-btn:hover { transform: translateY(-2px); }
+    .case-btn.gold { border-color: rgba(245,158,11,.3); background: rgba(245,158,11,.07); }
+    .case-btn.gold:hover { background: rgba(245,158,11,.12); }
+    .case-btn.indigo { border-color: rgba(99,102,241,.3); background: rgba(99,102,241,.07); }
+    .case-btn.indigo:hover { background: rgba(99,102,241,.12); }
+    .case-icon { font-size: 26px; flex-shrink: 0; }
+    .case-info { flex: 1; }
+    .case-name { font-size: 15px; font-weight: 700; color: #f1f5f9; }
+    .case-sub { font-size: 12px; color: #94a3b8; margin-top: 3px; }
+    .case-stage { font-family: 'JetBrains Mono', monospace; font-size: 10px; margin-top: 6px; padding: 2px 8px; border-radius: 999px; display: inline-block; }
+    .case-stage.active { background: rgba(245,158,11,.15); color: #fcd34d; border: 1px solid rgba(245,158,11,.25); }
+    .case-stage.pending { background: rgba(99,102,241,.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,.25); }
+    .case-arrow { color: #475569; flex-shrink: 0; }
+
+    .row { display: flex; align-items: flex-start; gap: 10px; padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,.05); font-size: 13px; }
+    .row:last-child { border-bottom: none; padding-bottom: 0; }
+    .row-label { color: #64748b; font-family: 'JetBrains Mono', monospace; font-size: 10px; min-width: 80px; padding-top: 2px; flex-shrink: 0; }
+    .row-val { color: #f1f5f9; flex: 1; line-height: 1.45; }
+
+    .blocker { display: flex; gap: 10px; padding: 11px 14px; border-radius: 10px; background: rgba(239,68,68,.07); border: 1px solid rgba(239,68,68,.2); margin-bottom: 8px; font-size: 13px; }
+    .blocker:last-child { margin-bottom: 0; }
+    .blocker-text { color: #fca5a5; line-height: 1.4; }
+    .blocker-meta { font-size: 10px; color: #64748b; font-family: 'JetBrains Mono', monospace; margin-top: 3px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <a href="legal.html" class="back-btn">חזרה למחלקת משפטים</a>
+
+    <div class="header">
+      <img src="assets/agent_amir.png" alt="Amir" class="agent-img"
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2270%22 height=%2270%22><rect width=%2270%22 height=%2270%22 rx=%2235%22 fill=%22%23f59e0b%22/><text x=%2235%22 y=%2244%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2226%22>א</text></svg>'">
+      <div>
+        <div class="agent-name">אמיר (Amir)</div>
+        <div class="agent-role">מנהל משפטים · CLO · Tier 1 · כפוף למאיה</div>
+      </div>
+    </div>
+
+    <!-- SYNTHESIS -->
+    <div class="card">
+      <div class="card-title">סינתזה משפטית — שתי התביעות</div>
+
+      <a href="gil.html" class="case-btn gold">
+        <span class="case-icon">⚖️</span>
+        <div class="case-info">
+          <div class="case-name">תיק גיל — כנגד לירון</div>
+          <div class="case-sub">משמורת 7:7 · ביטול מזונות · טיפול לאיילה</div>
+          <span class="case-stage active">חומר מוכן · ממתין לדיון</span>
+        </div>
+        <svg class="case-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+
+      <a href="michal.html" class="case-btn indigo">
+        <span class="case-icon">🪖</span>
+        <div class="case-info">
+          <div class="case-name">תיק מיכל — כנגד הצבא</div>
+          <div class="case-sub">הכרה כנפגע טראומה · עורכת דין בתיק</div>
+          <span class="case-stage pending">ממתין לחוות דעת פסיכיאטר</span>
+        </div>
+        <svg class="case-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+    </div>
+
+    <!-- SYSTEM STATUS -->
+    <div class="card">
+      <div class="card-title">מצב מערכת משפטית</div>
+      <div class="row">
+        <span class="row-label">מצב כולל</span>
+        <span class="row-val">שתי תביעות פעילות · הליכים בתהליך</span>
+      </div>
+      <div class="row">
+        <span class="row-label">סעיף ג'</span>
+        <span class="row-val">✅ חתום — ויתור על גישור ופגישות מהות (תיק לירון)</span>
+      </div>
+      <div class="row">
+        <span class="row-label">חומר מזונות</span>
+        <span class="row-val">✅ מוכן (הכין Claude) · ממתין לשליחה לעורך דין</span>
+      </div>
+      <div class="row">
+        <span class="row-label">פגישת פסיכיאטר</span>
+        <span class="row-val">✅ הושלמה · ביקשתי חוות דעת להכרה כנפגע טראומה</span>
+      </div>
+      <div class="row">
+        <span class="row-label">תאריך דיון</span>
+        <span class="row-val">לא נקבע עדיין בשני התיקים</span>
+      </div>
+    </div>
+
+    <!-- BLOCKERS -->
+    <div class="card">
+      <div class="card-title">חסמים פעילים</div>
+      <div class="blocker">
+        <span style="font-size:16px;flex-shrink:0;">🚧</span>
+        <div>
+          <div class="blocker-text">תקשורת קשה עם לירון — מקשה על קידום כל הנושאים</div>
+          <div class="blocker-meta">תיק גיל · severity: high</div>
+        </div>
+      </div>
+      <div class="blocker">
+        <span style="font-size:16px;flex-shrink:0;">⏳</span>
+        <div>
+          <div class="blocker-text">חוות דעת פסיכיאטר — לא התקבלה · עורכת הדין ממתינה להגשה</div>
+          <div class="blocker-meta">תיק מיכל · severity: medium</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEXT ACTIONS -->
+    <div class="card" style="border-color:rgba(245,158,11,.25);background:rgba(245,158,11,.05);">
+      <div class="card-title" style="color:#f59e0b;">פעולות נדרשות</div>
+      <div class="row" style="border-color:rgba(245,158,11,.1);">
+        <span class="row-label" style="color:#f59e0b;">1</span>
+        <span class="row-val" style="font-weight:600;">שלח חומר מזונות לעורך הדין (מוכן — ממתין לשליחה)</span>
+      </div>
+      <div class="row" style="border-color:rgba(245,158,11,.1);">
+        <span class="row-label" style="color:#f59e0b;">2</span>
+        <span class="row-val" style="font-weight:600;">עקוב אחר חוות הדעת הפסיכיאטרית (תיק מיכל)</span>
+      </div>
+      <div class="row">
+        <span class="row-label" style="color:#f59e0b;">3</span>
+        <span class="row-val">תעד כל ניסיון תקשורת עם לירון (כל תיעוד = ראיה)</span>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
