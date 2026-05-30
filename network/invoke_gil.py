@@ -1,73 +1,39 @@
 """
-invoke_gil.py — Standalone runner for Gil (Family Law Case Manager).
-
-Usage:
-    python invoke_gil.py "your message to Gil"
-    python invoke_gil.py --status
-    python invoke_gil.py --log "update text"
+invoke_gil.py — Standalone runner for Gil (Family Case Manager — Legal).
 """
+import json, sys, argparse
+from core import AgentRunner, MessageBus
+AGENT_ID = "gil"; ROLE_TITLE = "Family Case Manager - Legal"
 
-import json
-import sys
-import argparse
-from datetime import datetime
-from core import AgentRunner
+def show_status(r):
+    s = r.load_json(r.agent_dir / "state.json")
+    return json.dumps({"agent":"gil","system_mode":s.get("system_mode"),"last_invoked":s.get("last_invoked"),"active_blockers":s.get("active_blockers",[])},indent=2,ensure_ascii=False)
 
+def show_inbox(bus): unread=bus.read_unread("gil"); print(json.dumps(unread,indent=2,ensure_ascii=False)) if unread else print("📭 No unread messages for gil")
 
-def show_status(runner: AgentRunner) -> str:
-    state = runner.load_json(runner.agent_dir / "state.json")
-    return json.dumps({
-        "case": state.get("case_name"),
-        "tracks": {
-            "custody_7_7": state["tracks"]["custody_7_7"]["stage"],
-            "alimony_cancellation": state["tracks"]["alimony_cancellation"]["stage"],
-            "ayala_therapy": state["tracks"]["ayala_therapy"]["stage"],
-        },
-        "key_agreements": [a["description"] + " — " + a["status"] for a in state.get("key_agreements", [])],
-        "communication": state["communication_log"]["status"],
-        "blockers": state.get("active_blockers", []),
-        "next_court_date": state.get("next_court_date"),
-        "last_updated": state.get("last_updated"),
-    }, indent=2, ensure_ascii=False)
+def send_message(bus,to,intent,data_str):
+    try: data=json.loads(data_str) if data_str and data_str!="{}" else {}
+    except: data={"message":data_str}
+    try: msg_id=bus.send("gil",to,intent,data); print(f"✅ Sent | gil → {to} | {msg_id}")
+    except PermissionError as e: print(f"❌ {e}",file=sys.stderr); sys.exit(1)
 
-
-def log_update(runner: AgentRunner, text: str) -> dict:
-    entry = {
-        "timestamp": datetime.now().astimezone().isoformat(),
-        "update": text,
-        "logged_by": "invoke_gil.py --log",
-    }
-    runner.update_history(entry)
-    runner.update_state({"last_updated": entry["timestamp"]})
-    return entry
-
+def process_inbox(bus):
+    unread=bus.read_unread("gil")
+    if not unread: print("📭 No unread"); return
+    for msg in unread:
+        print(f"  [{msg['msg_id']}] {msg['from']} | {msg['payload']['intent']}")
+        bus.mark_read("gil",msg["msg_id"]); bus.update_log_status(msg["msg_id"],"read")
+    print(f"✅ {len(unread)} marked read.")
 
 def main():
-    parser = argparse.ArgumentParser(description="Invoke Gil — Family Law Case Manager.")
-    parser.add_argument("message", nargs="?", help="Message to Gil.")
-    parser.add_argument("--status", action="store_true", help="Show case status.")
-    parser.add_argument("--log", help="Log a case update.")
-    args = parser.parse_args()
+    p=argparse.ArgumentParser(); p.add_argument("message",nargs="?"); p.add_argument("--status",action="store_true")
+    p.add_argument("--inbox",action="store_true"); p.add_argument("--send",nargs=3,metavar=("TMO","INTENT","DATA")); p.add_argument("--process-inbox",action="store_true")
+    a=p.parse_args(); r=AgentRunner("gil","Family Case Manager"); bus=MessageBus()
+    if a.inbox: show_inbox(bus); return
+    if a.send: send_message(bus,a.send[0],a.send[1],a.send[2]); return
+    if a.process_inbox: process_inbox(bus); return
+    if a.status: print(show_status(r)); return
+    if a.message: print(r.build_boot_prompt(a.message)); return
+    p.print_help(); sys.exit(1)
 
-    runner = AgentRunner("gil", "Family Law Case Manager")
-
-    if args.status:
-        print(show_status(runner))
-        return
-
-    if args.log:
-        entry = log_update(runner, args.log)
-        print("Logged:")
-        print(json.dumps(entry, indent=2, ensure_ascii=False))
-        return
-
-    if args.message:
-        print(runner.build_boot_prompt(args.message))
-        return
-
-    parser.print_help()
-    sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
+if __name__=="__main__": main()

@@ -1,12 +1,12 @@
 """
-invoke_mia.py — Standalone runner for Mia (Stress Management Agent).
+invoke_daniel.py — Standalone runner for Daniel (Finance Executive).
 
 Usage:
-  python invoke_mia.py "your message"
-  python invoke_mia.py --status
-  python invoke_mia.py --inbox
-  python invoke_mia.py --send <to> <intent> <json_data>
-  python invoke_mia.py --process-inbox
+  python invoke_daniel.py "your message"
+  python invoke_daniel.py --status
+  python invoke_daniel.py --inbox
+  python invoke_daniel.py --send <to> <intent> <json_data>
+  python invoke_daniel.py --process-inbox
 """
 
 import json
@@ -15,8 +15,8 @@ import argparse
 from pathlib import Path
 from core import AgentRunner, MessageBus
 
-AGENT_ID = "mia"
-ROLE_TITLE = "Stress Management Agent"
+AGENT_ID = "daniel"
+ROLE_TITLE = "Finance Executive"
 
 
 def show_status(runner: AgentRunner) -> str:

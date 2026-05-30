@@ -1,7 +1,7 @@
 {
   "maya": {
     "tier": 0,
-    "division": "ceo",
+    "division": "executive",
     "reports_to": null,
     "direct_reports": ["dr_liam", "amir", "daniel", "ella"],
     "cross_links": []
@@ -76,18 +76,18 @@
     "direct_reports": ["ron"],
     "cross_links": []
   },
-  "ella": {
-    "tier": 1,
-    "division": "admin",
-    "reports_to": "maya",
-    "direct_reports": ["chen"],
-    "cross_links": []
-  },
   "ron": {
     "tier": 2,
     "division": "finance",
     "reports_to": "daniel",
     "direct_reports": [],
+    "cross_links": []
+  },
+  "ella": {
+    "tier": 1,
+    "division": "admin",
+    "reports_to": "maya",
+    "direct_reports": ["chen"],
     "cross_links": []
   },
   "chen": {

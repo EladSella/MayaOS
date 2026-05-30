@@ -1,74 +1,32 @@
 """
-invoke_michal.py — Standalone runner for Michal (IDF Claim Case Manager).
-
-Usage:
-    python invoke_michal.py "your message to Michal"
-    python invoke_michal.py --status
-    python invoke_michal.py --log "update text"
+invoke_michal.py — Standalone runner for Michal (IDF Case Manager — Legal).
 """
+import json, sys, argparse
+from core import AgentRunner, MessageBus
+AGENT_ID="michal"; ROLEE_TITLE="IDF Case Manager - Legal"
 
-import json
-import sys
-import argparse
-from datetime import datetime
-from core import AgentRunner
-
-
-def show_status(runner: AgentRunner) -> str:
-    state = runner.load_json(runner.agent_dir / "state.json")
-    return json.dumps({
-        "case": state.get("case_name"),
-        "tracks": {
-            "trauma_recognition": state["tracks"]["trauma_recognition"]["stage"],
-            "expert_opinion": {
-                "meeting_done": state["tracks"]["expert_opinion"]["psychiatric_meeting"]["completed"],
-                "opinion_received": state["tracks"]["expert_opinion"]["opinion_received"],
-                "expected": state["tracks"]["expert_opinion"]["expected_date"],
-            },
-        },
-        "blockers": state.get("active_blockers", []),
-        "next_court_date": state.get("next_court_date"),
-        "last_updated": state.get("last_updated"),
-    }, indent=2, ensure_ascii=False)
-
-
-def log_update(runner: AgentRunner, text: str) -> dict:
-    entry = {
-        "timestamp": datetime.now().astimezone().isoformat(),
-        "update": text,
-        "logged_by": "invoke_michal.py --log",
-    }
-    runner.update_history(entry)
-    runner.update_state({"last_updated": entry["timestamp"]})
-    return entry
-
-
+def show_status(r): s=r.load_json(r.agent_dir/"state.json"); return json.dumps({"agent":"michal","system_mode":s.get("system_mode"),"last_invoked":s.get("last_invoked"),"active_blockers":s.get("active_blockers",[])},indent=2,ensure_ascii=False)
+def show_inbox(bus): u=bus.read_unread("michal"); print(json.dumps(u,indent=2,ensure_ascii=False)) if u else print("📭 No unread messages for michal")
+def send_message(bus,t,intent,ds):
+    try: d=json.loads(ds) if ds and ds!="{}" else {}
+    except: d={"message":ds}
+    try: mid=bus.send("michal",t,intent,d); print(f"✅ Sent | michal → {t} | {mid}")
+    except PermissionError as e: print(f"❌ {e}",file=sys.stderr); sys.exit(1)
+def process_inbox(bus):
+    u=bus.read_unread("michal")
+    if not u: print("📭 No unread"); return
+    for m in u:
+        print(f"  [{m['msg_id']}] {m['from']} | {m['payload']['intent']}")
+        bus.mark_read("michal",m["msg_id"]); bus.update_log_status(m["msg_id"],"read")
+    print(f"✅ {len(u)} marked read.")
 def main():
-    parser = argparse.ArgumentParser(description="Invoke Michal — IDF Claim Case Manager.")
-    parser.add_argument("message", nargs="?", help="Message to Michal.")
-    parser.add_argument("--status", action="store_true", help="Show case status.")
-    parser.add_argument("--log", help="Log a case update.")
-    args = parser.parse_args()
-
-    runner = AgentRunner("michal", "IDF Claim Case Manager")
-
-    if args.status:
-        print(show_status(runner))
-        return
-
-    if args.log:
-        entry = log_update(runner, args.log)
-        print("Logged:")
-        print(json.dumps(entry, indent=2, ensure_ascii=False))
-        return
-
-    if args.message:
-        print(runner.build_boot_prompt(args.message))
-        return
-
-    parser.print_help()
-    sys.exit(1)
-
-
-if __name__ == "__main__":
-    main()
+    p=argparse.ArgumentParser(); p.add_argument("message",nargs="?"); p.add_argument("--status",action="store_true")
+    p.add_argument("--inbox",action="store_true"); p.add_argument("--send",nargs=3,metavar=("TO","INTENT","DATA")); p.add_argument("--process-inbox",action="store_true")
+    a=p.parse_args(); r=AgentRunner("michal","IDF Case Manager"); bus=MessageBus()
+    if a.inbox: show_inbox(bus); return
+    if a.send: send_message(bus,a.send[0],a.send[1],a.send[2]); return
+    if a.process_inbox: process_inbox(bus); return
+    if a.status: print(show_status(r)); return
+    if a.message: print(r.build_boot_prompt(a.message)); return
+    p.print_help(); sys.exit(1)
+if __name__=="__main__": main()
