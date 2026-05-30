@@ -1,1 +1,22 @@
-﻿[]
+[
+  {
+    "msg_id": "dd7f5183-515f-4819-9c67-f96216991ce5",
+    "timestamp": "2026-05-30T12:19:13.643053+03:00",
+    "from": "maya",
+    "to": "gil",
+    "type": "request",
+    "payload": {
+      "intent": "user_request",
+      "data": {
+        "original_message": "גיל, מה הסטטוס של תיק לירון? יש עדכון על המזונות?",
+        "routed_by": "maya",
+        "reason": "תיק משפחה — גיל (Family Case) מטפל",
+        "priority": "routine"
+      },
+      "context_refs": []
+    },
+    "confidence_level": "high",
+    "requires_response": false,
+    "status": "unread"
+  }
+]

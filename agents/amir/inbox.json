@@ -1,1 +1,21 @@
-﻿[]
+[
+  {
+    "msg_id": "4b5a35c0-d52a-4565-9b62-9287131abd51",
+    "timestamp": "2026-05-30T12:19:13.653324+03:00",
+    "from": "maya",
+    "to": "amir",
+    "type": "request",
+    "payload": {
+      "intent": "fyi_notification",
+      "data": {
+        "original_message": "גיל, מה הסטטוס של תיק לירון? יש עדכון על המזונות?",
+        "note": "לידיעה — נשלח ל['gil']",
+        "priority": "routine"
+      },
+      "context_refs": []
+    },
+    "confidence_level": "high",
+    "requires_response": false,
+    "status": "unread"
+  }
+]

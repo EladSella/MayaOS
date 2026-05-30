@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "msg_id": "dd366072-1936-478b-a35b-a49b80276e62",
+    "timestamp": "2026-05-30T12:19:13.876142+03:00",
+    "from": "maya",
+    "to": "gabriel",
+    "type": "request",
+    "payload": {
+      "intent": "user_request",
+      "data": {
+        "original_message": "כאב חזה חזק וקוצר נשימה",
+        "routed_by": "maya",
+        "reason": "מילות מפתח חירום — גבריאל (Triage) מקבל ראשון",
+        "priority": "CRITICAL"
+      },
+      "context_refs": []
+    },
+    "confidence_level": "high",
+    "requires_response": false,
+    "status": "unread"
+  }
+]

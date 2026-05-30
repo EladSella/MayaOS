@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "msg_id": "255b44ba-0034-4663-8609-ec9f54802f0c",
+    "timestamp": "2026-05-30T12:19:13.387622+03:00",
+    "from": "maya",
+    "to": "dr_liam",
+    "type": "request",
+    "payload": {
+      "intent": "fyi_notification",
+      "data": {
+        "original_message": "יש מייל מד'ר עמית דרואין amitdr@amitdr.com צריך לקבוע תור רופא משפחה",
+        "note": "לידיעה — נשלח ל['dana']",
+        "priority": "routine"
+      },
+      "context_refs": []
+    },
+    "confidence_level": "high",
+    "requires_response": false,
+    "status": "unread"
+  },
+  {
+    "msg_id": "862772a3-9efa-4912-9cb8-8229d23aa9ee",
+    "timestamp": "2026-05-30T12:19:13.888283+03:00",
+    "from": "maya",
+    "to": "dr_liam",
+    "type": "request",
+    "payload": {
+      "intent": "fyi_notification",
+      "data": {
+        "original_message": "כאב חזה חזק וקוצר נשימה",
+        "note": "לידיעה — נשלח ל['gabriel']",
+        "priority": "CRITICAL"
+      },
+      "context_refs": []
+    },
+    "confidence_level": "high",
+    "requires_response": false,
+    "status": "unread"
+  }
+]

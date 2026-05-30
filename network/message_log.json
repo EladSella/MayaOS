@@ -1,1 +1,50 @@
-[]
+[
+  {
+    "msg_id": "22c15dfe-8efa-41cb-bd44-e1f52e6205d7",
+    "timestamp": "2026-05-30T12:19:13.384905+03:00",
+    "from": "maya",
+    "to": "dana",
+    "intent": "user_request",
+    "status": "delivered"
+  },
+  {
+    "msg_id": "255b44ba-0034-4663-8609-ec9f54802f0c",
+    "timestamp": "2026-05-30T12:19:13.387622+03:00",
+    "from": "maya",
+    "to": "dr_liam",
+    "intent": "fyi_notification",
+    "status": "delivered"
+  },
+  {
+    "msg_id": "dd7f5183-515f-4819-9c67-f96216991ce5",
+    "timestamp": "2026-05-30T12:19:13.643053+03:00",
+    "from": "maya",
+    "to": "gil",
+    "intent": "user_request",
+    "status": "delivered"
+  },
+  {
+    "msg_id": "4b5a35c0-d52a-4565-9b62-9287131abd51",
+    "timestamp": "2026-05-30T12:19:13.653324+03:00",
+    "from": "maya",
+    "to": "amir",
+    "intent": "fyi_notification",
+    "status": "delivered"
+  },
+  {
+    "msg_id": "dd366072-1936-478b-a35b-a49b80276e62",
+    "timestamp": "2026-05-30T12:19:13.876142+03:00",
+    "from": "maya",
+    "to": "gabriel",
+    "intent": "user_request",
+    "status": "delivered"
+  },
+  {
+    "msg_id": "862772a3-9efa-4912-9cb8-8229d23aa9ee",
+    "timestamp": "2026-05-30T12:19:13.888283+03:00",
+    "from": "maya",
+    "to": "dr_liam",
+    "intent": "fyi_notification",
+    "status": "delivered"
+  }
+]

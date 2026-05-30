@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "msg_id": "22c15dfe-8efa-41cb-bd44-e1f52e6205d7",
+    "timestamp": "2026-05-30T12:19:13.384905+03:00",
+    "from": "maya",
+    "to": "dana",
+    "type": "request",
+    "payload": {
+      "intent": "user_request",
+      "data": {
+        "original_message": "יש מייל מד'ר עמית דרואין amitdr@amitdr.com צריך לקבוע תור רופא משפחה",
+        "routed_by": "maya",
+        "reason": "נדרשת קביעת תור — דנה (Appointments) מטפלת",
+        "priority": "routine"
+      },
+      "context_refs": []
+    },
+    "confidence_level": "high",
+    "requires_response": false,
+    "status": "unread"
+  }
+]
