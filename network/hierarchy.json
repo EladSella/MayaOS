@@ -1,0 +1,100 @@
+{
+  "maya": {
+    "tier": 0,
+    "division": "ceo",
+    "reports_to": null,
+    "direct_reports": ["dr_liam", "amir", "daniel", "ella"],
+    "cross_links": []
+  },
+  "dr_liam": {
+    "tier": 1,
+    "division": "health",
+    "reports_to": "maya",
+    "direct_reports": ["gabriel", "dana", "mia", "lian", "leo"],
+    "cross_links": ["amir", "michal", "gil"]
+  },
+  "amir": {
+    "tier": 1,
+    "division": "legal",
+    "reports_to": "maya",
+    "direct_reports": ["gil", "michal"],
+    "cross_links": ["dr_liam"]
+  },
+  "gil": {
+    "tier": 2,
+    "division": "legal",
+    "reports_to": "amir",
+    "direct_reports": [],
+    "cross_links": ["mia", "dr_liam"]
+  },
+  "michal": {
+    "tier": 2,
+    "division": "legal",
+    "reports_to": "amir",
+    "direct_reports": [],
+    "cross_links": ["dr_liam", "mia"]
+  },
+  "gabriel": {
+    "tier": 2,
+    "division": "health",
+    "reports_to": "dr_liam",
+    "direct_reports": [],
+    "cross_links": ["maya"]
+  },
+  "dana": {
+    "tier": 2,
+    "division": "health",
+    "reports_to": "dr_liam",
+    "direct_reports": [],
+    "cross_links": []
+  },
+  "mia": {
+    "tier": 2,
+    "division": "health",
+    "reports_to": "dr_liam",
+    "direct_reports": [],
+    "cross_links": ["gil", "michal"]
+  },
+  "lian": {
+    "tier": 2,
+    "division": "health",
+    "reports_to": "dr_liam",
+    "direct_reports": [],
+    "cross_links": []
+  },
+  "leo": {
+    "tier": 2,
+    "division": "health",
+    "reports_to": "dr_liam",
+    "direct_reports": [],
+    "cross_links": []
+  },
+  "daniel": {
+    "tier": 1,
+    "division": "finance",
+    "reports_to": "maya",
+    "direct_reports": ["ron"],
+    "cross_links": []
+  },
+  "ella": {
+    "tier": 1,
+    "division": "admin",
+    "reports_to": "maya",
+    "direct_reports": ["chen"],
+    "cross_links": []
+  },
+  "ron": {
+    "tier": 2,
+    "division": "finance",
+    "reports_to": "daniel",
+    "direct_reports": [],
+    "cross_links": []
+  },
+  "chen": {
+    "tier": 2,
+    "division": "admin",
+    "reports_to": "ella",
+    "direct_reports": [],
+    "cross_links": []
+  }
+}

@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+  <title>MayaOS · COWORK · רשת סוכנים</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0f1e;
+      --panel: rgba(255,255,255,.04);
+      --border: rgba(255,255,255,.08);
+      --text: #f1f5f9; --muted: #94a3b8; --dim: #475569;
+      --gold: #f59e0b; --red: #ef4444; --blue: #3b82f6;
+      --green: #10b981; --purple: #8b5cf6; --indigo: #6366f1;
+      --radius: 16px;
+    }
+    *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+    html,body { font-family:'Outfit',sans-serif; color:var(--text); background:var(--bg); -webkit-font-smoothing:antialiased; }
+    body {
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 10%, rgba(99,102,241,.08), transparent 60%),
+        radial-gradient(ellipse 50% 30% at 80% 80%, rgba(245,158,11,.06), transparent 60%),
+        var(--bg);
+      min-height:100vh; padding:20px 16px 60px;
+    }
+    .app { max-width:520px; margin:0 auto; display:flex; flex-direction:column; gap:16px; }
+
+    .back { display:inline-flex; align-items:center; gap:8px; color:var(--indigo); text-decoration:none; font-size:13px; font-weight:600; background:rgba(99,102,241,.1); padding:7px 14px; border-radius:10px; border:1px solid rgba(99,102,241,.2); width:fit-content; transition:all .2s; }
+    .back:hover { background:rgba(99,102,241,.18); }
+
+    .card { padding:20px; border-radius:var(--radius); background:var(--panel); border:1px solid var(--border); }
+    .card-title { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.1em; margin-bottom:14px; }
+
+    /* HEADER */
+    .hdr-title { font-size:22px; font-weight:800; background:linear-gradient(135deg,#6366f1,#3b82f6,#f59e0b); -webkit-background-clip:text; color:transparent; background-clip:text; }
+    .hdr-sub { font-size:12px; color:var(--dim); margin-top:4px; font-family:'JetBrains Mono',monospace; }
+    .network-status { display:flex; align-items:center; gap:8px; margin-top:12px; font-size:13px; font-weight:600; padding:9px 13px; border-radius:10px; background:rgba(99,102,241,.08); border:1px solid rgba(99,102,241,.2); color:#a5b4fc; }
+    .pulse { width:7px; height:7px; border-radius:50%; background:#6366f1; animation:pulse 2s infinite; flex-shrink:0; }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    /* TREE */
+    .tree-node { margin-bottom:6px; }
+    .node-row { display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:10px; cursor:pointer; transition:all .2s; border:1px solid transparent; }
+    .node-row:hover { background:rgba(255,255,255,.04); border-color:var(--border); }
+    .node-row.tier-0 { background:rgba(99,102,241,.08); border-color:rgba(99,102,241,.2); }
+    .node-row.tier-1 { background:rgba(255,255,255,.03); border-color:rgba(255,255,255,.06); margin-right:16px; }
+    .node-row.tier-2 { margin-right:36px; }
+    .node-connector { font-family:'JetBrains Mono',monospace; color:var(--dim); font-size:11px; flex-shrink:0; }
+    .node-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:12px; flex-shrink:0; }
+    .node-info { flex:1; }
+    .node-name { font-size:13px; font-weight:700; }
+    .node-role { font-size:10px; color:var(--dim); font-family:'JetBrains Mono',monospace; }
+    .node-badges { display:flex; gap:4px; align-items:center; }
+    .badge { font-size:9px; font-family:'JetBrains Mono',monospace; padding:2px 6px; border-radius:999px; font-weight:700; }
+    .badge.unread { background:rgba(239,68,68,.2); color:#fca5a5; border:1px solid rgba(239,68,68,.3); }
+    .badge.ok { background:rgba(16,185,129,.1); color:#6ee7b7; border:1px solid rgba(16,185,129,.2); }
+    .badge.div { background:rgba(99,102,241,.1); color:#a5b4fc; border:1px solid rgba(99,102,241,.2); }
+
+    /* CROSS LINKS */
+    .cross-row { display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:8px; font-size:12px; border:1px solid rgba(245,158,11,.15); background:rgba(245,158,11,.05); margin-bottom:6px; }
+    .cross-from { font-weight:700; color:#fcd34d; }
+    .cross-to { font-weight:700; color:#93c5fd; }
+    .cross-arrow { color:var(--dim); font-family:'JetBrains Mono',monospace; }
+
+    /* SEND */
+    .send-form { display:flex; flex-direction:column; gap:10px; }
+    .form-row { display:flex; gap:8px; }
+    select, input, textarea { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:10px; color:var(--text); font-family:'Outfit',sans-serif; font-size:13px; padding:10px 13px; outline:none; transition:border-color .2s; width:100%; }
+    select:focus, input:focus, textarea:focus { border-color:rgba(99,102,241,.5); }
+    option { background:#1e293b; }
+    .send-btn { padding:12px; border-radius:10px; border:none; cursor:pointer; background:linear-gradient(135deg,#6366f1,#3b82f6); color:white; font-size:13px; font-weight:700; font-family:'Outfit',sans-serif; transition:all .2s; }
+    .send-btn:hover { transform:translateY(-1px); filter:brightness(1.1); }
+    .send-result { padding:12px; border-radius:10px; font-size:12px; font-family:'JetBrains Mono',monospace; white-space:pre-wrap; word-break:break-all; display:none; }
+    .send-result.ok { background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.2); color:#6ee7b7; }
+    .send-result.err { background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.2); color:#fca5a5; }
+
+    /* LOG */
+    .log-item { display:flex; gap:10px; padding:9px 12px; border-radius:8px; border:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.02); margin-bottom:6px; font-size:12px; }
+    .log-item:last-child { margin-bottom:0; }
+    .log-from { color:#fcd34d; font-weight:700; font-family:'JetBrains Mono',monospace; min-width:60px; }
+    .log-arrow { color:var(--dim); }
+    .log-to { color:#93c5fd; font-weight:700; font-family:'JetBrains Mono',monospace; min-width:60px; }
+    .log-intent { color:var(--muted); flex:1; }
+    .log-time { color:var(--dim); font-family:'JetBrains Mono',monospace; font-size:10px; }
+
+    .refresh-btn { padding:8px 14px; border-radius:8px; border:1px solid rgba(99,102,241,.25); background:rgba(99,102,241,.08); color:#a5b4fc; font-size:12px; font-weight:600; cursor:pointer; font-family:'Outfit',sans-serif; transition:all .2s; }
+    .refresh-btn:hover { background:rgba(99,102,241,.15); }
+    .empty { text-align:center; padding:20px; color:var(--dim); font-size:12px; }
+    .footer { text-align:center; font-size:10px; color:var(--dim); font-family:'JetBrains Mono',monospace; }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <a href="maya.html" class="back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+    חזור למאיה
+  </a>
+
+  <!-- HEADER -->
+  <div class="card">
+    <div class="hdr-title">🔗 COWORK</div>
+    <div class="hdr-sub">MayaOS · מערכת תיאום בין-סוכנים · v1.0</div>
+    <div class="network-status">
+      <div class="pulse"></div>
+      <span id="net-status">רשת פעילה · <span id="agent-count">—</span> סוכנים · <span id="unread-total">—</span> הודעות ממתינות</span>
+    </div>
+  </div>
+
+  <!-- AGENT TREE -->
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div class="card-title" style="margin-bottom:0;">עץ סוכנים</div>
+      <button class="refresh-btn" onclick="loadTree()">🔄 רענן</button>
+    </div>
+    <div id="tree-container">
+      <div class="empty">טוען...</div>
+    </div>
+  </div>
+
+  <!-- CROSS LINKS -->
+  <div class="card">
+    <div class="card-title">קשרים רוחביים (cross-division)</div>
+    <div id="cross-container"><div class="empty">טוען...</div></div>
+  </div>
+
+  <!-- SEND MESSAGE -->
+  <div class="card">
+    <div class="card-title">📨 שלח הודעה בין סוכנים</div>
+    <div class="send-form">
+      <div class="form-row">
+        <select id="send-from"><option value="">מ...</option></select>
+        <select id="send-to"><option value="">אל...</option></select>
+      </div>
+      <input id="send-intent" placeholder="intent (למשל: track_update, request_context)" />
+      <input id="send-data" placeholder='data JSON (למשל: {"text":"עדכון תיק"})' />
+      <button class="send-btn" onclick="sendMessage()">🚀 שלח הודעה</button>
+      <div id="send-result" class="send-result"></div>
+    </div>
+  </div>
+
+  <!-- MESSAGE LOG -->
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div class="card-title" style="margin-bottom:0;">📋 לוג הודעות</div>
+      <button class="refresh-btn" onclick="loadLog()">🔄 רענן</button>
+    </div>
+    <div id="log-container"><div class="empty">אין הודעות עדיין</div></div>
+  </div>
+
+  <div class="footer">COWORK v1.0 · trigger-based · no autonomous loops · MayaOS 2026</div>
+</div>
+
+<script>
+// ══ CONFIG ══
+const HIERARCHY = {
+  maya:     { tier:0, division:'ceo',     reports_to:null,      direct_reports:['dr_liam','amir','daniel','ella'], cross_links:[] },
+  dr_liam:  { tier:1, division:'health',  reports_to:'maya',    direct_reports:['gabriel','dana','mia','lian','leo'], cross_links:['amir','michal','gil'] },
+  amir:     { tier:1, division:'legal',   reports_to:'maya',    direct_reports:['gil','michal'], cross_links:['dr_liam'] },
+  gil:      { tier:2, division:'legal',   reports_to:'amir',    direct_reports:[], cross_links:['mia','dr_liam'] },
+  michal:   { tier:2, division:'legal',   reports_to:'amir',    direct_reports:[], cross_links:['dr_liam','mia'] },
+  gabriel:  { tier:2, division:'health',  reports_to:'dr_liam', direct_reports:[], cross_links:['maya'] },
+  dana:     { tier:2, division:'health',  reports_to:'dr_liam', direct_reports:[], cross_links:[] },
+  mia:      { tier:2, division:'health',  reports_to:'dr_liam', direct_reports:[], cross_links:['gil','michal'] },
+  lian:     { tier:2, division:'health',  reports_to:'dr_liam', direct_reports:[], cross_links:[] },
+  leo:      { tier:2, division:'health',  reports_to:'dr_liam', direct_reports:[], cross_links:[] },
+  daniel:   { tier:1, division:'finance', reports_to:'maya',    direct_reports:['ron'], cross_links:[] },
+  ella:     { tier:1, division:'admin',   reports_to:'maya',    direct_reports:['chen'], cross_links:[] },
+  ron:      { tier:2, division:'finance', reports_to:'daniel',  direct_reports:[], cross_links:[] },
+  chen:     { tier:2, division:'admin',   reports_to:'ella',    direct_reports:[], cross_links:[] },
+};
+
+const DIV_COLORS = {
+  ceo:'#8b5cf6', health:'#10b981', legal:'#ef4444', finance:'#f59e0b', admin:'#3b82f6'
+};
+const AGENT_PAGES = {
+  maya:'maya.html', dr_liam:'health.html', amir:'amir.html', gil:'gil.html',
+  michal:'michal.html', gabriel:'gabriel.html', dana:'dana.html',
+  mia:'mia.html', lian:'lian.html', leo:'leo.html'
+};
+const AGENT_INITIALS = {
+  maya:'מ', dr_liam:'ל', amir:'א', gil:'ג', michal:'מ', gabriel:'ג',
+  dana:'ד', mia:'מ', lian:'ל', leo:'ל', daniel:'ד', ella:'א', ron:'ר', chen:'צ'
+};
+
+// Simulated inbox (reads from localStorage key "cowork_messages")
+function getMessages() {
+  try { return JSON.parse(localStorage.getItem('cowork_messages')||'[]'); } catch { return []; }
+}
+function saveMessages(msgs) { localStorage.setItem('cowork_messages', JSON.stringify(msgs)); }
+
+function unreadFor(agent) {
+  return getMessages().filter(m => m.to === agent && m.status === 'unread').length;
+}
+
+// ══ TREE ══
+function loadTree() {
+  const container = document.getElementById('tree-container');
+  container.innerHTML = '';
+  let totalUnread = 0;
+
+  function renderNode(agent, depth) {
+    const node = HIERARCHY[agent];
+    if (!node) return;
+    const color = DIV_COLORS[node.division] || '#64748b';
+    const initial = AGENT_INITIALS[agent] || agent[0].toUpperCase();
+    const unread = unreadFor(agent);
+    totalUnread += unread;
+    const page = AGENT_PAGES[agent];
+
+    const div = document.createElement('div');
+    div.className = 'tree-node';
+    const connector = depth === 0 ? '' : depth === 1 ? '├─ ' : '│  ├─ ';
+
+    div.innerHTML = `
+      <div class="node-row tier-${node.tier}" onclick="${page ? `window.location.href='${page}'` : 'void(0)'}">
+        ${depth > 0 ? `<span class="node-connector">${connector}</span>` : ''}
+        <div class="node-avatar" style="background:${color}22;color:${color};border:1px solid ${color}44;">${initial}</div>
+        <div class="node-info">
+          <div class="node-name">${agent === 'dr_liam' ? 'Dr. Liam' : agent.charAt(0).toUpperCase()+agent.slice(1)}</div>
+          <div class="node-role">${node.division} · tier ${node.tier}</div>
+        </div>
+        <div class="node-badges">
+          ${unread > 0 ? `<span class="badge unread">${unread} unread</span>` : '<span class="badge ok">✓</span>'}
+          <span class="badge div">${node.division}</span>
+        </div>
+      </div>`;
+    container.appendChild(div);
+
+    // Render children
+    (node.direct_reports || []).forEach(child => renderNode(child, depth + 1));
+  }
+
+  renderNode('maya', 0);
+
+  // Update stats
+  document.getElementById('agent-count').textContent = Object.keys(HIERARCHY).length;
+  document.getElementById('unread-total').textContent = totalUnread;
+}
+
+// ══ CROSS LINKS ══
+function loadCrossLinks() {
+  const container = document.getElementById('cross-container');
+  container.innerHTML = '';
+  const shown = new Set();
+
+  Object.entries(HIERARCHY).forEach(([agent, node]) => {
+    (node.cross_links || []).forEach(cl => {
+      const key = [agent,cl].sort().join('-');
+      if (shown.has(key)) return; shown.add(key);
+      const div = document.createElement('div');
+      div.className = 'cross-row';
+      div.innerHTML = `
+        <span class="cross-from">${agent}</span>
+        <span class="cross-arrow">↔</span>
+        <span class="cross-to">${cl}</span>
+        <span style="color:#475569;font-size:11px;font-family:'JetBrains Mono',monospace;flex:1;padding-right:8px;">${HIERARCHY[agent]?.division} ↔ ${HIERARCHY[cl]?.division}</span>`;
+      container.appendChild(div);
+    });
+  });
+
+  if (!container.children.length) container.innerHTML = '<div class="empty">אין קשרים רוחביים</div>';
+}
+
+// ══ SEND MESSAGE ══
+function populateSelects() {
+  const agents = Object.keys(HIERARCHY);
+  ['send-from','send-to'].forEach(id => {
+    const sel = document.getElementById(id);
+    const label = id === 'send-from' ? 'מ...' : 'אל...';
+    sel.innerHTML = `<option value="">${label}</option>`;
+    agents.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a; opt.textContent = a === 'dr_liam' ? 'Dr. Liam' : a.charAt(0).toUpperCase()+a.slice(1);
+      sel.appendChild(opt);
+    });
+  });
+}
+
+function canMessage(from, to) {
+  if (!from || !to) return { ok: false, reason: 'בחר סוכנים' };
+  const f = HIERARCHY[from], t = HIERARCHY[to];
+  if (!f || !t) return { ok: false, reason: 'סוכן לא מוכר' };
+  if (f.tier === 0) return { ok: true, reason: 'CEO — גישה מלאה' };
+  if (f.reports_to === to) return { ok: true, reason: 'דיווח UP ↑' };
+  if ((f.direct_reports||[]).includes(to)) return { ok: true, reason: 'הנחיה DOWN ↓' };
+  if ((f.cross_links||[]).includes(to)) return { ok: true, reason: 'קשר רוחבי ↔' };
+  if (t.tier === 0) return { ok: true, reason: 'הודעה ל-CEO' };
+  return { ok: false, reason: `אסור: אין קשר מוגדר בין ${from} ל-${to}` };
+}
+
+function sendMessage() {
+  const from = document.getElementById('send-from').value;
+  const to = document.getElementById('send-to').value;
+  const intent = document.getElementById('send-intent').value.trim();
+  const dataStr = document.getElementById('send-data').value.trim();
+  const resultEl = document.getElementById('send-result');
+
+  if (!from || !to || !intent) {
+    resultEl.className = 'send-result err'; resultEl.style.display = '';
+    resultEl.textContent = 'שגיאה: מלא From, To ו-Intent'; return;
+  }
+
+  const { ok, reason } = canMessage(from, to);
+  if (!ok) {
+    resultEl.className = 'send-result err'; resultEl.style.display = '';
+    resultEl.textContent = `🚫 ${reason}`; return;
+  }
+
+  let data = {};
+  if (dataStr) { try { data = JSON.parse(dataStr); } catch { data = { text: dataStr }; } }
+
+  const msg = {
+    msg_id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36),
+    timestamp: new Date().toISOString(),
+    from, to,
+    type: 'request',
+    payload: { intent, data, context_refs:[] },
+    confidence_level: 'high',
+    requires_response: false,
+    status: 'unread'
+  };
+
+  const msgs = getMessages();
+  msgs.push(msg);
+  saveMessages(msgs);
+
+  resultEl.className = 'send-result ok'; resultEl.style.display = '';
+  resultEl.textContent = `✓ הועבר\nמ: ${from} → ${to}\nintent: ${intent}\nהרשאה: ${reason}\nmsg_id: ${msg.msg_id}`;
+
+  loadTree();
+  loadLog();
+}
+
+// ══ LOG ══
+function loadLog() {
+  const container = document.getElementById('log-container');
+  const msgs = getMessages().slice().reverse().slice(0, 20);
+  if (!msgs.length) { container.innerHTML = '<div class="empty">אין הודעות עדיין</div>'; return; }
+
+  container.innerHTML = '';
+  msgs.forEach(m => {
+    const d = document.createElement('div');
+    d.className = 'log-item';
+    const time = new Date(m.timestamp).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+    d.innerHTML = `
+      <span class="log-from">${m.from}</span>
+      <span class="log-arrow">→</span>
+      <span class="log-to">${m.to}</span>
+      <span class="log-intent">${m.payload?.intent||''}</span>
+      <span class="log-time">${time}</span>`;
+    container.appendChild(d);
+  });
+}
+
+// ══ INIT ══
+loadTree();
+loadCrossLinks();
+populateSelects();
+loadLog();
+</script>
+</body>
+</html>
