@@ -546,6 +546,9 @@
     transition:all .15s;font-family:'Outfit',sans-serif;
   }
   .mhint-chip:hover{background:rgba(99,102,241,.15);}
+
+  @keyframes fadeStep { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  .chain-wrap { display:flex;flex-direction:column;gap:5px;margin-bottom:2px; }
 </style>
 
 <button class="mfab" onclick="mOpen()" id="maya-fab">
@@ -596,295 +599,335 @@
 // AGENT KNOWLEDGE BASE
 // ══════════════════════════════════
 const KB = {
-  maya: {
-    name:'Maya', role:'CEO — מנכ"לית MayaOS', division:'ceo', tier:0,
-    desc:'מאיה היא המנכ"לית של MayaOS — רשת ה-AI האישית של אלעד. היא מקבלת דיווחים מכל מנהלי המחלקות, מנתבת בקשות, ומפקחת על כל הסוכנים.',
-    responsibilities:['ניתוב בקשות לסוכנים הנכונים','קבלת דיווחים מ-Dr.Liam ואמיר','פיקוח על כל הרשת','הפעלת CEO override בעת הצורך'],
-    reports:['dr_liam','amir','daniel','ella'], page:'maya.html'
-  },
-  dr_liam: {
-    name:'Dr. Liam', role:'מנהל מחלקת הבריאות', division:'health', tier:1,
-    desc:"ד'ר ליאם הוא מנהל מחלקת הבריאות — מסנתז את כל המידע הרפואי מגבריאל, דנה, מיה, ליאן וליאו, ומדווח למאיה.",
-    responsibilities:['סינתזת מידע בריאותי','המלצות על מצב כללי','ניהול המחלקה','דיווח למאיה'],
-    reports:['gabriel','dana','mia','lian','leo'], page:'health.html'
-  },
-  gabriel: {
-    name:'Gabriel', role:'חירום רפואי ו-Triage', division:'health', tier:2,
-    desc:'גבריאל הוא סוכן החירום — עושה pre-screen של מילות מפתח, ומסמן אירועים כדחופים. מדווח ל-Dr.Liam.',
-    responsibilities:['זיהוי מצבי חירום','pre-screen מילות מפתח','תיעוד אירועים רפואיים','התראה מיידית'],
-    keywords_handled:['כאב חזה','מכחיל','קוצר נשימה','התעלף'], page:'gabriel.html'
-  },
-  dana: {
-    name:'Dana', role:'ניהול תורים ומסמכים', division:'health', tier:2,
-    desc:'דנה מנהלת את כל התורים הרפואיים, בדיקות, ומסמכים. מחשבת ימים שנותרו ומזהה פערים.',
+  maya:    { name:'Maya',     role:'CEO — מנכ"לית MayaOS',             division:'ceo',     tier:0, manager:null,
+    desc:'מאיה היא המנכ"לית. מקבלת דיווחים מכל מנהלי המחלקות, מנתבת בקשות, מפקחת על הרשת.',
+    status:'online · supervising all divisions',
+    responsibilities:['ניתוב בקשות','קבלת דיווחים מ-Dr.Liam ואמיר','פיקוח על הרשת','CEO override'], page:'maya.html' },
+
+  dr_liam: { name:'Dr. Liam', role:'מנהל מחלקת בריאות',               division:'health',  tier:1, manager:'maya',
+    desc:"מסנתז מידע רפואי מגבריאל, דנה, מיה, ליאן וליאו. מדווח למאיה.",
+    status:'synthesizing health division',
+    responsibilities:['סינתזת מידע בריאותי','ניהול 5 sub-agents','דיווח למאיה'], page:'health.html',
+    reports:['gabriel','dana','mia','lian','leo'] },
+
+  amir:    { name:'Amir',     role:'CLO — מנהל מחלקת משפטים',         division:'legal',   tier:1, manager:'maya',
+    desc:'מנהל גיל ומיכל, מסנתז שני תיקים משפטיים, מדווח למאיה.',
+    status:'coordinating 2 active legal tracks',
+    responsibilities:['סינתזת מצב משפטי','ניהול גיל ומיכל','אסטרטגיה','דיווח למאיה'], page:'amir.html',
+    reports:['gil','michal'] },
+
+  gabriel: { name:'Gabriel',  role:'חירום רפואי · Triage',             division:'health',  tier:2, manager:'dr_liam',
+    desc:'סוכן החירום — pre-screen מילות מפתח, מסמן אירועים דחופים.',
+    status:'monitoring for emergency keywords',
+    responsibilities:['זיהוי חירום','pre-screen','תיעוד אירועים רפואיים','התראה מיידית'],
+    triggers:['כאב חזה','מכחיל','קוצר נשימה','התעלף'], page:'gabriel.html' },
+
+  dana:    { name:'Dana',     role:'ניהול תורים ומסמכים',              division:'health',  tier:2, manager:'dr_liam',
+    desc:'מנהלת תורים, בדיקות ומסמכים. מחשבת ימים שנותרו ומזהה gaps.',
+    status:'tracking 2 pending appointments',
     responsibilities:['קביעת תורים','מעקב מסמכים','חישוב days remaining','זיהוי gaps'],
-    keywords_handled:['תור','רופא','קביעה','ביקור','בדיקה'], page:'dana.html'
-  },
-  mia: {
-    name:'Mia', role:'ויסות סטרס ורגש', division:'health', tier:2,
-    desc:'מיה עוקבת אחרי מצבי סטרס, מתמאמת עם גיל ומיכל (קשרים רוחביים), ומסייעת לזהות גורמי עומס.',
-    responsibilities:['ניטור סטרס','זיהוי מתאמים','קשר עם גיל ומיכל (cross-link)','המלצות ויסות'],
-    cross_links:['gil','michal'], page:'mia.html'
-  },
-  lian: {
-    name:'Lian', role:'ניטור אנרגיה', division:'health', tier:2,
-    desc:'ליאן עוקבת אחרי רמות האנרגיה, ריכוז ועייפות — על בסיס readings רציפים.',
+    triggers:['תור','רופא','קביעה','בדיקה'], page:'dana.html' },
+
+  mia:     { name:'Mia',      role:'ויסות סטרס ורגש',                  division:'health',  tier:2, manager:'dr_liam',
+    desc:'עוקבת אחרי סטרס, מזהה מתאמים. cross-link עם גיל ומיכל.',
+    status:'monitoring stress correlations',
+    responsibilities:['ניטור סטרס','זיהוי מתאמים','cross-link עם גיל/מיכל','המלצות'],
+    cross_links:['gil','michal'], page:'mia.html' },
+
+  lian:    { name:'Lian',     role:'ניטור אנרגיה',                     division:'health',  tier:2, manager:'dr_liam',
+    desc:'עוקבת אחרי אנרגיה, ריכוז ועייפות — readings רציפים.',
+    status:'collecting energy readings',
     responsibilities:['readings אנרגיה/סטרס/פוקוס','זיהוי מגמות','דיווח ל-Dr.Liam'],
-    keywords_handled:['אנרגיה','עייפות','ריכוז'], page:'lian.html'
-  },
-  leo: {
-    name:'Leo', role:'אורח חיים בריא', division:'health', tier:2,
-    desc:'ליאו עוקב אחרי כושר, תזונה ומדיטציה — ומציע קישורי מדיטציה יומיים.',
-    responsibilities:['מעקב כושר','תזונה','מדיטציה יומית','links YouTube'],
-    keywords_handled:['אימון','כושר','תזונה','מדיטציה'], page:'leo.html'
-  },
-  amir: {
-    name:'Amir', role:'CLO — מנהל מחלקת משפטים', division:'legal', tier:1,
-    desc:'אמיר הוא ה-CLO (Chief Legal Officer) של MayaOS — מנהל את גיל ומיכל, מסנתז את שני התיקים ומדווח למאיה.',
-    responsibilities:['סינתזת מצב משפטי','ניהול גיל ומיכל','דיווח למאיה','אסטרטגיה משפטית'],
-    reports:['gil','michal'], page:'amir.html'
-  },
-  gil: {
-    name:'Gil', role:'תיק משפחה — כנגד לירון', division:'legal', tier:2,
-    desc:'גיל מנהל את התיק המשפטי מול לירון — אמא של איילה. עוסק בשלושה מסלולים: משמורת 7:7, ביטול מזונות, וטיפול רגשי לאיילה. מחובר ל-Gmail (Label: כתיק-לירון), Drive (ספריית ברומר), ו-WhatsApp.',
+    triggers:['אנרגיה','עייפות','ריכוז'], page:'lian.html' },
+
+  leo:     { name:'Leo',      role:'אורח חיים בריא',                   division:'health',  tier:2, manager:'dr_liam',
+    desc:'עוקב אחרי כושר, תזונה ומדיטציה. מציע YouTube links יומיים.',
+    status:'tracking fitness & meditation',
+    responsibilities:['מעקב כושר','תזונה','מדיטציה יומית','YouTube links'],
+    triggers:['אימון','כושר','תזונה','מדיטציה'], page:'leo.html' },
+
+  gil:     { name:'Gil',      role:'תיק משפחה · כנגד לירון',           division:'legal',   tier:2, manager:'amir',
+    desc:'מנהל תיק מול לירון (אמא של איילה). 3 מסלולים: משמורת 7:7, ביטול מזונות, טיפול לאיילה.',
+    status:'3 active tracks · waiting for court date',
     responsibilities:[
-      'מסלול A: משמורת 7:7 — תביעה הוגשה, ממתין לדיון',
-      'מסלול B: ביטול מזונות — חומר מוכן, ממתין לשליחה לברומר',
-      'מסלול C: טיפול רגשי לאיילה — ממתין לתגובת לירון',
-      'ניתוח Gmail + Drive + WhatsApp',
-      'הערכת סיכויי זכייה'
+      'מסלול A: משמורת 7:7 — תביעה הוגשה',
+      'מסלול B: מזונות — חומר מוכן לברומר',
+      'מסלול C: טיפול לאיילה — ממתין ללירון',
+      'ניתוח Gmail · Drive · WhatsApp'
     ],
-    current_status:'סעיף ג\' חתום (ויתור על גישור). תביעת משמורת הוגשה. חומר מזונות מוכן.',
-    cross_links:['mia','dr_liam'], page:'gil.html',
-    special:'CEO override: גישה ל-Gmail, Drive, WhatsApp'
-  },
-  michal: {
-    name:'Michal', role:'תיק IDF — תביעה צבאית', division:'legal', tier:2,
-    desc:'מיכל מנהלת את התיק מול הצבא — תביעה להכרה כנפגע טראומה. מתואמת עם Dr.Liam לתיעוד רפואי.',
+    current_status:'סעיף ג\' חתום. תביעה הוגשה. אין תאריך דיון.',
+    cross_links:['mia','dr_liam'],
+    special:'CEO override: Gmail + Drive + WhatsApp access', page:'gil.html' },
+
+  michal:  { name:'Michal',   role:'תיק IDF · תביעה צבאית',           division:'legal',   tier:2, manager:'amir',
+    desc:'מנהלת תיק מול הצבא — הכרה כנפגע טראומה. מתואמת עם Dr.Liam.',
+    status:'collecting psychiatric documentation',
     responsibilities:[
-      'תיעוד מסמכים רפואיים לתביעה',
+      'תיעוד רפואי לתביעה',
       'קשר עם פסיכיאטר (חוות דעת הוזמנה)',
       'עבודה עם עורכת דין',
-      'cross-link עם Dr.Liam ומיה'
+      'cross-link Dr.Liam + מיה'
     ],
-    current_status:'נפגשת עם פסיכיאטר. חוות דעת הוזמנה להכרה כנפגע טראומה.',
-    cross_links:['dr_liam','mia'], page:'michal.html'
-  },
-  daniel:{name:'Daniel',role:'מנהל מחלקת כספים (V1)',division:'finance',tier:1,desc:'דניאל מנהל את מחלקת הכספים — V1 בלבד, ללא sub-agents פעילים מלבד רון.',reports:['ron'],page:null},
-  ron:{name:'Ron',role:'sub-agent כספים',division:'finance',tier:2,desc:'רון עוזר לדניאל בענייני כספים.',page:null},
-  ella:{name:'Ella',role:'מנהלת מחלקת Admin (V2 חלקי)',division:'admin',tier:1,desc:'אלה מנהלת את Admin — כרגע פעיל רק chen בתחום ביטוח.',reports:['chen'],page:null},
-  chen:{name:'Chen',role:'sub-agent ביטוח',division:'admin',tier:2,desc:'חן עוסקת בתביעות ביטוח והחזרים.',page:null},
+    current_status:'חוות דעת פסיכיאטר הוזמנה. ממתין לקבלה.',
+    cross_links:['dr_liam','mia'], page:'michal.html' },
+
+  daniel:  { name:'Daniel',   role:'מנהל כספים (V1)',                  division:'finance', tier:1, manager:'maya',
+    desc:'מנהל כספים V1. רון הוא ה-sub-agent היחיד הפעיל.',
+    status:'V1 active', reports:['ron'], page:null },
+  ron:     { name:'Ron',      role:'sub-agent כספים',                  division:'finance', tier:2, manager:'daniel',
+    desc:'עוזר לדניאל בכספים.', status:'standby', page:null },
+  ella:    { name:'Ella',     role:'מנהלת Admin (V2 חלקי)',            division:'admin',   tier:1, manager:'maya',
+    desc:'מנהלת Admin — פעיל רק ביטוח עם חן.', status:'V2 partial', reports:['chen'], page:null },
+  chen:    { name:'Chen',     role:'sub-agent ביטוח',                  division:'admin',   tier:2, manager:'ella',
+    desc:'מטפלת בתביעות ביטוח והחזרים.', status:'standby', page:null },
 };
 
-// ══════════════════════════════════
-// Q&A PATTERNS
-// ══════════════════════════════════
-const QA = [
-  // Match by agent name anywhere in the message
-  { match:/\bgil\b|\bגיל\b/i,    fn:()=>agentCard('gil') },
-  { match:/\bmichal\b|\bמיכל\b/i, fn:()=>agentCard('michal') },
-  { match:/\bamir\b|\bאמיר\b/i,   fn:()=>agentCard('amir') },
-  { match:/\bgabriel\b|\bגבריאל\b/i, fn:()=>agentCard('gabriel') },
-  { match:/\bdana\b|\bדנה\b/i,    fn:()=>agentCard('dana') },
-  { match:/\bmia\b|\bמיה\b/i,     fn:()=>agentCard('mia') },
-  { match:/\blian\b|\bליאן\b/i,   fn:()=>agentCard('lian') },
-  { match:/\bleo\b|\bליאו\b/i,    fn:()=>agentCard('leo') },
-  { match:/dr\.?liam|ד.ר ליאם|ליאם/i, fn:()=>agentCard('dr_liam') },
-  { match:/\bmaya\b|\bמאיה\b/i,   fn:()=>agentCard('maya') },
-  // Division questions
-  { match:/מחלקת?\s?(בריאות|health)/i, fn:()=>divisionCard('health') },
-  { match:/מחלקת?\s?(משפטים|legal)/i,  fn:()=>divisionCard('legal') },
-  // System questions
-  { match:/כמה סוכנים|how many agents|\bcowork\b|רשת הסוכנים/i, fn:()=>networkSummary() },
-  { match:/תיק לירון|תיק משפחה|סטטוס משפטי/i, fn:()=>legalStatus() },
-  { match:/תיק צבאי|תיק מיכל|idf claim/i,      fn:()=>agentCard('michal') },
-  { match:/מי מטפל.?תורים?|appointment/i,       fn:()=>agentCard('dana') },
-  { match:/מי מטפל.?חירום|emergency/i,           fn:()=>agentCard('gabriel') },
-  { match:/מי מטפל.?סטרס/i,                      fn:()=>agentCard('mia') },
-  { match:/\bסטטוס\b|\bstatus\b|מה קורה/i,   fn:()=>systemStatus() },
-];
+const DIV_EMOJI  = { health:'🏥', legal:'⚖️', ceo:'👑', finance:'💰', admin:'📋' };
+const DIV_COLOR  = { health:'health', legal:'legal', ceo:'info', finance:'info', admin:'info' };
+const TIER_LABEL = { 0:'CEO', 1:'Exec', 2:'Agent' };
 
 // ══════════════════════════════════
-// ROUTING RULES (actions)
+// ROUTING RULES (for action messages)
 // ══════════════════════════════════
 const ROUTES = [
-  { kws:['כאב חזה','מכחיל','קוצר נשימה','התעלף','אמבולנס','chest pain'], agents:['gabriel'], notify:['dr_liam'], div:'health', prio:'critical', why:"מילות מפתח חירום — גבריאל מקבל ראשון" },
-  { kws:['תור','קביעה','appointment','בדיקה','ביקור','מרפאה'], agents:['dana'], notify:['dr_liam'], div:'health', prio:'routine', why:"קביעת תור — דנה מטפלת" },
-  { kws:['סטרס','לחץ','חרדה','מתח','לא ישנתי','anxiety','overwhelmed'], agents:['mia'], notify:['dr_liam'], div:'health', prio:'routine', why:"מצב רגשי — מיה מטפלת" },
-  { kws:['אנרגיה','עייף','עייפות','ריכוז'], agents:['lian'], notify:[], div:'health', prio:'routine', why:"ניטור אנרגיה — ליאן" },
+  { kws:['כאב חזה','מכחיל','קוצר נשימה','התעלף','אמבולנס','chest pain'], agents:['gabriel'], notify:['dr_liam'], div:'health', prio:'critical', why:"חירום — גבריאל מקבל ראשון" },
+  { kws:['תור','קביעה','appointment','בדיקה','ביקור','מרפאה'], agents:['dana'], notify:['dr_liam'], div:'health', prio:'routine', why:"קביעת תור — דנה" },
+  { kws:['סטרס','לחץ','חרדה','מתח','לא ישנתי','anxiety','overwhelmed'], agents:['mia'], notify:['dr_liam'], div:'health', prio:'routine', why:"מצב רגשי — מיה" },
+  { kws:['אנרגיה','עייף','עייפות','ריכוז'], agents:['lian'], notify:[], div:'health', prio:'routine', why:"אנרגיה — ליאן" },
   { kws:['אימון','כושר','מדיטציה','תזונה'], agents:['leo'], notify:[], div:'health', prio:'routine', why:"אורח חיים — ליאו" },
-  { kws:['לירון','משמורת','מזונות','7:7','custody','alimony'], agents:['gil'], notify:['amir'], div:'legal', prio:'routine', why:"תיק משפחה — גיל מטפל" },
-  { kws:['צבא','טראומה','idf','ptsd','נפגע'], agents:['michal'], notify:['amir'], div:'legal', prio:'routine', why:"תיק צבאי — מיכל מטפלת" },
-  { kws:['עורך דין','ברומר','תביעה','בית משפט','דיון','משפט'], agents:['amir'], notify:[], div:'legal', prio:'routine', why:"עניין משפטי — אמיר" },
-  { kws:['בריאות','כאב','תסמין','רפואי','ד\'ר','דוקטור','מייל מ'], agents:['dr_liam'], notify:[], div:'health', prio:'routine', why:"עניין רפואי — ד'ר ליאם" },
+  { kws:['לירון','משמורת','מזונות','7:7','custody','alimony'], agents:['gil'], notify:['amir'], div:'legal', prio:'routine', why:"תיק משפחה — גיל" },
+  { kws:['צבא','טראומה','idf','ptsd','נפגע'], agents:['michal'], notify:['amir'], div:'legal', prio:'routine', why:"תיק צבאי — מיכל" },
+  { kws:['עורך דין','ברומר','תביעה','בית משפט','דיון','משפט'], agents:['amir'], notify:[], div:'legal', prio:'routine', why:"משפטי — אמיר" },
+  { kws:['בריאות','כאב','תסמין','רפואי','דוקטור','מייל מ'], agents:['dr_liam'], notify:[], div:'health', prio:'routine', why:"רפואי — Dr.Liam" },
 ];
 
 // ══════════════════════════════════
-// RESPONSE BUILDERS
+// AGENT DETECTION
 // ══════════════════════════════════
-function agentCard(id) {
-  const a = KB[id]; if(!a) return `<div class="mbubble">לא מצאתי מידע על "${id}"</div>`;
-  const divColor = {health:'health',legal:'legal',ceo:'info',finance:'info',admin:'info'}[a.division]||'info';
-  const divEmoji = {health:'🏥',legal:'⚖️',ceo:'👑',finance:'💰',admin:'📋'}[a.division]||'📌';
-  const pageLink = a.page ? `<a href="${a.page}" style="color:#93c5fd;font-size:11px;text-decoration:none;margin-top:8px;display:inline-block;">פתח דף ${a.name} ↗</a>` : '';
-  const crossLinks = a.cross_links ? `<div class="mrow"><span class="mkey">cross</span><span class="mval">${a.cross_links.join(', ')}</span></div>` : '';
-  const special = a.special ? `<div class="mrow"><span class="mkey">מיוחד</span><span class="mval" style="color:#fcd34d;">${a.special}</span></div>` : '';
-  const status = a.current_status ? `<div class="mrow"><span class="mkey">סטטוס</span><span class="mval">${a.current_status}</span></div>` : '';
-  return `<div class="mbubble">
-    <div class="mcard ${divColor}">
-      <div class="mcard-title">${divEmoji} ${a.name} — ${a.role}</div>
-      <div class="mrow"><span class="mkey">מחלקה</span><span class="mval">${a.division} · Tier ${a.tier}</span></div>
-      ${status}${crossLinks}${special}
-      <div style="margin-top:8px;font-size:12px;color:#94a3b8;line-height:1.5;">${a.desc}</div>
-      ${a.responsibilities ? `<div style="margin-top:8px;"><div style="font-size:10px;color:#475569;margin-bottom:4px;">אחריויות:</div>${a.responsibilities.map(r=>`<div style="font-size:11px;color:#cbd5e1;padding:2px 0;">• ${r}</div>`).join('')}</div>` : ''}
-      ${pageLink}
-    </div>
+const AGENT_PATTERNS = [
+  { id:'gil',      re:/\bgil\b|\bגיל\b/i },
+  { id:'michal',   re:/\bmichal\b|\bמיכל\b/i },
+  { id:'amir',     re:/\bamir\b|\bאמיר\b/i },
+  { id:'gabriel',  re:/\bgabriel\b|\bגבריאל\b/i },
+  { id:'dana',     re:/\bdana\b|\bדנה\b/i },
+  { id:'mia',      re:/\bmia\b|\bמיה\b/i },
+  { id:'lian',     re:/\blian\b|\bליאן\b/i },
+  { id:'leo',      re:/\bleo\b|\bליאו\b/i },
+  { id:'dr_liam',  re:/dr\.?liam|ד.ר ליאם|\bליאם\b/i },
+  { id:'maya',     re:/\bmaya\b|\bמאיה\b/i },
+  { id:'daniel',   re:/\bdaniel\b|\bדניאל\b/i },
+  { id:'ron',      re:/\bron\b|\bרון\b/i },
+  { id:'ella',     re:/\bella\b|\bאלה\b/i },
+  { id:'chen',     re:/\bchen\b|\bחן\b/i },
+];
+
+function detectAgent(text) {
+  for (const p of AGENT_PATTERNS) {
+    if (p.re.test(text)) return p.id;
+  }
+  return null;
+}
+
+// ══════════════════════════════════
+// COWORK MESSAGE STORE
+// ══════════════════════════════════
+function saveCWMsg(from, to, intent, data) {
+  const msgs = JSON.parse(localStorage.getItem('cowork_messages') || '[]');
+  msgs.push({ msg_id: crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36),
+    timestamp: new Date().toISOString(), from, to, type:'request',
+    payload:{ intent, data, context_refs:[] }, confidence_level:'high',
+    requires_response:false, status:'unread' });
+  localStorage.setItem('cowork_messages', JSON.stringify(msgs));
+}
+
+// ══════════════════════════════════
+// VISUAL CHAIN BUILDER
+// ══════════════════════════════════
+function chainStep(from, to, msg, type='send') {
+  const fromA = KB[from]; const toA = KB[to];
+  const arrow = type==='response' ? '←' : '→';
+  const color = type==='response' ? '#10b981' : '#6366f1';
+  const bg    = type==='response' ? 'rgba(16,185,129,.06)' : 'rgba(99,102,241,.06)';
+  return `<div class="chain-step" style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;background:${bg};border:1px solid ${type==='response'?'rgba(16,185,129,.2)':'rgba(99,102,241,.18)'};font-size:11px;animation:fadeStep .3s ease both;">
+    <span style="color:${color};font-weight:700;font-family:'JetBrains Mono',monospace;min-width:64px;">${fromA?.name||from}</span>
+    <span style="color:${color};">${arrow}</span>
+    <span style="color:${color};font-weight:700;min-width:64px;">${toA?.name||to}</span>
+    <span style="color:#64748b;flex:1;">${msg}</span>
   </div>`;
 }
 
-function divisionCard(div) {
-  const agents = Object.values(KB).filter(a=>a.division===div);
-  const exec = agents.find(a=>a.tier===1);
-  const subs = agents.filter(a=>a.tier===2);
-  const divEmoji = div==='health'?'🏥':'⚖️';
-  return `<div class="mbubble">
-    <div class="mcard ${div}">
-      <div class="mcard-title">${divEmoji} מחלקת ${div==='health'?'הבריאות':'המשפטים'}</div>
-      <div class="mrow"><span class="mkey">מנהל</span><span class="mval">${exec?.name||'—'} (${exec?.role||''})</span></div>
-      <div class="mrow"><span class="mkey">סוכנים</span><span class="mval">${subs.map(s=>s.name).join(', ')}</span></div>
-      <div style="margin-top:10px;display:flex;flex-wrap:wrap;gap:5px;">
-        ${subs.map(s=>`<span class="mtag ok" style="cursor:pointer;" onclick="mAsk('מה ${s.name} עושה?')">${s.name}</span>`).join('')}
-      </div>
+function agentInfoBlock(id) {
+  const a = KB[id]; if (!a) return '';
+  const divC = DIV_COLOR[a.division]||'info';
+  const divE = DIV_EMOJI[a.division]||'📌';
+  const pageLink = a.page ? `<a href="${a.page}" style="color:#93c5fd;font-size:11px;text-decoration:none;display:inline-block;margin-top:6px;">פתח דף ${a.name} ↗</a>` : '';
+  const statusBadge = `<span style="font-size:10px;padding:2px 7px;border-radius:999px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);color:#6ee7b7;font-family:'JetBrains Mono',monospace;">${a.status||'active'}</span>`;
+  const cross = a.cross_links ? `<div class="mrow"><span class="mkey">cross</span><span class="mval">${a.cross_links.join(' · ')}</span></div>` : '';
+  const special = a.special ? `<div class="mrow"><span class="mkey">⭐</span><span class="mval" style="color:#fcd34d;">${a.special}</span></div>` : '';
+  const currStatus = a.current_status ? `<div class="mrow"><span class="mkey">סטטוס</span><span class="mval">${a.current_status}</span></div>` : '';
+  const resps = (a.responsibilities||[]).map(r=>`<div style="font-size:11px;color:#cbd5e1;padding:1px 0;">• ${r}</div>`).join('');
+  return `<div class="mcard ${divC}" style="margin-top:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
+      <div class="mcard-title" style="margin-bottom:0;">${divE} ${a.name} — ${a.role}</div>
+      ${statusBadge}
     </div>
+    <div class="mrow"><span class="mkey">מחלקה</span><span class="mval">${a.division} · Tier ${a.tier}</span></div>
+    ${currStatus}${cross}${special}
+    <div style="margin-top:7px;font-size:12px;color:#94a3b8;line-height:1.5;">${a.desc}</div>
+    ${resps ? `<div style="margin-top:7px;">${resps}</div>` : ''}
+    ${pageLink}
   </div>`;
 }
 
-function networkSummary() {
-  const all = Object.values(KB);
-  const active = all.filter(a=>a.tier<=2);
-  return `<div class="mbubble">
-    <div class="mcard info">
-      <div class="mcard-title">🔗 MayaOS Network — סיכום</div>
-      <div class="mrow"><span class="mkey">סה"כ</span><span class="mval">${active.length} סוכנים פעילים</span></div>
-      <div class="mrow"><span class="mkey">CEO</span><span class="mval">Maya (Tier 0)</span></div>
-      <div class="mrow"><span class="mkey">Tier 1</span><span class="mval">Dr.Liam · Amir · Daniel · Ella</span></div>
-      <div class="mrow"><span class="mkey">Health</span><span class="mval">Gabriel · Dana · Mia · Lian · Leo</span></div>
-      <div class="mrow"><span class="mkey">Legal</span><span class="mval">Gil · Michal</span></div>
-      <a href="cowork.html" style="color:#93c5fd;font-size:11px;text-decoration:none;margin-top:8px;display:inline-block;">פתח COWORK ↗</a>
-    </div>
-  </div>`;
+// ══════════════════════════════════
+// CHAIN QUERY — animated flow
+// ══════════════════════════════════
+async function runChainQuery(agentId, userText, insertFn) {
+  const agent   = KB[agentId];
+  const manager = agent.manager ? KB[agent.manager] : null;
+
+  // If agent IS the manager or CEO — direct answer
+  if (!manager || agent.tier <= 1) {
+    insertFn(`<div class="chain-wrap">
+      ${chainStep('maya', agentId, `בודקת ישירות...`, 'send')}
+    </div>`);
+    await delay(600);
+    insertFn(`<div class="chain-wrap">
+      ${chainStep('maya', agentId, `בודקת ישירות...`, 'send')}
+      ${chainStep(agentId, 'maya', `מדווח/ת`, 'response')}
+    </div>${agentInfoBlock(agentId)}`);
+    return;
+  }
+
+  // STEP 1: Maya → Manager
+  const managerId = agent.manager;
+  saveCWMsg('maya', managerId, 'agent_status_request', { about: agentId, user_question: userText });
+  insertFn(`<div class="chain-wrap">
+    ${chainStep('maya', managerId, `בקשת סטטוס על ${agent.name}`)}
+  </div>`);
+  await delay(700);
+
+  // STEP 2: Manager → Agent
+  saveCWMsg(managerId, agentId, 'status_check', { requested_by: 'maya' });
+  insertFn(`<div class="chain-wrap">
+    ${chainStep('maya', managerId, `בקשת סטטוס על ${agent.name}`)}
+    ${chainStep(managerId, agentId, `בדיקת סטטוס...`)}
+  </div>`);
+  await delay(700);
+
+  // STEP 3: Agent → Manager (response)
+  insertFn(`<div class="chain-wrap">
+    ${chainStep('maya', managerId, `בקשת סטטוס על ${agent.name}`)}
+    ${chainStep(managerId, agentId, `בדיקת סטטוס...`)}
+    ${chainStep(agentId, managerId, `מדווח/ת: ${agent.status}`, 'response')}
+  </div>`);
+  await delay(700);
+
+  // STEP 4: Manager → Maya (synthesis)
+  saveCWMsg(managerId, 'maya', 'agent_report', { agent: agentId, status: agent.status });
+  insertFn(`<div class="chain-wrap">
+    ${chainStep('maya', managerId, `בקשת סטטוס על ${agent.name}`)}
+    ${chainStep(managerId, agentId, `בדיקת סטטוס...`)}
+    ${chainStep(agentId, managerId, `מדווח/ת: ${agent.status}`, 'response')}
+    ${chainStep(managerId, 'maya', `סינתזה → ${agent.name} active`, 'response')}
+  </div>`);
+  await delay(500);
+
+  // STEP 5: Full report
+  insertFn(`<div class="chain-wrap">
+    ${chainStep('maya', managerId, `בקשת סטטוס על ${agent.name}`)}
+    ${chainStep(managerId, agentId, `בדיקת סטטוס...`)}
+    ${chainStep(agentId, managerId, `מדווח/ת: ${agent.status}`, 'response')}
+    ${chainStep(managerId, 'maya', `סינתזה → ${agent.name} active`, 'response')}
+  </div>
+  <div style="font-size:11px;color:#475569;margin:8px 0 5px;font-family:'JetBrains Mono',monospace;">
+    דוח מ-${manager.name} למאיה:
+  </div>
+  ${agentInfoBlock(agentId)}`);
 }
 
-function legalStatus() {
-  const gil = KB.gil; const michal = KB.michal;
-  return `<div class="mbubble">
-    <div class="mcard legal">
-      <div class="mcard-title">⚖️ סטטוס מחלקת משפטים</div>
-      <div style="margin-top:6px;font-weight:700;font-size:11px;color:#fcd34d;">תיק גיל — כנגד לירון</div>
-      ${gil.responsibilities.map(r=>`<div style="font-size:11px;color:#e2e8f0;padding:2px 0;">• ${r}</div>`).join('')}
-      <div style="margin-top:8px;font-weight:700;font-size:11px;color:#fcd34d;">תיק מיכל — IDF</div>
-      ${michal.responsibilities.map(r=>`<div style="font-size:11px;color:#e2e8f0;padding:2px 0;">• ${r}</div>`).join('')}
-      <div style="margin-top:8px;display:flex;gap:6px;">
-        <a href="gil.html" style="color:#93c5fd;font-size:11px;text-decoration:none;">פתח גיל ↗</a>
-        <span style="color:#334155;">·</span>
-        <a href="amir.html" style="color:#93c5fd;font-size:11px;text-decoration:none;">פתח אמיר ↗</a>
-      </div>
-    </div>
-  </div>`;
-}
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function systemStatus() {
-  const msgs = JSON.parse(localStorage.getItem('cowork_messages')||'[]');
-  const unread = {};
-  msgs.forEach(m=>{ if(m.status==='unread') unread[m.to]=(unread[m.to]||0)+1; });
-  const lines = Object.entries(unread).map(([a,n])=>`<div class="mrow"><span class="mkey">${a}</span><span class="mval">${n} unread</span></div>`).join('');
-  return `<div class="mbubble">
-    <div class="mcard info">
-      <div class="mcard-title">📊 סטטוס רשת</div>
-      ${lines||'<div style="color:#475569;font-size:12px;">אין הודעות ממתינות</div>'}
-      <a href="cowork.html" style="color:#93c5fd;font-size:11px;text-decoration:none;margin-top:8px;display:inline-block;">פתח COWORK לפירוט ↗</a>
-    </div>
-  </div>`;
-}
-
+// ══════════════════════════════════
+// ACTION ROUTING
+// ══════════════════════════════════
 function routeCard(text) {
   const lower = text.toLowerCase();
-  const matched = [];
-  const seen = new Set();
-  for(const r of ROUTES){
-    for(const kw of r.kws){
-      if(lower.includes(kw.toLowerCase())){
-        const newA = r.agents.filter(a=>!seen.has(a));
-        if(newA.length>0){
-          matched.push({...r,kw,agents:newA});
-          r.agents.forEach(a=>seen.add(a));
-          r.notify.forEach(a=>seen.add(a));
+  const matched = []; const seen = new Set();
+  for (const r of ROUTES) {
+    for (const kw of r.kws) {
+      if (lower.includes(kw.toLowerCase())) {
+        const newA = r.agents.filter(a => !seen.has(a));
+        if (newA.length > 0) {
+          matched.push({...r, kw, agents: newA});
+          r.agents.forEach(a => seen.add(a));
+          r.notify.forEach(a => seen.add(a));
         }
         break;
       }
     }
   }
-  if(!matched.length) return null;
-
-  const allDelivered=[];
-  let html = `<div class="mbubble"><div style="font-size:12px;color:#64748b;margin-bottom:8px;">מנתבת את הבקשה:</div>`;
-  matched.forEach((m,i)=>{
+  if (!matched.length) return null;
+  const allD = [];
+  let html = `<div class="mbubble"><div style="font-size:12px;color:#64748b;margin-bottom:8px;">מנתבת:</div>`;
+  matched.forEach((m, i) => {
     const cls = m.prio==='critical'?'critical':m.div==='legal'?'legal':'health';
-    const dEmoji = m.div==='health'?'🏥':m.div==='legal'?'⚖️':'📋';
-    const pEmoji = m.prio==='critical'?'🚨':'🟢';
-    html+=`<div class="mcard ${cls}">`;
-    html+=`<div class="mcard-title">${dEmoji} ניתוב ${i+1}</div>`;
-    html+=`<div class="mrow"><span class="mkey">עדיפות</span><span class="mval">${pEmoji} ${m.prio==='critical'?'חירום':'שגרה'}</span></div>`;
-    html+=`<div class="mrow"><span class="mkey">טריגר</span><span class="mval">"${m.kw}"</span></div>`;
-    html+=`<div class="mrow"><span class="mkey">סיבה</span><span class="mval">${m.why}</span></div>`;
-    html+=`<div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:5px;">`;
-    m.agents.forEach(a=>{
-      saveCWMsg('maya',a,'user_request',{text,reason:m.why,priority:m.prio});
-      html+=`<span class="mtag ok">✅ ${KB[a]?.name||a}</span>`;
-      allDelivered.push(a);
+    const de = m.div==='health'?'🏥':m.div==='legal'?'⚖️':'📋';
+    const pe = m.prio==='critical'?'🚨':'🟢';
+    html += `<div class="mcard ${cls}"><div class="mcard-title">${de} ניתוב ${i+1}</div>
+      <div class="mrow"><span class="mkey">עדיפות</span><span class="mval">${pe} ${m.prio==='critical'?'חירום':'שגרה'}</span></div>
+      <div class="mrow"><span class="mkey">טריגר</span><span class="mval">"${m.kw}"</span></div>
+      <div class="mrow"><span class="mkey">סיבה</span><span class="mval">${m.why}</span></div>
+      <div style="margin-top:7px;display:flex;flex-wrap:wrap;gap:5px;">`;
+    m.agents.forEach(a => {
+      saveCWMsg('maya', a, 'user_request', {text, reason:m.why, priority:m.prio});
+      html += `<span class="mtag ok">✅ ${KB[a]?.name||a}</span>`;
+      allD.push(a);
     });
-    m.notify.forEach(a=>{
-      if(!allDelivered.includes(a)){
-        saveCWMsg('maya',a,'fyi_notification',{text,note:`נשלח ל-${m.agents.join(', ')}`});
-        html+=`<span class="mtag fyi">ℹ️ ${KB[a]?.name||a}</span>`;
-        allDelivered.push(a);
+    m.notify.forEach(a => {
+      if (!allD.includes(a)) {
+        saveCWMsg('maya', a, 'fyi_notification', {text, note:`נשלח ל-${m.agents.join(', ')}`});
+        html += `<span class="mtag fyi">ℹ️ ${KB[a]?.name||a}</span>`;
+        allD.push(a);
       }
     });
-    html+=`</div></div>`;
+    html += `</div></div>`;
   });
-  html+=`<div style="font-size:11px;color:#334155;margin-top:8px;padding-top:6px;border-top:1px solid rgba(255,255,255,.05);">`;
-  html+=`${allDelivered.length} סוכנים קיבלו הודעה`;
-  if(matched.some(m=>m.prio==='critical')) html+=` · <span style="color:#fca5a5;font-weight:700;">⚠️ אם פעיל — התקשר 101</span>`;
-  html+=`</div></div>`;
+  if (matched.some(m=>m.prio==='critical'))
+    html += `<div style="color:#fca5a5;font-size:11px;margin-top:8px;font-weight:700;">⚠️ מצב חירום — אם פעיל התקשר 101</div>`;
+  html += `</div>`;
   return html;
 }
 
-function saveCWMsg(from,to,intent,data){
-  const msgs=JSON.parse(localStorage.getItem('cowork_messages')||'[]');
-  msgs.push({msg_id:crypto.randomUUID?crypto.randomUUID():Date.now().toString(36),timestamp:new Date().toISOString(),from,to,type:'request',payload:{intent,data,context_refs:[]},confidence_level:'high',requires_response:false,status:'unread'});
-  localStorage.setItem('cowork_messages',JSON.stringify(msgs));
+function systemStatus() {
+  const msgs = JSON.parse(localStorage.getItem('cowork_messages')||'[]');
+  const unread = {};
+  msgs.forEach(m => { if(m.status==='unread') unread[m.to]=(unread[m.to]||0)+1; });
+  const lines = Object.entries(unread).map(([a,n]) =>
+    `<div class="mrow"><span class="mkey">${KB[a]?.name||a}</span><span class="mval">${n} unread</span></div>`).join('');
+  return `<div class="mbubble"><div class="mcard info"><div class="mcard-title">📊 סטטוס רשת</div>
+    ${lines||'<div style="color:#475569;font-size:12px;">אין הודעות ממתינות</div>'}
+    <a href="cowork.html" style="color:#93c5fd;font-size:11px;text-decoration:none;display:inline-block;margin-top:6px;">פתח COWORK ↗</a>
+  </div></div>`;
+}
+
+function divisionCard(div) {
+  const execs = Object.values(KB).filter(a=>a.division===div && a.tier===1);
+  const subs  = Object.values(KB).filter(a=>a.division===div && a.tier===2);
+  const exec  = execs[0];
+  const de = DIV_EMOJI[div]||'📌';
+  return `<div class="mbubble"><div class="mcard ${DIV_COLOR[div]||'info'}">
+    <div class="mcard-title">${de} מחלקת ${div==='health'?'הבריאות':div==='legal'?'המשפטים':div}</div>
+    <div class="mrow"><span class="mkey">מנהל</span><span class="mval">${exec?.name||'—'} (${exec?.role||''})</span></div>
+    <div class="mrow"><span class="mkey">סוכנים</span><span class="mval">${subs.map(s=>s.name).join(' · ')}</span></div>
+    <div style="margin-top:9px;display:flex;flex-wrap:wrap;gap:5px;">
+      ${subs.map(s=>`<span class="mtag ok" style="cursor:pointer;" onclick="mAsk('ספר לי על ${s.name}')">${s.name}</span>`).join('')}
+    </div>
+  </div></div>`;
 }
 
 // ══════════════════════════════════
-// MAIN RESPONSE ENGINE
-// ══════════════════════════════════
-function mRespond(text) {
-  // 1. Check Q&A patterns first
-  for(const qa of QA){
-    if(qa.match.test(text)) return qa.fn(text);
-  }
-  // 2. Try routing
-  const routed = routeCard(text);
-  if(routed) return routed;
-  // 3. Fallback
-  return `<div class="mbubble">
-    קיבלתי, אך לא זיהיתי לאן לנתב.<br><br>
-    <div style="font-size:12px;color:#475569;">נסה: "מה גיל עושה?" · "תור רופא" · "תיק לירון" · "כאב" · "סטטוס"</div>
-  </div>`;
-}
-
-// ══════════════════════════════════
-// UI
+// UI HELPERS
 // ══════════════════════════════════
 function mOpen(){
   document.getElementById('mdrawer').classList.add('open');
@@ -895,29 +938,73 @@ function mClose(){
   document.getElementById('mdrawer').classList.remove('open');
   document.getElementById('maya-fab').style.display='flex';
 }
-function mKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();mSend();}}
-function mResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,90)+'px';}
-function mAsk(t){document.getElementById('minput').value=t;mSend();}
+function mKey(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();mSend();} }
+function mResize(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,90)+'px'; }
+function mAsk(t){ document.getElementById('minput').value=t; mSend(); }
 
-async function mSend(){
-  const inp=document.getElementById('minput');
-  const text=inp.value.trim(); if(!text) return;
-  const chat=document.getElementById('mchat');
+// ══════════════════════════════════
+// MAIN SEND HANDLER
+// ══════════════════════════════════
+async function mSend() {
+  const inp  = document.getElementById('minput');
+  const text = inp.value.trim(); if (!text) return;
+  const chat = document.getElementById('mchat');
+  inp.value = ''; inp.style.height = 'auto';
 
-  const ub=document.createElement('div'); ub.className='mu'; ub.textContent=text;
-  chat.appendChild(ub);
-  inp.value=''; inp.style.height='auto'; chat.scrollTop=chat.scrollHeight;
+  // User bubble
+  const ub = document.createElement('div'); ub.className='mu'; ub.textContent=text;
+  chat.appendChild(ub); chat.scrollTop=chat.scrollHeight;
 
-  const td=document.createElement('div'); td.className='mm';
-  td.innerHTML='<div class="mlabel">מאיה</div><div class="mbubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>';
-  chat.appendChild(td); chat.scrollTop=chat.scrollHeight;
+  // Maya "thinking" bubble
+  const tb = document.createElement('div'); tb.className='mm';
+  tb.innerHTML=`<div class="mlabel">מאיה</div><div class="mbubble"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  chat.appendChild(tb); chat.scrollTop=chat.scrollHeight;
 
-  await new Promise(r=>setTimeout(r,800));
+  await delay(600);
 
-  const resp=mRespond(text);
-  const md=document.createElement('div'); md.className='mm';
-  md.innerHTML=`<div class="mlabel">מאיה</div>${resp}`;
-  chat.replaceChild(md,td);
+  const agentId = detectAgent(text);
+
+  if (agentId && agentId !== 'maya') {
+    // Chain query mode — animate step by step
+    const mb = document.createElement('div'); mb.className='mm';
+    mb.innerHTML=`<div class="mlabel">מאיה</div><div class="mbubble" id="chain-live"></div>`;
+    chat.replaceChild(mb, tb); chat.scrollTop=chat.scrollHeight;
+
+    let lastHTML = '';
+    function insertFn(html) {
+      lastHTML = html;
+      const el = document.getElementById('chain-live');
+      if (el) el.innerHTML = html;
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    await runChainQuery(agentId, text, insertFn);
+    // Remove the id to finalize
+    const el = document.getElementById('chain-live');
+    if (el) el.removeAttribute('id');
+
+  } else if (/\bסטטוס\b|\bstatus\b|מה קורה|cowork/i.test(text)) {
+    const md = document.createElement('div'); md.className='mm';
+    md.innerHTML=`<div class="mlabel">מאיה</div>${systemStatus()}`;
+    chat.replaceChild(md, tb);
+
+  } else if (/מחלקת?(בריאות|health)/i.test(text)) {
+    const md = document.createElement('div'); md.className='mm';
+    md.innerHTML=`<div class="mlabel">מאיה</div>${divisionCard('health')}`;
+    chat.replaceChild(md, tb);
+
+  } else if (/מחלקת?(משפטים|legal)/i.test(text)) {
+    const md = document.createElement('div'); md.className='mm';
+    md.innerHTML=`<div class="mlabel">מאיה</div>${divisionCard('legal')}`;
+    chat.replaceChild(md, tb);
+
+  } else {
+    // Try action routing
+    const routed = routeCard(text);
+    const md = document.createElement('div'); md.className='mm';
+    md.innerHTML=`<div class="mlabel">מאיה</div>${routed || `<div class="mbubble">לא זיהיתי פעולה ספציפית.<br><div style="font-size:11px;color:#475569;margin-top:6px;">נסה: שם סוכן · "תור" · "כאב" · "תיק לירון" · "סטטוס"</div></div>`}`;
+    chat.replaceChild(md, tb);
+  }
   chat.scrollTop=chat.scrollHeight;
 }
 </script>
