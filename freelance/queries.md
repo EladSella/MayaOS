@@ -36,3 +36,29 @@ F, שליחויות:
 - "שליחים עצמאיים הוד השרון"
 - "הפצת חבילות עצמאי רכב פרטי נתניה / כפר סבא / פתח תקווה"
 - "קבלן חלוקה חבילות"
+
+A2, אקסל ואוטומציה:
+- "Google Sheets Apps Script freelance"
+- "Excel cleanup automation"
+- "data entry Hebrew remote"
+
+M, תרגום:
+- "Hebrew MTPE freelance"
+- "English Hebrew post-editor"
+- ProZ: Hebrew jobs
+
+T, טלמרקטינג:
+- דרושים, קטגוריה 170 (טלמרקטינג מהבית)
+- "טלמיטינג מהבית פרילנס"
+- "תיאום פגישות טלפוני עצמאי"
+
+O, צ'אטרים:
+- "OnlyFans chatter remote"
+- "Fanvue chatter"
+- "chat operator adult platform remote". לסנן סוכנויות בלי אתר או חוזה, ומי שדורש תשלום מראש.
+
+H, אימון מודלים (אלעד בלבד):
+- "Hebrew AI trainer freelance"
+- Outlier
+- Mindrift
+- Lilt
